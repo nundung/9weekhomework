@@ -1,0 +1,184 @@
+
+#header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top:0;
+    height: 55px;
+    background-color: #3b5998;
+}
+
+.headerIcon {
+    cursor: pointer;
+    height: 35px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#todayValue {
+    font-size: 30px;
+    color: white;
+}
+
+#menuBar {
+    position: fixed;
+    right: -230px;
+    top: 0px;
+    width : 230px;
+    height: 100%;
+    background-color: #3b5998;
+    transition: 0.2s;
+    /* z-index: 3;
+    overflow: hidden; */
+}
+
+#menuBarHeader {
+    display: flex;
+    height: 55px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#logOutButton {
+    cursor: pointer;
+    color: #3b5998;
+    background-color: white;
+    margin-left: 15px;
+    width: 90px;
+    height: 30px;
+    border: solid 0.5px;
+}
+
+#myInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#profile {
+    width: 100px;
+}
+
+#detailInfo {
+    display: flex;
+    justify-content: center;
+    width: 110px;
+    height: 80px;
+    flex-wrap: wrap;
+}
+
+#department {
+    margin: 4px;
+    display: inline;
+    color: white;
+}
+
+#position {
+    margin: 4px;
+    display: inline;
+    color: white;
+}
+
+#name {
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+#phoneNumber {
+    color: white;
+    font-size: 25px;
+}
+
+#editInfoButton {
+    cursor: pointer;
+    color: #3b5998;
+    background-color: white;
+    width: 90px;
+    height: 30px;
+    border: solid 0.5px;
+}
+
+
+
+#year {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-top: 60px;
+    height: 45px;
+}
+
+.yearSelectButton {
+    cursor: pointer;
+    height: 35px;
+}
+
+#yearValue {
+    font-size: 30px;
+    margin: 10px;
+    color: #3b5998;
+}
+
+#month {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.monthSelectButton {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: bold;
+    color: #3b5998;
+}
+
+.monthSelectButton:hover {
+    /* 호버 시 변경할 스타일 */
+    background-color: #3b5998;
+    color: white;
+}
+
+.selected {
+    background-color: #3b5998;
+    color: white;
+}
+
+#calendar {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5px;
+}
+
+#calendarHeader {
+    width: 1100px;
+    height: 40px;
+    text-align: center;
+    background-color: #3b5998;
+}
+
+#monthValue {
+    color: white;
+}
+
+.daySelectButton {
+    color: #3b5998;
+    cursor: pointer;
+    font-weight: bold;
+    width: 141.5px;
+    height: 100px;
+    background-color: #dfe1ee;
+}

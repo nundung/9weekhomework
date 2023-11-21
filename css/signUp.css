@@ -1,0 +1,87 @@
+
+#body {
+    text-align: center;
+}
+
+#title {
+    margin-top: 60px;
+    margin-bottom: 50px;
+    font-size: 55px;
+    color: #3b5998;
+}
+
+
+#idRow {
+    width: 610.4px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: end;
+}
+
+#idInputBox {
+    margin-bottom: 8px;
+    width: 350px;
+    height: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#duplicateCheckButton {
+    width: 115px;
+    height: 35.2px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: white;
+    background-color: #3b5998;
+    border-color: solid 1px black;
+}
+
+#rows {
+    margin-left: auto;
+    margin-right: auto;
+    width: 610.4px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputBox {
+    margin-bottom: 8px;
+    width: 350px;
+    height: 30px;
+    margin-left: 10px;
+    margin-right: 124.56px;
+}
+
+.column {
+    margin-bottom: 8px;
+    width: 115px;
+    text-align: end;
+}
+
+#idColumn {
+    width: 115px;
+    margin-bottom: 8px;
+}
+
+.radioBox {
+    width: 350.4px;
+    height: 30px;
+    margin-left: 20px;
+    margin-right: 124.56px;
+    text-align: start;
+}
+
+#signUpButton {
+    width: 358px;
+    height: 38px;
+    cursor: pointer;
+    color: white;
+    background-color: #3b5998;
+    border-color: solid 1px black;
+}

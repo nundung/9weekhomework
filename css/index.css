@@ -1,0 +1,48 @@
+
+#body {
+    text-align: center;
+}
+
+#title {
+    margin-top: 60px;
+    margin-bottom: 50px;
+    font-size: 55px;
+    color: #3b5998;
+}
+
+.inputBox {
+    margin-bottom: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
+    height: 30px;
+}
+
+::placeholder {
+    color: #999; /* 연한 회색 또는 다른 적절한 색상으로 변경 가능 */
+}
+
+#Button {
+    cursor: pointer;
+    width: 360px;
+    height: 38px;
+    cursor: pointer;
+    color: white;
+    background-color: #3b5998;
+    border: 0.5px solid;
+}
+
+#menuBox {
+    width: 358px;
+    margin-top:4px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-evenly;
+    color: rgb(150, 148, 157);
+}
+
+.menu {
+    cursor: pointer;
+}

@@ -60,7 +60,7 @@
                 }
                 else {
                     out.println("<div>사용가능한 아이디입니다.</div>");
-                    //세션값으로 아이디를 저장
+                    //세션값으로 아이디값 지정
                     session.setAttribute("id", id);
                 } 
             }

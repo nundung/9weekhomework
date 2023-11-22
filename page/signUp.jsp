@@ -17,7 +17,7 @@
     </div>
     <form action="../action/signUpAction.jsp" onsubmit=" return exceptionHandlingEvent()">
         <div id="idRow">
-            <label for="idInput" id="idColumn">아이디</label>
+            <label for="id" id="idColumn">아이디</label>
             <input type="text" id="idInput" name="id" placeholder="영문, 숫자 조합으로 6~18자">
             <input type="button" id="duplicateCheckButton" onclick="duplicateCheckEvent()" value="아이디 중복체크">
         </div>
@@ -34,12 +34,12 @@
             <label for="phonenumber" class ="column">전화번호</label>
             <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
 
-            <span for="department" class ="column">부서</span>
+            <label for="department" class ="column">부서</label>
             <div class="radioInput">
                 <input type="radio" name="department" value="개발">개발
                 <input type="radio" name="department" value="디자인">디자인
             </div>
-            <span for="position" class ="column">직급</span>
+            <label for="position" class ="column">직급</label>
             <div class="radioInput">
                 <input type="radio" name="position" value="팀원">팀원
                 <input type="radio" name="position" value="팀장">팀장

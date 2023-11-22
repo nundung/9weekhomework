@@ -11,6 +11,11 @@
 }
 
 
+#idColumn {
+    width: 115px;
+    margin-bottom: 8px;
+}
+
 #idRow {
     width: 610.4px;
     margin-left: auto;
@@ -21,12 +26,15 @@
     text-align: end;
 }
 
-#idInputBox {
+#idInput {
     margin-bottom: 8px;
     width: 350px;
     height: 30px;
     margin-left: 10px;
     margin-right: 10px;
+}
+#idInput::placeholder {
+    color:#a8a7a7; /* placeholder 색상 설정 */
 }
 
 #duplicateCheckButton {
@@ -39,6 +47,13 @@
     border-color: solid 1px black;
 }
 
+
+.column {
+    margin-bottom: 8px;
+    width: 115px;
+    text-align: end;
+}
+
 #rows {
     margin-left: auto;
     margin-right: auto;
@@ -49,27 +64,19 @@
     justify-content: center;
     align-items: center;
 }
-
-.inputBox {
+.input {
     margin-bottom: 8px;
     width: 350px;
     height: 30px;
     margin-left: 10px;
     margin-right: 124.56px;
 }
-
-.column {
-    margin-bottom: 8px;
-    width: 115px;
-    text-align: end;
+.input::placeholder {
+    color:#a8a7a7;
 }
 
-#idColumn {
-    width: 115px;
-    margin-bottom: 8px;
-}
 
-.radioBox {
+.radioInput {
     width: 350.4px;
     height: 30px;
     margin-left: 20px;

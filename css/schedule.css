@@ -182,3 +182,12 @@
     height: 100px;
     background-color: #dfe1ee;
 }
+
+#todayButton {
+    color: #3b5998;
+    cursor: pointer;
+    font-weight: bold;
+    width: 141.5px;
+    height: 100px;
+    background-color: white;
+}

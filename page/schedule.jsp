@@ -30,7 +30,9 @@
             <p id="phoneNumber">010-1234-5678</p>
             <input type="button" value="정보수정" id="editInfoButton" onclick="editInfoEvent()">
         </div>
-        
+        <div id="teamMemberList">
+
+        </div>
     </div>
 
     <div id="year">
@@ -64,6 +66,17 @@
                 menuBar.style.right = "-230px";
             }
         }
+
+        //로그아웃 이벤트
+        function logOutEvent() {
+            location.href = "../action/logOutAction.jsp"
+        }
+
+        //정보수정 이벤트
+        function editInfoEvent() {
+            location.href="editInfo.jsp";
+        }
+
 
         //올해 년도 입력
         var yearValue = document.getElementById("yearValue");
@@ -107,24 +120,31 @@
             clickedMonthButton.classList.add("selected");
         }
 
+        //날짜 버튼 입력
         var calendar = document.getElementById("calendar");
+        var today = today.getDate();
         for (var i=0; i<31; i++) {
+            if (today !== i+1) {
             var daySelectButton = document.createElement("div")
             daySelectButton.innerHTML = i+1;
             daySelectButton.className = "daySelectButton";
             daySelectButton.addEventListener('click', showDetailEvent);
             calendar.appendChild(daySelectButton);
+            }
+            else {
+                var daySelectButton = document.createElement("div")
+            daySelectButton.innerHTML = i+1;
+            daySelectButton.id = "todayButton";
+            daySelectButton.addEventListener('click', showDetailEvent);
+            calendar.appendChild(daySelectButton);
+            }
         }
 
 
-        function logOutEvent() {}
-
-        function editInfoEvent() {
-            location.href="editInfo.jsp";
-        }
+        var teamMemberList = document.getElementById("teamMemderList");
 
         function showDetailEvent() {
-            let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400";
+            let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
             var ret = window.open("scheduleDetail.jsp", "상세일정", options)
         }
     </script>

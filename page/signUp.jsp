@@ -34,10 +34,10 @@
             <label for="phonenumber" class ="column">전화번호</label>
             <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
 
-            <label for="department" class ="column">부서</label>
+            <label for="team" class ="column">부서</label>
             <div class="radioInput">
-                <input type="radio" name="department" value="개발">개발
-                <input type="radio" name="department" value="디자인">디자인
+                <input type="radio" name="team" value="개발">개발
+                <input type="radio" name="team" value="디자인">디자인
             </div>
             <label for="position" class ="column">직급</label>
             <div class="radioInput">
@@ -48,23 +48,19 @@
         <input type="submit" id="signUpButton" value="회원가입" >
     </form>
     <script>
-        //페이지 새로고침시 세션의 id값 초기화
-        window.onbeforeunload = function() {
-            <% session.setAttribute("id", null); %>
-        }
+        var checkedId = false;
+
         //아이디 중복체크
         function duplicateCheckEvent() {
             var id = document.getElementById("idInput").value;
-            //아이디 유효성 검사
+            //아이디 유효성 체크
             if(id.trim() == "") {
                 alert("아이디값을 입력해주세요.");
                 return false;
             }
-
             //아이디 정규식
             var idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
-
-            //id 문자열이 idReg로 정의된 정규 표현식과 일치하는지
+            //id 문자열이 idReg로 정의된 정규 표현식과 일치하는지 체크
             if(!idReg.test(id)) {
                 alert("아이디는 영문, 숫자의 조합으로 6~18자로 입력해주세요.");
                 return false;
@@ -74,11 +70,9 @@
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400";
             var pop = window.open("../action/checkIdAction.jsp?id="+ id, "아이디중복체크", options);
 
-            //팝업창이 닫히는 시점에 함수를 지정하는 명령어
+            //팝업창이 닫힐 때
             pop.onunload = function () {
-                var checkedId = "<%=checkedId%>";
-                console.log(checkedId);
-                if (checkedId == id) {
+                if (checkedId === true) {
                     var idInput = document.getElementById("idInput");
                     var duplicateCheckButton = document.getElementById("duplicateCheckButton");
                 
@@ -102,8 +96,7 @@
 
         //입력값 유효성 검사
         function exceptionHandlingEvent() {
-            var checkedId = "<%=checkedId%>";
-            if (checkedId == "null" || !checkedId) {
+            if (checkedId == false) {
                 alert("아이디 중복체크를 먼저 진행해주세요.");
                 return false;
             }
@@ -137,7 +130,7 @@
             }
 
             //전화번호 정규식
-            var phonenumberReg = /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9{4}])$/;
+            var phonenumberReg = /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/;
             var phonenumber = document.getElementById("phonenumber").value;
             if(!phonenumberReg.test(phonenumber)) {
                 alert("유효한 전화번호 값을 입력해주세요.")
@@ -146,27 +139,22 @@
 
 
 
-            //라디오 버튼 선택값 검사
-            var departmentChecked = false;
-            var positionChecked = false;
-            
             // 부서 라디오 버튼 그룹 확인
-            var departmentRadio = document.getElementsByName("department");
-            for (var j = 0; j < departmentRadio.length; j++) {
-                if (departmentRadio[j].checked) {
-                    departmentChecked = true;
-                    break;
-                }
-            }
-            // 직급 라디오 버튼 그룹 확인
+            var teamRadio = document.getElementsByName("team");
             var positionRadio = document.getElementsByName("position");
-            for (var k = 0; k < positionRadio.length; k++) {
-                if (positionRadio[k].checked) {
-                    positionChecked = true;
+            
+            //라디오 버튼 선택값 검사
+            var radioList = [teamRadio, positionRadio];
+
+            for (var j = 0; j < radioList.length; j++) {
+                var isChecked = false;
+                for(var k = 0; k < radioList[j].length; k++)
+                if (radioList[j][k].checked) {
+                    isChecked = true;
                     break;
                 }
             }
-            if (!departmentChecked || !positionChecked) {
+            if (!isChecked) {
                 alert("부서와 직급을 선택해주세요.");
                 return false;
             }

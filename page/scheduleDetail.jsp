@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/scheduleDetail.css">
 </head>
 <body>
-    <div id="header">선택된 날짜</div>
+    <div id="header">2023.11.25 상세일정</div>
     <div id="scheduleList">
         <!-- <div id="scheduleRow">
             <span>시간</span>

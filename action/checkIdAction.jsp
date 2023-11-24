@@ -56,12 +56,13 @@
 
                 if (result.next()) {
                     id = "0";
+                    out.println("<script>window.opener.checkedId = false;</script>");
                     out.println("<div>이미 존재하는 아이디입니다.</div>");
                 }
                 else {
+                    out.println("<script>window.opener.checkedId = true;</script>");
                     out.println("<div>사용가능한 아이디입니다.</div>");
-                    //세션값으로 아이디값 지정
-                    session.setAttribute("id", id);
+                    
                 } 
             }
             catch (Exception e) {
@@ -99,12 +100,14 @@
     </div>
     <script>
         var id = "<%= id %>";
-        if(id == 0) {
-            alert("사용불가한 아이디입니다.")
+        if (id == 0) {
+            alert("사용불가한 아이디입니다.");
+            window.opener.checkedId = false; 
+        } else {
+            alert("사용가능한 아이디입니다.");
+            window.opener.checkedId = true;
         }
-        else {
-            alert("사용가능한 아이디입니다.")
-        }
+        window.close(); // 팝업 창 닫기
     </script>
 </body>
 </html>

@@ -31,8 +31,8 @@
     height: 100%;
     background-color: #3b5998;
     transition: 0.2s;
-    /* z-index: 3;
-    overflow: hidden; */
+    z-index: 5;
+    /* overflow: hidden; */
 }
 
 #menuBarHeader {
@@ -181,13 +181,22 @@
     width: 141.5px;
     height: 100px;
     background-color: #dfe1ee;
+    position: relative;
 }
 
 #todayButton {
-    color: #3b5998;
+    color: #3b5898;
     cursor: pointer;
     font-weight: bold;
     width: 141.5px;
     height: 100px;
-    background-color: white;
+    background-color: #94a4c4;
+}
+
+#scheldulesInDay {
+    position: absolute;
+    bottom: 0;
+    background-color: #3b5898;
+    width: 141.5px;
+    height: 35px;
 }

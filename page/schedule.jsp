@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="header">
-        <img src="../image/home.svg" class="headerIcon">
+        <img src="../image/home.svg" class="headerIcon" onclick="schedulePageEvent()">
         <p id="todayValue"></p>
         <img src="../image/menu.svg" class="headerIcon" onclick="toggleMenuEvent()">
     </div>
@@ -45,10 +45,15 @@
     </div>
     <div id="calendar">
         <div id="calendarHeader">
-            <p id="monthValue">5월</p>
+            <p id="monthValue"></p>
         </div>
     </div>
     <script>
+
+        //홈 버튼 클릭시 새로고침
+        function schedulePageEvent() {
+            location.reload();
+        }
 
         //오늘 날짜 입력
         var today = new Date();
@@ -96,9 +101,9 @@
             yearValue.innerHTML = year;
         }
 
-        //월 버튼 입력
-        var month = document.getElementById("month")
+        //월 선택 버튼 입력
         for (var i=0; i<12; i++) {
+            var month = document.getElementById("month");
             var monthSelectButton = document.createElement("p")
             monthSelectButton.innerHTML = i+1;
             monthSelectButton.className = "monthSelectButton";
@@ -106,41 +111,55 @@
             month.appendChild(monthSelectButton);
         }
 
-        //월 선택 이벤트
-        var monthValue = document.getElementById("monthValue");
+        //페이지 새로고침시 이번달 달력 출력 함수 호출
+        var thisMonth = today.getMonth() + 1;
+        makeDaySelectButonEvent(thisMonth);
+
+        //월 버튼 클릭 이벤트
         function monthSelectEvent(event) {
             var buttons = document.getElementsByClassName("monthSelectButton");
             for (var i = 0; i < buttons.length; i++) {
-            buttons[i].classList.remove("selected");
+                buttons[i].classList.remove("selected");
             }
             var clickedMonthButton = event.target;
             var clickedMonthValue = clickedMonthButton.innerHTML;
-            monthValue.innerHTML = null;
-            monthValue.innerHTML = clickedMonthValue + '월';
             clickedMonthButton.classList.add("selected");
+
+            //클릭된 달의 달력 출력 함수 호출
+            makeDaySelectButonEvent(clickedMonthValue);
         }
 
-        //날짜 버튼 입력
-        var calendar = document.getElementById("calendar");
-        var today = today.getDate();
-        for (var i=0; i<31; i++) {
-            if (today !== i+1) {
-            var daySelectButton = document.createElement("div")
-            daySelectButton.innerHTML = i+1;
-            daySelectButton.className = "daySelectButton";
-            daySelectButton.addEventListener('click', showDetailEvent);
-            calendar.appendChild(daySelectButton);
-            }
-            else {
-                var daySelectButton = document.createElement("div")
-            daySelectButton.innerHTML = i+1;
-            daySelectButton.id = "todayButton";
-            daySelectButton.addEventListener('click', showDetailEvent);
-            calendar.appendChild(daySelectButton);
-            }
+        //클릭된 달의 달력 출력
+        function makeDaySelectButonEvent(clickedMonthValue) {
+            monthValue.innerHTML = clickedMonthValue + '월';
+            var calendar = document.getElementById("calendar");
+            var calendarHeader = document.getElementById("calendarHeader");
+            calendar.innerHTML = "";
+            calendar.appendChild(calendarHeader);
+            var daysInMonth = new Date(today.getFullYear(), clickedMonthValue, 0).getDate();
+            for (var i = 0; i < daysInMonth; i++) {
+                    var daySelectButton = document.createElement("div");
+                    daySelectButton.innerHTML = i + 1;
+                    daySelectButton.id = i + 1;
+                    daySelectButton.className = "daySelectButton";
+                    if (thisMonth == clickedMonthValue && (i + 1) == today.getDate()) {
+                        daySelectButton.id = "todayButton";
+                    }                
+                    daySelectButton.addEventListener('click', showDetailEvent);
+                    calendar.appendChild(daySelectButton);
+            
+                }
         }
 
+        var test = 7;
+        makeScheldulesInDay(test);
 
+        function makeScheldulesInDay(test) {
+            var day = document.getElementById(test);
+            var scheldulesInDay = document.createElement("div");
+            scheldulesInDay.id = "scheldulesInDay";
+            day.appendChild(scheldulesInDay);
+        }
         var teamMemberList = document.getElementById("teamMemderList");
 
         function showDetailEvent() {
@@ -150,3 +169,4 @@
     </script>
 </body>
 </html>
+

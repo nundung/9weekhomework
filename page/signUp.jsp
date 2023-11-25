@@ -156,12 +156,6 @@
                 return false;
             }
 
-
-
-            // 부서 라디오 버튼 그룹 체크
-            var teamRadio = document.getElementsByName("team");
-            var positionRadio = document.getElementsByName("position");
-            
             //라디오 버튼 선택값 체크
             var radioList = [teamRadio, positionRadio];
 

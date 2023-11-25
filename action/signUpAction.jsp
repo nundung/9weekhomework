@@ -53,7 +53,7 @@
         Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
         Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
-        if (!phonenumberMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
+        if (!pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
 
@@ -75,13 +75,17 @@
 	query.setString(4, phonenumber);
 	query.setString(5, team);
 	query.setString(6, position);
-
+    
+        boolean signUpSuccess = false;
+    
     try {
         //SQL 전송
         query.executeUpdate();
+        signUpSuccess = true;
     }
 
     catch(SQLException e) {
+        signUpSuccess = false;
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
     }
 %>
@@ -92,10 +96,12 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="messageArea">
     <script>
-        alert("회원가입이 완료되었습니다.")
-        location.href="index.jsp"
+        var signUpSuccess = "<%=signUpSuccess%>";
+        if (signUpSuccess === "true") {
+            alert("회원가입이 완료되었습니다.")
+            location.href="../index.jsp"
+        }
     </script>
 
 </body>

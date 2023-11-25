@@ -33,8 +33,8 @@
 	String position = request.getParameter("position");
 
     if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
-        return;
         out.println("<div>입력값이 부족합니다.</div>");
+        return;
     }
     else {
 

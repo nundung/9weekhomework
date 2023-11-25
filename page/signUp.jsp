@@ -105,7 +105,7 @@
             .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
         }
 
-        //예외처리
+        //입력값 유효성 체크
         function exceptionCheckEvent() {
             if (checkedId == false) {
                 alert("아이디 중복체크를 먼저 진행해주세요.");
@@ -120,6 +120,7 @@
             }
 
             //아이디 정규식
+            var id = document.getElementById("idInput").value;
             var idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
             if(!idReg.test(id)) {
                 alert("")
@@ -157,9 +158,11 @@
 
 
 
-            //라디오 버튼 선택값 체크
+            // 부서 라디오 버튼 그룹 체크
             var teamRadio = document.getElementsByName("team");
             var positionRadio = document.getElementsByName("position");
+            
+            //라디오 버튼 선택값 체크
             var radioList = [teamRadio, positionRadio];
 
             for (var j = 0; j < radioList.length; j++) {

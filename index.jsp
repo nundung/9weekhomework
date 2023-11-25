@@ -12,9 +12,9 @@
     <div id="title">
         로그인
     </div>
-    <form action="action/logInAction.jsp">
-        <input type="text" class="inputBox" placeholder="아이디">
-        <input type="text" class="inputBox" placeholder="비밀번호">
+    <form action="action/logInAction.jsp" onsubmit="return exceptionCheckEvent()">
+        <input type="text" class="input" name = "id"  placeholder="아이디">
+        <input type="text" class="input" name = "pw"  placeholder="비밀번호">
         <input type="submit" id="Button" value="로그인">
     </form>
     <div id="menuBox">
@@ -25,6 +25,17 @@
         <span class="menu" onclick="signUpEvent()">회원가입</span>
     </div>
     <script>
+        //예외처리
+        function exceptionCheckEvent() {
+            var input = document.getElementsByClassName("input")
+            for(var i=0; i < input.length; i++) {
+                if (input[i].value == "") {
+                    alert("모든값을 입력해주세요.")
+                    return false;
+                }
+            }
+        }
+
         function findIdEvent() {
             location.href = "page/findId.jsp";
         }

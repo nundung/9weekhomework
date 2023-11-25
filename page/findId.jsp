@@ -13,8 +13,8 @@
         아이디 찾기
     </div>
     <form action="">
-        <input type="text" class="inputBox" placeholder="이름">
-        <input type="text" class="inputBox" placeholder="전화번호">
+        <input type="text" class="input" placeholder="이름">
+        <input type="text" class="input" placeholder="전화번호">
         <button id="Button" onclick="findId()">아이디 찾기</button>
     </form>
 </body>

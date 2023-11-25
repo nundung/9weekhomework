@@ -41,17 +41,19 @@
             out.println("<div>잘못된 형식의 아이디입니다.</div>");
         } 
         else {
-            //변수 선언
             Connection connect = null;
             PreparedStatement query = null;
             ResultSet result = null;
         
             try {
                 Class.forName("com.mysql.jdbc.Driver");
+
                 connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+                
                 String sql = "SELECT * FROM account WHERE id = ?";
                 query = connect.prepareStatement(sql);
                 query.setString(1, id);
+                
                 result = query.executeQuery();
 
                 if (result.next()) {

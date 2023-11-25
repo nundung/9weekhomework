@@ -13,9 +13,9 @@
         비밀번호 찾기
     </div>
     <form>
-        <input type="text" class="inputBox" placeholder="이름">
-        <input type="text" class="inputBox" placeholder="아이디">
-        <input type="text" class="inputBox" placeholder="전화번호">
+        <input type="text" class="input" placeholder="이름">
+        <input type="text" class="input" placeholder="아이디">
+        <input type="text" class="input" placeholder="전화번호">
         <button id="Button" onclick="loginEvent()">비밀번호 찾기</button>
     </form>
 </body>

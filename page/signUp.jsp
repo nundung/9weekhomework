@@ -15,7 +15,7 @@
     <div id="title">
         회원가입
     </div>
-    <form action="../action/signUpAction.jsp" onsubmit=" return exceptionHandlingEvent()">
+    <form action="../action/signUpAction.jsp" onsubmit=" return exceptionCheckEvent()">
         <div id="idRow">
             <label for="id" id="idColumn">아이디</label>
             <input type="text" id="idInput" name="id" placeholder="영문, 숫자 조합으로 6~18자">
@@ -76,8 +76,7 @@
                     var idInput = document.getElementById("idInput");
                     var duplicateCheckButton = document.getElementById("duplicateCheckButton");
                 
-                    // 아이디 입력 요소와 버튼을 비활성화
-                    idInput.disabled = true;
+                    //버튼을 비활성화
                     duplicateCheckButton.disabled = true;
 
                     // 버튼색 변경
@@ -85,6 +84,18 @@
                 }
             }
         }
+
+        // 아이디 입력 값 변경 시 중복 체크 상태 초기화
+        function resetDuplicateCheck() {
+            checkedId = false;
+            var duplicateCheckButton = document.getElementById("duplicateCheckButton");
+            duplicateCheckButton.disabled = false;
+            duplicateCheckButton.style.backgroundColor = ""; // 버튼 색상 초기화
+        }
+        document.getElementById("idInput").addEventListener("input", function() {
+            resetDuplicateCheck();
+        });
+
 
         // 자동 하이픈 추가
         var phonenumberAutoHyphen =() => {
@@ -94,8 +105,8 @@
             .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
         }
 
-        //입력값 유효성 검사
-        function exceptionHandlingEvent() {
+        //예외처리
+        function exceptionCheckEvent() {
             if (checkedId == false) {
                 alert("아이디 중복체크를 먼저 진행해주세요.");
                 return false;
@@ -107,6 +118,13 @@
                     return false;
                 }
             }
+
+            //아이디 정규식
+            var idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
+            if(!idReg.test(id)) {
+                alert("")
+                return false;
+            } 
             //비밀번호 정규식
             var pwReg = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
             var pw = document.getElementById("pw").value;
@@ -139,11 +157,9 @@
 
 
 
-            // 부서 라디오 버튼 그룹 확인
+            //라디오 버튼 선택값 체크
             var teamRadio = document.getElementsByName("team");
             var positionRadio = document.getElementsByName("position");
-            
-            //라디오 버튼 선택값 검사
             var radioList = [teamRadio, positionRadio];
 
             for (var j = 0; j < radioList.length; j++) {

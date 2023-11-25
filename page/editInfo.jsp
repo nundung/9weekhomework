@@ -10,7 +10,7 @@
 </head>
 <body id="body">
     <div id="header">
-        <img src="../image/home.svg" class="headerIcon">
+        <img src="../image/home.svg" class="headerIcon" onclick="schedulePageEvent()">
         <p id="title">정보수정</p>
         <div id="empty"></div>
     </div>
@@ -45,5 +45,9 @@
         </div>
         <input type="submit" id="editButton" value="수정완료">
     </form>
+    <script>
+        function schedulePageEvent() {
+            location.href = "schedule.jsp";
+        }
+    </script>
 </body>
-</html>

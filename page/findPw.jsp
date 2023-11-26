@@ -1,30 +1,34 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>비밀번호 찾기</title>
     <link rel="stylesheet" type="text/css" href="../css/signUp.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
-<body id="body">
-    <div id="title">
+<body>
+    <header>
         비밀번호 찾기
-    </div>
-    <form action="../action/findPwAction.jsp" onsubmit="return exceptionCheckEvent()">
-        <div id="rows">
-            <label for="name" class ="column">이름</label>
-            <input type="text" class="input" id="name" name="name">
-
-            <label for="id" class ="column">아이디</label>
-            <input type="text" class="input" id="id" name="id">
-
-            <label for="phonenumber" class ="column">전화번호</label>
-            <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
-        </div>
-        <input type="submit" id="button" value="비밀번호 찾기"></button>
-    </form>
+    </header>
+    <main>
+        <form action="../action/findPwAction.jsp" onsubmit="return exceptionCheckEvent()">
+            <section class="rows">
+                <label for="name" class ="label">이름</label>
+                <input type="text" class="input" id="name" name="name">
+            </section>
+            <section class="rows">
+                <label for="id" class ="label">아이디</label>
+                <input type="text" class="input" id="id" name="id">
+            </section>
+            <section class="rows">
+                <label for="phonenumber" class ="label">전화번호</label>
+                <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
+            </section>
+            <input type="submit" id="button" value="비밀번호 찾기"></button>
+        </form>
+    </main>
+    
     <script>
         // 자동 하이픈 추가
         var phonenumberAutoHyphen =() => {

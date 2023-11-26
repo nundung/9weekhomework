@@ -1,94 +1,86 @@
 
-#body {
-    text-align: center;
-}
-
-#title {
+header {
     margin-top: 60px;
     margin-bottom: 50px;
-    font-size: 55px;
+    font-size: 60px;
     color: #3b5998;
 }
 
-
-#idColumn {
-    width: 115px;
-    margin-bottom: 8px;
+main {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #idRow {
-    width: 610.4px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    justify-content: center;
+    margin-bottom: 8px;
     align-items: center;
+    display: flex;
+    width: 100%;
+    height: 35px;
+}
+
+#idLabel {
+    font-size: 15px;
+    width: 115px;
     text-align: end;
 }
 
 #idInput {
-    margin-bottom: 8px;
-    width: 350px;
-    height: 30px;
+    font-size: 15px;
+    flex-grow: 1;
+    height: 100%;
     margin-left: 10px;
     margin-right: 10px;
-}
-#idInput::placeholder {
-    color:#a8a7a7; /* placeholder 색상 설정 */
 }
 
 #duplicateCheckButton {
     width: 115px;
-    height: 35.2px;
-    margin-bottom: 8px;
+    height: 100%;
     cursor: pointer;
     color: white;
     background-color: #3b5998;
-    border-color: solid 1px black;
+    border: none;
 }
 
 
-.column {
+.rows {
     margin-bottom: 8px;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+
+.label {
+    font-size: 15px;
     width: 115px;
     text-align: end;
 }
 
-#rows {
-    margin-left: auto;
-    margin-right: auto;
-    width: 610.4px;
-    height: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
 .input {
-    margin-bottom: 8px;
-    width: 350px;
-    height: 30px;
+    font-size: 15px;
+    flex-grow: 1;
+    height: 35px;
     margin-left: 10px;
-    margin-right: 124.56px;
+    margin-right: 125px;
 }
-.input::placeholder {
-    color:#a8a7a7;
-}
-
 
 .radioInput {
-    width: 350.4px;
-    height: 30px;
+    font-size: 15px;
     margin-left: 20px;
-    margin-right: 124.56px;
     text-align: start;
+
 }
 
 #button {
-    width: 358px;
-    height: 38px;
+    width: 350px;
+    height: 35px;
+    font-size: 15px;
     cursor: pointer;
     color: white;
     background-color: #3b5998;
-    border-color: solid 1px black;
+    border: none;
 }

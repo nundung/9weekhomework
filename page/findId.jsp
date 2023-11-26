@@ -7,21 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아이디 찾기</title>
     <link rel="stylesheet" type="text/css" href="../css/signUp.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
-<body id="body">
-    <div id="title">
+<body>
+    <header>
         아이디 찾기
-    </div>
-    <form action="../action/findIdAction.jsp" onsubmit="return exceptionCheckEvent()">
-        <div id="rows">
-            <label for="name" class ="column">이름</label>
-            <input type="text" class="input" id="name" name="name">
+    </header>
+    <main>
+        <form action="../action/findIdAction.jsp" onsubmit="return exceptionCheckEvent()">
+            <section class="rows">
+                <label for="name" class ="label">이름</label>
+                <input type="text" class="input" id="name" name="name">
+            </section>
+            <section class="rows">
+                <label for="phonenumber" class ="label">전화번호</label>
+                <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
+            </section>
+            <input type="submit" id="button" value="아이디 찾기"></button>
+        </form>
+    </main>
     
-            <label for="phonenumber" class ="column">전화번호</label>
-            <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
-        </div>
-        <input type="submit" id="button" value="아이디 찾기"></button>
-    </form>
     <script>
         // 자동 하이픈 추가
         var phonenumberAutoHyphen =() => {

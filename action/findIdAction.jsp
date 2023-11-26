@@ -15,16 +15,37 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
-<% 
+<!-- 정규식 -->
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
+
+
+<%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    String idInput = request.getParameter("id"); 
-    String pwInput = request.getParameter("pw"); 
+    String name = request.getParameter("name"); 
+    String phonenumber = request.getParameter("phonenumber"); 
 
-    if (idInput == null || pwInput == null) {
+    if (name == null || phonenumber == null) {
         return;
     }
+    else {
+        //이름 정규식
+        String nameReg = "[가-힣]{2,4}";
+        Pattern namePattern = Pattern.compile(nameReg);
+        Matcher nameMatcher = namePattern.matcher(name);
+
+        //전화번호 정규식
+        String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
+        Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
+        Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
+
+        if (!nameMatcher.matches() || !phonenumberMatcher.matches()) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+        }
+    }
+    
 
     Connection connect = null;
     PreparedStatement query = null;
@@ -33,47 +54,27 @@
     Class.forName("com.mysql.jdbc.Driver");
     connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-    String sql = "SELECT * FROM account WHERE id= ? AND pw = ?";
+    String sql = "SELECT * FROM account WHERE name= ? AND phonenumber = ?";
 	query = connect.prepareStatement(sql);
-	query.setString(1, idInput);
-    query.setString(2, pwInput);
+	query.setString(1, name);
+    query.setString(2, phonenumber);
 
     //return값을 저장해줌
     result = query.executeQuery();
-    
-    String logInCheck = "null";
+
+    String idFind = "null";
+    String id = "null";
 
     try {
-        int accountIdx = 0;
-        String pw = "null";
-        String name = "null";
-        String phonenumber = "null";
-        String team = "null";
-        String position = "null";
-
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
-            accountIdx = result.getInt(1);
-            pw = result.getString(3);
-            name = result.getString(4);
-            phonenumber = result.getString(5);
-            team = result.getString(6);
-            position = result.getString(7);
-            
-            //세션에 값 설정
-            session.setAttribute("accountIdx", accountIdx);
-            session.setAttribute("id", idInput);
-            session.setAttribute("name", name);
-            session.setAttribute("pw", pw);
-            session.setAttribute("phonenumber", phonenumber);
-            session.setAttribute("team", team);
-            session.setAttribute("position", position);
-            logInCheck = "ok";
+            id = result.getString(2);
+            idFind = "ok";
         }
         else {
-            logInCheck = "notOk";
+            idFind = "notOk";
         }
-    } 
+    }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         e.printStackTrace();
@@ -98,7 +99,7 @@
     }
 %>
 
-<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,15 +107,16 @@
 </head>
 <body>
     <script>
-        var logInCheck = "<%=logInCheck%>";
-        if(logInCheck === "ok") {
-            console.log(logInCheck);
-            location.href = "../page/schedule.jsp";
+        var idFind = "<%=idFind%>";
+        console.log(idFind);
+            var id = "<%=id%>";
+        if(idFind === "ok") {
+            alert("회원님의 아이디는" + id + "입니다.");
+            location.href = "../index.jsp";
         }
         else {
-            console.log(logInCheck);
             alert("일치하는 계정정보가 존재하지 않습니다.")
-            location.href = "../index.jsp";
+            location.href = "../page/findId.jsp";
         }
     </script>
 </body>

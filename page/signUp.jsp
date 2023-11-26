@@ -18,7 +18,7 @@
     <form action="../action/signUpAction.jsp" onsubmit=" return exceptionCheckEvent()">
         <div id="idRow">
             <label for="id" id="idColumn">아이디</label>
-            <input type="text" id="idInput" name="id" placeholder="영문, 숫자 조합으로 6~18자">
+            <input type="text" id="idInput" name="id" placeholder="영문, 숫자 조합으로 6~18자" oninput="resetDuplicateCheck()">
             <input type="button" id="duplicateCheckButton" onclick="duplicateCheckEvent()" value="아이디 중복체크">
         </div>
         <div id="rows">
@@ -92,9 +92,6 @@
             duplicateCheckButton.disabled = false;
             duplicateCheckButton.style.backgroundColor = ""; // 버튼 색상 초기화
         }
-        document.getElementById("idInput").addEventListener("input", function() {
-            resetDuplicateCheck();
-        });
 
 
         // 자동 하이픈 추가
@@ -105,7 +102,7 @@
             .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
         }
 
-        //입력값 유효성 체크
+        //예외처리
         function exceptionCheckEvent() {
             if (checkedId === false) {
                 alert("아이디 중복체크를 먼저 진행해주세요.");

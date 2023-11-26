@@ -28,6 +28,7 @@
     String phonenumber = request.getParameter("phonenumber"); 
 
     if (name == null || phonenumber == null) {
+        out.println("<div>입력값이 부족합니다.</div>");
         return;
     }
     else {
@@ -62,17 +63,17 @@
     //return값을 저장해줌
     result = query.executeQuery();
 
-    String idFind = "null";
+    boolean idFind = false;
     String id = "null";
 
     try {
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             id = result.getString(2);
-            idFind = "ok";
+            idFind = true;
         }
         else {
-            idFind = "notOk";
+            idFind = false;
         }
     }
     catch (SQLException e) {
@@ -108,9 +109,9 @@
 <body>
     <script>
         var idFind = "<%=idFind%>";
-        console.log(idFind);
-            var id = "<%=id%>";
-        if(idFind === "ok") {
+        var id = "<%=id%>";
+
+        if(idFind === "true") {
             alert("회원님의 아이디는" + id + "입니다.");
             location.href = "../index.jsp";
         }

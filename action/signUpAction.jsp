@@ -15,9 +15,10 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
+<!-- 정규식 -->
 <%@ page import="java.util.regex.Pattern" %>
-
 <%@ page import="java.util.regex.Matcher" %>
+
 
 <%
 	//전페이지에서 온 데이터에 대해서 인코딩 설정
@@ -37,7 +38,6 @@
         return;
     }
     else {
-
         //비밀번호 정규식
         String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
         Pattern pwPattern = Pattern.compile(pwReg);
@@ -76,7 +76,7 @@
 	query.setString(5, team);
 	query.setString(6, position);
     
-        boolean signUpSuccess = false;
+    boolean signUpSuccess = false;
     
     try {
         //SQL 전송

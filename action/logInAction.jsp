@@ -15,15 +15,36 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
+<!-- 정규식 -->
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
+
+
 <% 
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    String idInput = request.getParameter("id"); 
-    String pwInput = request.getParameter("pw"); 
+    String id = request.getParameter("id"); 
+    String pw = request.getParameter("pw"); 
 
-    if (idInput == null || pwInput == null) {
+    if (id == null || pw == null) {
+        out.println("<div>입력값이 부족합니다.</div>");
         return;
+    }
+    else {
+        //아이디 정규식
+        String idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
+        Pattern idPattern = Pattern.compile(idReg);
+        Matcher idMatcher = pwPattern.matcher(id);
+
+        //비밀번호 정규식
+        String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
+        Pattern pwPattern = Pattern.compile(pwReg);
+        Matcher pwMatcher = pwPattern.matcher(pw);
+
+        if (!idMatcher.matches() || !pwMatcher.matches()) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+        }
     }
 
     Connection connect = null;
@@ -35,17 +56,16 @@
 
     String sql = "SELECT * FROM account WHERE id= ? AND pw = ?";
 	query = connect.prepareStatement(sql);
-	query.setString(1, idInput);
-    query.setString(2, pwInput);
+	query.setString(1, id);
+    query.setString(2, pw);
 
     //return값을 저장해줌
     result = query.executeQuery();
     
-    String logInCheck = "null";
+    boolean logInSuccess = false;
 
     try {
         int accountIdx = 0;
-        String pw = "null";
         String name = "null";
         String phonenumber = "null";
         String team = "null";
@@ -54,7 +74,6 @@
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             accountIdx = result.getInt(1);
-            pw = result.getString(3);
             name = result.getString(4);
             phonenumber = result.getString(5);
             team = result.getString(6);
@@ -62,16 +81,16 @@
             
             //세션에 값 설정
             session.setAttribute("accountIdx", accountIdx);
-            session.setAttribute("id", idInput);
+            session.setAttribute("id", id);
             session.setAttribute("name", name);
             session.setAttribute("pw", pw);
             session.setAttribute("phonenumber", phonenumber);
             session.setAttribute("team", team);
             session.setAttribute("position", position);
-            logInCheck = "ok";
+            logInSuccess = true;
         }
         else {
-            logInCheck = "notOk";
+            logInSuccess = false;
         }
     } 
     catch (SQLException e) {
@@ -106,13 +125,11 @@
 </head>
 <body>
     <script>
-        var logInCheck = "<%=logInCheck%>";
-        if(logInCheck === "ok") {
-            console.log(logInCheck);
+        var logInSuccess = "<%=logInSuccess%>";
+        if(logInSuccess === "true") {
             location.href = "../page/schedule.jsp";
         }
         else {
-            console.log(logInCheck);
             alert("일치하는 계정정보가 존재하지 않습니다.")
             location.href = "../index.jsp";
         }

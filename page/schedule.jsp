@@ -1,20 +1,21 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
+
 <%
     Object accountIdxSession = session.getAttribute("id");
-    String accountIdx = (String)accountIdxSession;
+    String accountIdxValue = (String)accountIdxSession;
 
     Object nameSession = session.getAttribute("name");
-    String name = (String)nameSession;
+    String nameValue = (String)nameSession;
 
     Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumber = (String)phonenumberSession;
+    String phonenumberValue = (String)phonenumberSession;
     
     Object teamSession = session.getAttribute("team");
-    String team = (String)teamSession;
+    String teamValue = (String)teamSession;
     
     Object positionSession = session.getAttribute("position");
-    String position = (String)positionSession;
+    String positionValue = (String)positionSession;
     
 %>
 
@@ -28,31 +29,32 @@
     <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
 <body>
-    <div id="header">
+    <!-- 상단헤더내용 -->
+    <header>
         <img src="../image/home.svg" class="headerIcon" onclick="reloadEvent()">
         <p id="todayValue"></p>
         <img src="../image/menu.svg" class="headerIcon" onclick="toggleMenuEvent()">
-    </div>
-
-    <div id= "menuBar">
-        <div id="menuBarHeader">
+    </header>
+    <!-- 메뉴내용 -->
+    <nav id= "menuBar">
+        <section id="menuBarHeader">
             <input type="button" value="로그아웃" id="logOutButton" onclick="logOutEvent()">
             <img src="../image/menu.svg" class="headerIcon" onclick="toggleMenuEvent()">
-        </div>
-        <div id="myInfo">
+        </section>
+        <section class="myInfo">
             <img src="../image/profile.svg" id="profile">
             <div id="detailInfo">
-                <p id="department">개발부</p>
-                <p id="position">팀원</p>
-                <p id="name">홍길동</p>
+                <p id="team"></p>
+                <p id="position"></p>
+                <p id="name"></p>
             </div>
-            <p id="phoneNumber">010-1234-5678</p>
-            <input type="button" value="정보수정" id="editInfoButton" onclick="editInfoEvent()">
-        </div>
-        <div id="teamMemberList">
-
-        </div>
-    </div>
+        </section>
+        <section class="myInfo">
+            <p id="phonenumber"></p>
+        </section>
+        <input type="button" value="정보수정" id="editInfoButton" onclick="editInfoEvent()">
+        <section id="teamMemberList"></section>
+    </nav>
 
     <div id="year">
         <img src="../image/left.png" class="yearSelectButton" onclick="lastYearEvent()">
@@ -68,7 +70,23 @@
         </div>
     </div>
     <script>
+        var nameValue = "<%=nameValue%>";
+        var phonenumberValue = "<%=phonenumberValue%>";
+        var teamValue = "<%=teamValue%>";
+        var positionValue = "<%=positionValue%>";
 
+        var nameId = document.getElementById("name");
+        var phonenumber = document.getElementById("phonenumber");
+        var team = document.getElementById("team");
+        var position = document.getElementById("position");
+        
+        console.log(nameValue);
+        nameId.innerHTML = nameValue;
+        phonenumber.innerHTML = phonenumberValue;
+        team.innerHTML = teamValue + "부";
+        position.innerHTML = positionValue
+
+        
         //홈 버튼 클릭시 새로고침
         function reloadEvent() {
             location.reload();
@@ -83,11 +101,11 @@
         //메뉴바 토글 이벤트
         function toggleMenuEvent(event) {
             var menuBar = document.getElementById("menuBar");
-            if (getComputedStyle(menuBar).right === "-230px") {
+            if (getComputedStyle(menuBar).right === "-240px") {
                 menuBar.style.right = "0px";
             } 
             else{
-                menuBar.style.right = "-230px";
+                menuBar.style.right = "-240px";
             }
         }
 

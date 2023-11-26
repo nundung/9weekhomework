@@ -1,5 +1,23 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
+
+<%
+    Object accountIdxSession = session.getAttribute("id");
+    String accountIdxValue = (String)accountIdxSession;
+
+    Object nameSession = session.getAttribute("name");
+    String nameValue = (String)nameSession;
+
+    Object phonenumberSession = session.getAttribute("phonenumber");
+    String phonenumberValue = (String)phonenumberSession;
+    
+    Object teamSession = session.getAttribute("team");
+    String teamValue = (String)teamSession;
+    
+    Object positionSession = session.getAttribute("position");
+    String positionValue = (String)positionSession;
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

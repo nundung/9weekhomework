@@ -7,7 +7,7 @@ header {
 }
 
 main {
-    width: 600px;
+    width: 610px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -22,7 +22,7 @@ main {
 
 #idLabel {
     font-size: 15px;
-    width: 115px;
+    width: 120px;
     text-align: end;
 }
 
@@ -35,14 +35,14 @@ main {
 }
 
 #duplicateCheckButton {
-    width: 115px;
+    width: 120px;
     height: 100%;
+    font-size: 15px;
     cursor: pointer;
     color: white;
     background-color: #3b5998;
     border: none;
 }
-
 
 .rows {
     margin-bottom: 8px;
@@ -56,7 +56,7 @@ main {
 
 .label {
     font-size: 15px;
-    width: 115px;
+    width: 120px;
     text-align: end;
 }
 
@@ -65,14 +65,12 @@ main {
     flex-grow: 1;
     height: 35px;
     margin-left: 10px;
-    margin-right: 125px;
+    margin-right: 130px;
 }
 
 .radioInput {
     font-size: 15px;
     margin-left: 20px;
-    text-align: start;
-
 }
 
 #button {

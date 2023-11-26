@@ -6,16 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아이디 찾기</title>
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/signUp.css">
 </head>
 <body id="body">
     <div id="title">
         아이디 찾기
     </div>
     <form action="../action/findIdAction.jsp" onsubmit="return exceptionCheckEvent()">
-        <input type="text" class="input" id="name" name="name" placeholder="이름">
-        <input type="text" class="input" id="phonenumber" name="phonenumber" placeholder="전화번호" oninput="phonenumberAutoHyphen()">
-        <input type="submit" id="Button" value="아이디 찾기"></button>
+        <div id="rows">
+            <label for="name" class ="column">이름</label>
+            <input type="text" class="input" id="name" name="name">
+    
+            <label for="phonenumber" class ="column">전화번호</label>
+            <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
+        </div>
+        <input type="submit" id="button" value="아이디 찾기"></button>
     </form>
     <script>
         // 자동 하이픈 추가

@@ -45,7 +45,7 @@
                 <input type="radio" name="position" value="팀장">팀장
             </div>
         </div>
-        <input type="submit" id="signUpButton" value="회원가입" >
+        <input type="submit" id="button" value="회원가입" >
     </form>
     <script>
         var checkedId = false;
@@ -92,7 +92,6 @@
             duplicateCheckButton.disabled = false;
             duplicateCheckButton.style.backgroundColor = ""; // 버튼 색상 초기화
         }
-
 
         // 자동 하이픈 추가
         var phonenumberAutoHyphen =() => {

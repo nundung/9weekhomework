@@ -1,48 +1,50 @@
 
-#body {
-    text-align: center;
-}
-
-#title {
+header {
     margin-top: 60px;
     margin-bottom: 50px;
-    font-size: 55px;
+    font-size: 60px;
     color: #3b5998;
 }
 
-.input {
-    margin-bottom: 8px;
-    display: block;
+main {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
     margin-left: auto;
     margin-right: auto;
     width: 350px;
-    height: 30px;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    height: 35px;
+    font-size: 15px;
+    margin-bottom: 8px;
 }
 
 ::placeholder {
     color: #999; /* 연한 회색 또는 다른 적절한 색상으로 변경 가능 */
 }
 
-#Button {
+#button {
     cursor: pointer;
-    width: 360px;
-    height: 38px;
-    cursor: pointer;
+    border: none;
+    width: 100%;
+    height: 35px;
     color: white;
     background-color: #3b5998;
-    border: 0.5px solid;
 }
 
 #menuBox {
-    width: 358px;
-    margin-top:4px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     display: flex;
+    font-size: 15px;
     justify-content: space-evenly;
     color: rgb(150, 148, 157);
 }
 
 .menu {
+    font-size: 15px;
     cursor: pointer;
 }

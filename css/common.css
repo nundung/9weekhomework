@@ -1,0 +1,16 @@
+* {
+    outline: none;
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+::placeholder {
+    color: #999; /* 연한 회색 또는 다른 적절한 색상으로 변경 가능 */
+}

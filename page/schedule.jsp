@@ -1,16 +1,35 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
+<%
+    Object accountIdxSession = session.getAttribute("id");
+    String accountIdx = (String)accountIdxSession;
+
+    Object nameSession = session.getAttribute("name");
+    String name = (String)nameSession;
+
+    Object phonenumberSession = session.getAttribute("phonenumber");
+    String phonenumber = (String)phonenumberSession;
+    
+    Object teamSession = session.getAttribute("team");
+    String team = (String)teamSession;
+    
+    Object positionSession = session.getAttribute("position");
+    String position = (String)positionSession;
+    
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>스케줄</title>
     <link rel="stylesheet" type="text/css" href="../css/schedule.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
 <body>
     <div id="header">
-        <img src="../image/home.svg" class="headerIcon" onclick="schedulePageEvent()">
+        <img src="../image/home.svg" class="headerIcon" onclick="reloadEvent()">
         <p id="todayValue"></p>
         <img src="../image/menu.svg" class="headerIcon" onclick="toggleMenuEvent()">
     </div>
@@ -51,7 +70,7 @@
     <script>
 
         //홈 버튼 클릭시 새로고침
-        function schedulePageEvent() {
+        function reloadEvent() {
             location.reload();
         }
 

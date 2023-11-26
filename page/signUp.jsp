@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
-<%
-    Object idSession = session.getAttribute("id");
-    String checkedId = (String)idSession;
-%>  
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

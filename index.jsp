@@ -7,23 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>9weekhomework</title>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
 </head>
-<body id="body">
-    <div id="title">
+<body>
+    <header>
         로그인
-    </div>
-    <form action="action/logInAction.jsp" onsubmit="return exceptionCheckEvent()">
-        <input type="text" class="input" name = "id" id="id" placeholder="아이디">
-        <input type="text" class="input" name = "pw" id="pw" placeholder="비밀번호">
-        <input type="submit" id="Button" value="로그인">
-    </form>
-    <div id="menuBox">
-        <span class="menu" onclick="findIdEvent()">아이디 찾기</span>
-        |
-        <span class="menu" onclick="findPwEvent()">비밀번호 찾기</span>
-        |
-        <span class="menu" onclick="signUpEvent()">회원가입</span>
-    </div>
+    </header>
+    <main>
+        <form action="action/logInAction.jsp" onsubmit="return exceptionCheckEvent()">
+            <input type="text" class="input" name = "id" id="id" placeholder="아이디">
+            <input type="text" class="input" name = "pw" id="pw" placeholder="비밀번호">
+            <input type="submit" id="button" value="로그인">
+        </form>
+        <div id="menuBox">
+            <span class="menu" onclick="findIdEvent()">아이디 찾기</span>
+            |
+            <span class="menu" onclick="findPwEvent()">비밀번호 찾기</span>
+            |
+            <span class="menu" onclick="signUpEvent()">회원가입</span>
+        </div>
+    </main>
     <script>
         //예외처리
         function exceptionCheckEvent() {

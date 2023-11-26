@@ -33,9 +33,9 @@
     }
     else {
         //아이디 정규식
-        String idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
+        String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
         Pattern idPattern = Pattern.compile(idReg);
-        Matcher idMatcher = pwPattern.matcher(id);
+        Matcher idMatcher = idPattern.matcher(id);ㄴ
 
         //비밀번호 정규식
         String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";

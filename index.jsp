@@ -28,6 +28,22 @@
         </div>
     </main>
     <script>
+        function maskPassword() {
+            var pw = document.getElementById("pw");
+            var pwCheck = document.getElementById("pwCheck");
+
+            // 비밀번호 입력 필드에 값이 있다면 마스킹
+            if (pw.value.length > 0) {
+                var maskedPw = "*".repeat(pw.value.length);
+                pw.value = maskedPassword;
+            }
+
+            // 비밀번호 확인 필드도 마찬가지로 마스킹
+            if (pwCheck.value.length > 0) {
+                var maskedPwCheck = "*".repeat(pwCheck.value.length);
+                pwCheck.value = maskedPwCheck;
+            }
+        }
         //예외처리
         function exceptionCheckEvent() {
             var input = document.getElementsByClassName("input")

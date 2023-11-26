@@ -2,8 +2,7 @@
 
 
 <%
-    Object accountIdxSession = session.getAttribute("id");
-    String accountIdxValue = (String)accountIdxSession;
+    Object accountIdxValue = session.getAttribute("accountIdx");
 
     Object nameSession = session.getAttribute("name");
     String nameValue = (String)nameSession;
@@ -80,7 +79,6 @@
         var team = document.getElementById("team");
         var position = document.getElementById("position");
         
-        console.log(nameValue);
         nameId.innerHTML = nameValue;
         phonenumber.innerHTML = phonenumberValue;
         team.innerHTML = teamValue + "부";

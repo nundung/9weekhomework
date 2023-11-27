@@ -68,7 +68,6 @@
     int scheduleIdx = 0;
     String scheduleName = "null";
     String scheduleDate = "null";
-    String scheduleTime = "null";
     
     boolean schedule = false;
 
@@ -78,7 +77,6 @@
             scheduleIdx = result.getInt(1);
             scheduleName = result.getString(2);
             scheduleDate = result.getString(3);
-            scheduleTime = result.getString(4);
             schedule = true;
         }
         else {
@@ -261,7 +259,7 @@
         function showDetailEvent() {
             var clickedDay = event.target.innerHTML
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?year=" + year + "&month=" + month +"&day="+ clickedDay, "year + '.' + month+'.'+clickedDay", options)
+            var ret = window.open("scheduleDetail.jsp?year=" + year + "&month=" + month +"&day="+ clickedDay, "상세일정", options)
         }
 
         //메뉴바 토글 이벤트

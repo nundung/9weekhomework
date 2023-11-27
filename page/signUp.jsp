@@ -73,7 +73,7 @@
 
             //아이디 중복체크 팝업 오픈
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400";
-            var pop = window.open("../action/checkIdAction.jsp?id="+ id, "아이디중복체크", options);
+            var pop = window.open("../action/checkIdAction.jsp?id="+ id, "아이디 중복체크", options);
 
             //팝업창이 닫힐 때
             pop.onunload = function () {

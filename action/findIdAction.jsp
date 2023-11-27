@@ -28,7 +28,7 @@
     String phonenumber = request.getParameter("phonenumber"); 
 
     if (name == null || phonenumber == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
+        out.println("<div>올바른 접근이 아닙니다.</div>");
         return;
     }
     else {

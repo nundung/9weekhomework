@@ -40,8 +40,8 @@
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
-
     <script>
+        
         function nullCheckEvent() {
             var timeValue = document.getElementById("timeValue").value;
             var scheduleValue = document.getElementById("scheduleValue").value;

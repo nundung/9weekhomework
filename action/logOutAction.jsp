@@ -1,4 +1,10 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
+
+
+<%
+    session.invalidate();
+%>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">

@@ -10,6 +10,12 @@ header {
     background-color: #3b5998;
 }
 
+main {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .headerIcon {
     cursor: pointer;
     height: 35px;
@@ -17,93 +23,16 @@ header {
     margin-right: 15px;
 }
 
-#todayValue {
+#todaySection {
     font-size: 30px;
     color: white;
 }
 
-#menuBar {
-    position: fixed;
-    right: -240px;
-    top: 0px;
-    width : 240px;
-    height: 100%;
-    background-color: #3b5998;
-    transition: 0.2s;
-    z-index: 5;
+#monthValue {
+    background-color: pink;
 }
 
-#menuBarHeader {
-    width: 100%;
-    display: flex;
-    height: 55px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#logOutButton {
-    cursor: pointer;
-    color: #3b5998;
-    background-color: white;
-    margin-left: 15px;
-    width: 90px;
-    height: 30px;
-    border: none;
-}
-
-.myInfo {
-    display: flex;
-    width: 220px;
-    margin-left: auto;
-    margin-right: auto;
-    flex-wrap: wrap;
-}
-
-#profile {
-    width: 100px;
-}
-
-#detailInfo {
-    display: flex;
-    justify-content: center;
-    width: 120px;
-    height: 100px;
-    flex-wrap: wrap;
-}
-
-#team {
-    margin: 4px;
-    color: white;
-}
-
-#position {
-    margin: 4px;
-    color: white;
-}
-
-#name {
-    font-size: 20px;
-    color: white;
-    font-weight: bold;
-}
-
-#phonenumber {
-    color: white;
-    width: 100%;
-    font-size: 25px;
-}
-
-#editInfoButton {
-    cursor: pointer;
-    color: #3b5998;
-    background-color: white;
-    width: 90px;
-    height: 30px;
-    border: none;
-}
-
-
-#year {
+#yearSection {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +52,7 @@ header {
     color: #3b5998;
 }
 
-#month {
+#monthSelectSection {
     height: 60px;
     display: flex;
     align-items: center;
@@ -166,11 +95,9 @@ header {
     height: 40px;
     text-align: center;
     background-color: #3b5998;
-}
-
-#monthValue {
     color: white;
 }
+
 
 .daySelectButton {
     color: #3b5998;

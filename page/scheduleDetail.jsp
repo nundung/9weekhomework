@@ -7,19 +7,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상세일정</title>
     <link rel="stylesheet" type="text/css" href="../css/scheduleDetail.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
 <body>
-    <div id="header">2023.11.25 상세일정</div>
-    <div id="scheduleList">
-        <!-- <div id="scheduleRow">
-            <span>시간</span>
-            <span id="schedule">일정</span>
-            <span id="buttonBox">
-                <img src="../image/pencil.svg" id="editButton">
-                <img src="../image/trashcan.svg" id="deleteButton">
-            </span>
-        </div> -->
-    </div>
+    <header id="dayValue"></header>
+    <main>
+        <div id="scheduleList">
+            <div id="scheduleRow">
+                <span>시간</span>
+                <span id="schedule">일정</span>
+                <span id="buttonBox">
+                    <img src="../image/pencil.svg" id="editButton">
+                    <img src="../image/trashcan.svg" id="deleteButton">
+                </span>
+            </div>
+        </div>
+        <div id="scheduleList">
+            <div id="scheduleRow">
+                <span>시간</span>
+                <span id="schedule">일정</span>
+                <span id="buttonBox">
+                    <img src="../image/pencil.svg" id="editButton">
+                    <img src="../image/trashcan.svg" id="deleteButton">
+                </span>
+            </div>
+        </div>
+    </main>
     <form action = "../action/scheduleInputAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
             <input type="time" id="timeValue">
@@ -27,6 +40,7 @@
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
+
     <script>
         function nullCheckEvent() {
             var timeValue = document.getElementById("timeValue").value;

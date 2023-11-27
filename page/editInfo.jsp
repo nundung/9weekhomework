@@ -99,22 +99,6 @@
         nameId.value = nameValue;
         phonenumber.value = phonenumberValue;
         
-        
-        function maskPw() {
-            // 비밀번호 입력 필드에 값이 있다면 마스킹
-            if (pw.value.length > 0) {
-                var maskedPw = "*".repeat(pw.value.length);
-                pw.value = maskedPw;
-            }
-
-            // 비밀번호 확인 필드도 마찬가지로 마스킹
-            if (pwCheck.value.length > 0) {
-                var maskedPwCheck = "*".repeat(pwCheck.value.length);
-                pwCheck.value = maskedPwCheck;
-            }
-        }
-
-        window.onload = maskPw;
 
         if (teamValue === "개발") {
             teamDev.checked = true;

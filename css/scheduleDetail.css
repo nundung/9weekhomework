@@ -30,24 +30,19 @@ main {
     border: solid 0.5px;
 }
 
-#schedule {
 
-}
-
-#buttonBox {
+#buttonSection {
     width: 100px;
 }
 
 #editButton {
     cursor: pointer;
     height: 100%;
-    background-color: pink;
 }
 
 #deleteButton {
     cursor: pointer;
     height: 100%;
-    background-color: pink;
 }
 
 #scheduleInput {

@@ -23,6 +23,7 @@ main {
 }
 
 #scheduleRow {
+    color: black;
     display: flex;
     height: 40px;
     align-items: center;
@@ -53,12 +54,12 @@ main {
     bottom: 0;
 }
 
-#timeValue {
+#timeInput {
     width: 170px;
     height: 100%;
 }
 
-#scheduleValue {
+#titleInput {
     flex-grow: 1;
     height: 100%;
 }

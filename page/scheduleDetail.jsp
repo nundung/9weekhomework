@@ -53,17 +53,17 @@
     result = query.executeQuery();
 
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
-    ArrayList<String> scheduleNameList = new ArrayList<String>();
+    ArrayList<String> scheduleTitleList = new ArrayList<String>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
     
     try {
         while (result.next()) {
             int scheduleIdx = result.getInt(1);
-            String scheduleName = result.getString(2);
+            String scheduleTitle = result.getString(2);
             String scheduleTime = result.getString(4);
 
             scheduleIdxList.add(scheduleIdx);
-            scheduleNameList.add("\""+scheduleName+"\"");
+            scheduleTitleList.add("\""+scheduleTitle+"\"");
             scheduleTimeList.add("\""+scheduleTime+"\"");
         }
     }
@@ -107,8 +107,8 @@
     </main>
     <form action = "../action/scheduleInputAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
-            <input type="time" id="timeValue">
-            <input type="text" id="scheduleValue">
+            <input type="time" name="time" id="timeInput">
+            <input type="text" name="title" id="titleInput">
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
@@ -116,32 +116,30 @@
 
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
-        var scheduleNameList = <%=scheduleNameList%>;
+        var scheduleTitleList = <%=scheduleTitleList%>;
 
         var year = "<%=year%>";
         var month = "<%=month%>";
         var day = "<%=day%>";
 
         var scheduleSection = document.getElementById("schduleSection");
-        if(scheduleIdxList.length == 0) {
-            alert("일정 없음");
-        }
-        else {
+
+        if (scheduleIdxList.length > 0) {
             for(var i=0; i<scheduleIdxList.length; i++){
                 var scheduleRow = document.createElement("div");
-                var scheduletime = document.createElement("span");
-                var schedulename = document.createElement("span");
+                var scheduleTime = document.createElement("span");
+                var scheduleTitle = document.createElement("span");
                 var buttonSection = document.createElement("span");
                 var editButton = document.createElement("img");
                 var deleteButton = document.createElement("img");
                 
                 scheduleRow.id = "scheduleRow";
 
-                scheduletime.id = "scheduletime";
-                scheduletime.innerHTML = scheduleTimeList[i];
+                scheduleTime.id = "scheduleTime";
+                scheduleTime.innerHTML = scheduleTimeList[i];
 
-                schedulename.id = "schedulename";
-                schedulename.innerHTML = scheduleNameList[i];
+                scheduleTitle.id = "scheduleTitle";
+                scheduleTitle.innerHTML = scheduleTitleList[i];
 
                 buttonSection.id = "buttonSection";
                 editButton.id = "editButton";
@@ -152,13 +150,11 @@
                 buttonSection.appendChild(editButton);
                 buttonSection.appendChild(deleteButton);
 
-                scheduleRow.appendChild(scheduletime);
-                scheduleRow.appendChild(schedulename);
+                scheduleRow.appendChild(scheduleTime);
+                scheduleRow.appendChild(scheduleTitle);
                 scheduleRow.appendChild(buttonSection);
                 scheduleSection.appendChild(scheduleRow);
-
             }
-
         }
 
         var daySection = document.getElementById("daySection");
@@ -166,13 +162,13 @@
         daySection.innerHTML = dayValue;
 
         function nullCheckEvent() {
-            var timeValue = document.getElementById("timeValue").value;
-            var scheduleValue = document.getElementById("scheduleValue").value;
+            var timeInput = document.getElementById("timeInput").value;
+            var titleInput = document.getElementById("titleInput").value;
             if (timeValue.trim() == "") {
                 alert("일정시간을 입력해주세요.");
                 return false;
             } 
-            else if (scheduleValue.trim() == "") {
+            else if (titleInput.trim() == "") {
                 alert("일정내용을 입력해주세요.");
                 return false;
             }

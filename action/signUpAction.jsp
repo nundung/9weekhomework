@@ -62,16 +62,13 @@
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
 
-    }
-	//데이터베이스 연결 코드
-		// Connector 파일 찾는 부분
-		Class.forName("com.mysql.jdbc.Driver");
-		//데이터베이스 연결
-		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+    Connection connect = null;
+    PreparedStatement query = null;
 
-	//SQL(쿼리문) 만들기
-	//SQL문은 다른 프로그래밍 언어 기준에는 단순히 문자열임 따라서 String을 사용
-	//미리 만들어놓은 test테이블에 입력받은 값을 넣도록 한다.
+    }
+    Class.forName("com.mysql.jdbc.Driver");
+    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
 	String sql = "INSERT INTO account (id, pw, name, phonenumber, team, position) VALUES (?, ?, ?, ?, ?, ?)";
 	PreparedStatement query = connect.prepareStatement(sql);
 	query.setString(1, id);
@@ -92,6 +89,20 @@
     catch(SQLException e) {
         signUpSuccess = false;
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+    }
+    finally {
+        try {
+            if (connect != null) {
+                connect.close();
+            }
+            if (query != null) {
+                query.close();
+            }
+        }
+        catch (SQLException e) {
+            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+            return;
+        }
     }
 %>
 

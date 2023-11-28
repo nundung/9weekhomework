@@ -18,10 +18,6 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
-<!-- 정규식 -->
-<%@ page import="java.util.regex.Pattern" %>
-<%@ page import="java.util.regex.Matcher" %>
-
 
 <%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
@@ -53,23 +49,22 @@
     result = query.executeQuery();
 
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
-    ArrayList<String> scheduleTitleList = new ArrayList<String>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
+    ArrayList<String> scheduleTitleList = new ArrayList<String>();
     
     try {
         while (result.next()) {
             int scheduleIdx = result.getInt(1);
-            String scheduleTitle = result.getString(2);
-            String scheduleTime = result.getString(4);
+            String scheduleTime = result.getString(3);
+            String scheduleTitle = result.getString(4);
 
             scheduleIdxList.add(scheduleIdx);
-            scheduleTitleList.add("\""+scheduleTitle+"\"");
             scheduleTimeList.add("\""+scheduleTime+"\"");
+            scheduleTitleList.add("\""+scheduleTitle+"\"");
         }
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-        e.printStackTrace();
         return;
     }
     finally {
@@ -102,18 +97,24 @@
     <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
 <body>
+    <!-- 해당날짜를 출력 -->
     <header id="daySection"></header>
+
+    <!-- 해당날짜의 일정 리스트 출력 -->
     <main id="schduleSection">
     </main>
+
+    <!-- 일정 입력창 -->
     <form action = "../action/scheduleInputAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
+            <input type="hidden" name="date" id="dateInput">
             <input type="time" name="time" id="timeInput">
             <input type="text" name="title" id="titleInput">
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
     <script>
-
+        var date = "<%=date%>";
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;
@@ -122,6 +123,10 @@
         var month = "<%=month%>";
         var day = "<%=day%>";
 
+        var daySection = document.getElementById("daySection");
+        var dayValue = year + '.' + month + '.' + day;
+        daySection.innerHTML = dayValue;
+        
         var scheduleSection = document.getElementById("schduleSection");
 
         if (scheduleIdxList.length > 0) {
@@ -157,13 +162,11 @@
             }
         }
 
-        var daySection = document.getElementById("daySection");
-        var dayValue = year + '.' + month + '.' + day;
-        daySection.innerHTML = dayValue;
 
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
+            var dateInput = document.getElementById("dateInput");
             if (timeValue.trim() == "") {
                 alert("일정시간을 입력해주세요.");
                 return false;
@@ -172,6 +175,7 @@
                 alert("일정내용을 입력해주세요.");
                 return false;
             }
+            dateInput.value = date;
         }
 
         // JavaScript를 사용하여 내용이 비어 있을 때 기본 텍스트를 추가

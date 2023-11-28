@@ -114,6 +114,8 @@
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;
+
+        var daySection = document.getElementById("daySection");
         daySection.innerHTML = date;
         
         var scheduleSection = document.getElementById("schduleSection");
@@ -152,9 +154,8 @@
         }
 
 
-            dateInput.value = date;
-            console.log(date);
-
+        var dateInput = document.getElementById("dateInput");
+        dateInput.value = date;
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;

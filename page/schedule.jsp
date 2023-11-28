@@ -172,7 +172,6 @@
         var phonenumberValue = "<%=phonenumber%>";
         var teamValue = "<%=team%>";
         var positionValue = "<%=position%>";
-console.log(positionValue);
         var myName = document.getElementById("name");
         var phonenumber = document.getElementById("phonenumber");
         var team = document.getElementById("team");
@@ -242,6 +241,6 @@ console.log(positionValue);
             var ret = window.open("scheduleDetail.jsp?date=" + clickedDate, "상세일정", options)
         }
     </script>
-    <script src="../js/scheduleNave.js"></script>
+    <script src="../js/schedule.js"></script>
 </body>
 </html>

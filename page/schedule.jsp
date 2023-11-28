@@ -52,91 +52,58 @@
         out.println("<div>올바른 접근이 아닙니다.</div>");
         return;
     }
-    
+
     Connection connect = null;
-    PreparedStatement query = null;
-    ResultSet result = null;
+    PreparedStatement scheduleQuery = null;
+    ResultSet scheduleResult = null;
 
+    PreparedStatement accountQuery = null;
+    ResultSet accountResult = null;
 
+    ArrayList<String> memberNameList = new ArrayList<String>();
+    ArrayList<String> memberPhonenumberList = new ArrayList<String>();
+    
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "SELECT * FROM schedule WHERE account_idx = ?";
-        query = connect.prepareStatement(sql);
-        query.setInt(1,accountIdx);
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ?";
+        scheduleQuery = connect.prepareStatement(scheduleSql);
+        scheduleQuery.setInt(1,accountIdx);
 
         //return값을 저장해줌
-        result = query.executeQuery();
+        scheduleResult = scheduleQuery.executeQuery();
 
         int scheduleIdx = 0;
         String scheduleName = "null";
         String scheduleDate = "null";
-        
-        boolean schedule = false;
 
-        // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
-        if(result.next()) {
-            scheduleIdx = result.getInt(1);
-            scheduleName = result.getString(2);
-            scheduleDate = result.getString(3);
-            schedule = true;
+        if(scheduleResult.next()) {
+            scheduleIdx = scheduleResult.getInt(1);
+            scheduleName = scheduleResult.getString(2);
+            scheduleDate = scheduleResult.getString(3);
         }
-        else {
-            schedule = false;
+
+        if("팀장".equals(position)){
+            String accountSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
+            accountQuery = connect.prepareStatement(accountSql);
+            accountQuery.setString(1,team);
+    
+            //return값을 저장해줌
+            accountResult = accountQuery.executeQuery();
+    
+            while (accountResult.next()) {
+                String memberName = accountResult.getString(4);
+                String memberPhonenumber = accountResult.getString(5);
+    
+                memberNameList.add("\""+memberName+"\"");
+                memberPhonenumberList.add("\""+memberPhonenumber+"\"");
+            }
         }
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
-    }
-
-    if(position == '팀장') {
-
-
-        ArrayList<String> memberNameList = new ArrayList<String>();
-            ArrayList<String> memberPhonenumberList = new ArrayList<String>();
-            
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-        
-                String sql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
-                query = connect.prepareStatement(sql);
-                query.setString(1,team);
-        
-                //return값을 저장해줌
-                result = query.executeQuery();
-        
-                while (result.next()) {
-                    String memberName = result.getString(4);
-                    String memberPhonenumber = result.getString(5);
-        
-                    memberNameList.add("\""+memberName+"\"");
-                    memberPhonenumberList.add("\""+memberPhonenumber+"\"");
-                }
-            }
-            catch (SQLException e) {
-                out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-                return;
-            }
-            finally {
-                try {
-                    if (connect != null) {
-                        connect.close();
-                }
-                    if (query != null) {
-                        query.close();
-                }
-                    if (result != null) {
-                        result.close();
-                    } 
-                }
-                catch (SQLException e) {
-                    out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-                    return;
-                }
-            }
     }
 %>
 

@@ -61,35 +61,35 @@
         if (!pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
+    }
 
     Connection connect = null;
     PreparedStatement query = null;
-
-    }
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-	String sql = "INSERT INTO account (id, pw, name, phonenumber, team, position) VALUES (?, ?, ?, ?, ?, ?)";
-	PreparedStatement query = connect.prepareStatement(sql);
-	query.setString(1, id);
-	query.setString(2, pw);
-	query.setString(3, name);
-	query.setString(4, phonenumber);
-	query.setString(5, team);
-	query.setString(6, position);
-    
     boolean signUpSuccess = false;
-    
+
     try {
-        //SQL 전송
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+    
+        String sql = "INSERT INTO account (id, pw, name, phonenumber, team, position) VALUES (?, ?, ?, ?, ?, ?)";
+        query = connect.prepareStatement(sql);
+        query.setString(1, id);
+        query.setString(2, pw);
+        query.setString(3, name);
+        query.setString(4, phonenumber);
+        query.setString(5, team);
+        query.setString(6, position);
+    
+        // SQL 전송
         query.executeUpdate();
         signUpSuccess = true;
+    
     }
-
     catch(SQLException e) {
         signUpSuccess = false;
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-    }
+        return;
+    }    
     finally {
         try {
             if (connect != null) {

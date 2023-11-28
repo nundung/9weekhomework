@@ -24,11 +24,7 @@
     request.setCharacterEncoding("UTF-8");
     
     //클릭된 날짜 정보 받아오기
-    String year = request.getParameter("year"); 
-    String month = request.getParameter("month"); 
-    String day = request.getParameter("day"); 
-
-    String date = year + "-" + month + "-" + day;
+    String date = request.getParameter("date"); 
 
     //세션값 받아줌
     int accountIdxValue = (Integer)session.getAttribute("accountIdx");
@@ -118,14 +114,7 @@
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;
-
-        var year = "<%=year%>";
-        var month = "<%=month%>";
-        var day = "<%=day%>";
-
-        var daySection = document.getElementById("daySection");
-        var dayValue = year + '.' + month + '.' + day;
-        daySection.innerHTML = dayValue;
+        daySection.innerHTML = date;
         
         var scheduleSection = document.getElementById("schduleSection");
 
@@ -163,6 +152,9 @@
         }
 
 
+            dateInput.value = date;
+            console.log(date);
+
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
@@ -175,7 +167,6 @@
                 alert("일정내용을 입력해주세요.");
                 return false;
             }
-            dateInput.value = date;
         }
 
         // JavaScript를 사용하여 내용이 비어 있을 때 기본 텍스트를 추가

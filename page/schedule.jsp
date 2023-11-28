@@ -55,23 +55,23 @@
     PreparedStatement query = null;
     ResultSet result = null;
 
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-    String sql = "SELECT * FROM schedule WHERE account_idx = ?";
-	query = connect.prepareStatement(sql);
-	query.setInt(1,accountIdxValue);
-
-    //return값을 저장해줌
-    result = query.executeQuery();
-
-    int scheduleIdx = 0;
-    String scheduleName = "null";
-    String scheduleDate = "null";
-    
-    boolean schedule = false;
-
     try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
+        String sql = "SELECT * FROM schedule WHERE account_idx = ?";
+        query = connect.prepareStatement(sql);
+        query.setInt(1,accountIdxValue);
+
+        //return값을 저장해줌
+        result = query.executeQuery();
+
+        int scheduleIdx = 0;
+        String scheduleName = "null";
+        String scheduleDate = "null";
+        
+        boolean schedule = false;
+
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             scheduleIdx = result.getInt(1);
@@ -257,9 +257,10 @@
         var teamMemberList = document.getElementById("teamMemderList");
 
         function showDetailEvent() {
-            var clickedDay = event.target.innerHTML
+            var clickedDay = event.target.innerHTML;
+            var clickedDate = year+"-"+month+"-"+clickedDay;
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?year=" + year + "&month=" + month +"&day="+ clickedDay, "상세일정", options)
+            var ret = window.open("scheduleDetail.jsp?date=" + clickedDate, "상세일정", options)
         }
 
         //메뉴바 토글 이벤트

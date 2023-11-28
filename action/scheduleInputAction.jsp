@@ -23,45 +23,42 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //클릭된 날짜 정보 받아오기
-    String title = request.getParameter("title"); 
+    //Input 정보 받아오기
     String date = request.getParameter("date");
     String time = request.getParameter("time"); 
+    String title = request.getParameter("title"); 
+
+    //값이 null값이 아닌지 체크
+    if (title == null || date == null || time == null) {
+        out.println("<div>입력값이 부족합니다.</div>");
+        return;
+    }
 
     //세션값 받아줌
     int accountIdxValue = (Integer)session.getAttribute("accountIdx");
 
     Connection connect = null;
     PreparedStatement query = null;
-
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-    if (title == null || date == null || time == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
-        return;
-    }
-
-    String sql = "INSERT INTO schedule (title, date, time, account_idx) VALUES (?, ?, ?, ?)";
-	query = connect.prepareStatement(sql);
-	query.setString(1,title);
-	query.setString(2,date);
-	query.setString(3,time);
-	query.setInt(4,accountIdxValue);
-
     boolean scheduleInputSuccess = false;
-    
+
     try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
+        String sql = "INSERT INTO schedule (date, time, title, account_idx) VALUES (?, ?, ?, ?)";
+        query = connect.prepareStatement(sql);
+        query.setString(1,date);
+        query.setString(2,time);
+        query.setString(3,title);
+        query.setInt(4,accountIdxValue);
+
         //SQL 전송
         query.executeUpdate();
         scheduleInputSuccess = true;
     }
-
-    catch(SQLException e) {
-        scheduleInputSuccess = false;
-        out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+    catch (SQLException e) {
+        e.printStackTrace();
     }
-
     finally {
         try {
             if (connect != null) {
@@ -88,7 +85,11 @@
 </head>
 <body>
     <script>
-        alert("완");
+        var scheduleInputSuccess = "<%=scheduleInputSuccess%>";
+        var date = "<%=date%>";
+        if(scheduleInputSuccess === "true") {
+            location.href = "../page/scheduleDetail.jsp?date=" + date;
+        }
     </script>
 </body>
 </html>

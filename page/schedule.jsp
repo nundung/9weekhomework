@@ -219,13 +219,27 @@
         for(var i=0; i<memberNameList.length; i++){
         var memberRow = document.createElement("div");
         memberRow.className = "memberRow";
-        memberRow.innerHTML = memberNameList[i];
+        memberRow.addEventListener('click', showTemMemberScheduleEvent);
+
+        var memberName = document.createElement("p");
+        memberName.innerHTML = memberNameList[i];
+        
+        var memberPhonenumber = document.createElement("p");
+        memberPhonenumber.innerHTML = memberPhonenumberList[i];
+
+        memberRow.appendChild(memberName);
+        memberRow.appendChild(memberPhonenumber);
         memberList.appendChild(memberRow);
 
         }
         var test = 7;
 
         makeScheldulesInDay(test);
+
+        showTemMemberScheduleEvent() {
+            location.href = 
+        }
+
 
         function makeScheldulesInDay(test) {
             var day = document.getElementById(test);

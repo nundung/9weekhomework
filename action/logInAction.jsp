@@ -126,12 +126,13 @@
 <body>
     <script>
         var logInSuccess = "<%=logInSuccess%>";
+        var id = "<%=id%>";
         var date = new Date();
         var year = date.getFullYear();
         var month = date.getMonth()+1;
         var day = date.getDate();
         if(logInSuccess === "true") {
-            location.href = "../page/schedule.jsp?year=" + year + "&month=" + month + "&day=" + day;
+            location.href = "../page/schedule.jsp?id=" + id + "&year=" + year + "&month=" + month + "&day=" + day;
         }
         else {
             alert("일치하는 계정정보가 존재하지 않습니다.")

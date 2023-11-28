@@ -12,6 +12,9 @@
 <!-- DB데이터 받아오기-->
 <%@ page import="java.sql.ResultSet" %>
 
+<!-- 리스트 -->
+<%@ page import="java.util.ArrayList" %>
+
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
@@ -31,22 +34,21 @@
 
 
     //세션값 받아줌
-    int accountIdxValue = (Integer)session.getAttribute("accountIdx");
+    int accountIdx = (Integer)session.getAttribute("accountIdx");
 
     Object nameSession = session.getAttribute("name");
-    String nameValue = (String)nameSession;
+    String myName = (String)nameSession;
 
     Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumberValue = (String)phonenumberSession;
+    String phonenumber = (String)phonenumberSession;
     
     Object teamSession = session.getAttribute("team");
-    String teamValue = (String)teamSession;
+    String team = (String)teamSession;
     
     Object positionSession = session.getAttribute("position");
-    String positionValue = (String)positionSession;
+    String position = (String)positionSession;
     
-    //예외처리
-    if (accountIdxValue == 0) {
+    if (accountIdx == 0) {
         out.println("<div>올바른 접근이 아닙니다.</div>");
         return;
     }
@@ -55,13 +57,14 @@
     PreparedStatement query = null;
     ResultSet result = null;
 
+
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
         String sql = "SELECT * FROM schedule WHERE account_idx = ?";
         query = connect.prepareStatement(sql);
-        query.setInt(1,accountIdxValue);
+        query.setInt(1,accountIdx);
 
         //return값을 저장해줌
         result = query.executeQuery();
@@ -85,25 +88,55 @@
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-        e.printStackTrace();
         return;
     }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-        }
-            if (query != null) {
-                query.close();
-        }
-            if (result != null) {
-                result.close();
-            } 
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
+
+    if(position == '팀장') {
+
+
+        ArrayList<String> memberNameList = new ArrayList<String>();
+            ArrayList<String> memberPhonenumberList = new ArrayList<String>();
+            
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+        
+                String sql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
+                query = connect.prepareStatement(sql);
+                query.setString(1,team);
+        
+                //return값을 저장해줌
+                result = query.executeQuery();
+        
+                while (result.next()) {
+                    String memberName = result.getString(4);
+                    String memberPhonenumber = result.getString(5);
+        
+                    memberNameList.add("\""+memberName+"\"");
+                    memberPhonenumberList.add("\""+memberPhonenumber+"\"");
+                }
+            }
+            catch (SQLException e) {
+                out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+                return;
+            }
+            finally {
+                try {
+                    if (connect != null) {
+                        connect.close();
+                }
+                    if (query != null) {
+                        query.close();
+                }
+                    if (result != null) {
+                        result.close();
+                    } 
+                }
+                catch (SQLException e) {
+                    out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+                    return;
+                }
+            }
     }
 %>
 
@@ -160,73 +193,43 @@
             <p id="phonenumber"></p>
         </section>
         <input type="button" value="정보수정" id="editInfoButton" onclick="editInfoEvent()">
-        <section id="teamMemberList"></section>
+        <section id="memberList"></section>
     </nav>
+
     <script>
+        var memberNameList = <%=memberNameList%>;
+        var memberPhonenumberList = <%=memberPhonenumberList%>;
+        console.log(memberNameList,memberPhonenumberList);
 
-        var year = "<%=year%>";
-        var month = "<%=month%>";
-        var day = "<%=day%>";
-
-        var nameValue = "<%=nameValue%>";
-        var phonenumberValue = "<%=phonenumberValue%>";
-        var teamValue = "<%=teamValue%>";
-        var positionValue = "<%=positionValue%>";
-
-        var nameId = document.getElementById("name");
+        var myNameValue = "<%=myName%>";
+        var phonenumberValue = "<%=phonenumber%>";
+        var teamValue = "<%=team%>";
+        var positionValue = "<%=position%>";
+console.log(positionValue);
+        var myName = document.getElementById("name");
         var phonenumber = document.getElementById("phonenumber");
         var team = document.getElementById("team");
         var position = document.getElementById("position");
-        
-        nameId.innerHTML = nameValue;
+
+
+        myName.innerHTML = myNameValue;
         phonenumber.innerHTML = phonenumberValue;
         team.innerHTML = teamValue + "부";
         position.innerHTML = positionValue
+
+        //Parameter로 받은 날짜 정보
+        var year = "<%=year%>";
+        var month = "<%=month%>";
+        var day = "<%=day%>";
         
+        //실제 오늘 날짜
         var date = new Date();
         var thisYear = date.getFullYear();
         var thisMonth = date.getMonth() + 1;
         var thisDay = date.getDate();
-
-        //헤더 중앙부에 오늘 날짜 입력
-        var todaySection = document.getElementById("todaySection");
-        var today = thisYear + '.' + thisMonth + '.' + thisDay;
-        todaySection.innerHTML = today;
-
-        //홈 버튼 클릭시 이번달 달력 표시
-        function reloadEvent() {
-            location.href = "schedule.jsp?year=" + thisYear + "&month=" + thisMonth + "&day=" + thisDay;
-        }
-        //올해 년도 입력
-        var yearValue = document.getElementById("yearValue");
-        yearValue.innerHTML = year;
-
-        //년도 선택 이벤트
-        function lastYearEvent() {
-            year = parseInt(year) - 1;
-            location.href = "schedule.jsp?year=" + year + "&month=" + month + "&day=" + day;
-        }
-        function nextYearEvent() {
-            year = parseInt(year) + 1;
-            location.href = "schedule.jsp?year=" + year + "&month=" + month + "&day=" + day;
-        }
-
-        //월 선택 버튼 입력
-        for (var i=0; i<12; i++) {
-            var monthSelectSection = document.getElementById("monthSelectSection");
-            var monthSelectButton = document.createElement("p")
-            monthSelectButton.innerHTML = i+1;
-            monthSelectButton.className = "monthSelectButton";
-            monthSelectButton.addEventListener('click', monthSelectEvent);
-            monthSelectSection.appendChild(monthSelectButton);
-        }
-
-        //월 버튼 클릭 이벤트
-        function monthSelectEvent(event) {
-            var clickedMonth = event.target.innerHTML;
-            location.href = "schedule.jsp?year=" + year + "&month=" + clickedMonth + "&day=" + day;
-        }
-
+        
+        
+        //달력 
         var calendar = document.getElementById("calendar");
         var calendarHeader = document.getElementById("calendarHeader");
         calendarHeader.innerHTML = month + '월';
@@ -243,9 +246,19 @@
                 }
                 daySelectButton.addEventListener('click', showDetailEvent);
                 calendar.appendChild(daySelectButton);
-            }
+        }
 
+        //팀원목록
+        var memberList = document.getElementById("memberList");
+        for(var i=0; i<memberNameList.length; i++){
+        var memberRow = document.createElement("div");
+        memberRow.className = "memberRow";
+        memberRow.innerHTML = memberNameList[i];
+        memberList.appendChild(memberRow);
+
+        }
         var test = 7;
+
         makeScheldulesInDay(test);
 
         function makeScheldulesInDay(test) {
@@ -254,7 +267,6 @@
             scheldulesInDay.id = "scheldulesInDay";
             day.appendChild(scheldulesInDay);
         }
-        var teamMemberList = document.getElementById("teamMemderList");
 
         function showDetailEvent() {
             var clickedDay = event.target.innerHTML;
@@ -262,28 +274,7 @@
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
             var ret = window.open("scheduleDetail.jsp?date=" + clickedDate, "상세일정", options)
         }
-
-        //메뉴바 토글 이벤트
-        function toggleMenuEvent(event) {
-            var menuBar = document.getElementById("menuBar");
-            if (getComputedStyle(menuBar).right === "-240px") {
-                menuBar.style.right = "0px";
-            } 
-            else{
-                menuBar.style.right = "-240px";
-            }
-        }
-
-        //로그아웃 이벤트
-        function logOutEvent() {
-            location.href = "../action/logOutAction.jsp"
-        }
-
-        //정보수정 이벤트
-        function editInfoEvent() {
-            location.href="editInfo.jsp";
-        }
     </script>
+    <script src="../js/scheduleNave.js"></script>
 </body>
 </html>
-

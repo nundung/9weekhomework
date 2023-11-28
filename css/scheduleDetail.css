@@ -22,7 +22,9 @@ main {
     overflow-y: auto;
 }
 
-#scheduleRow {
+
+
+.scheduleRow {
     color: black;
     display: flex;
     height: 40px;
@@ -31,20 +33,21 @@ main {
     border: solid 0.5px;
 }
 
-
-#buttonSection {
+.buttonSection {
     width: 100px;
 }
 
-#editButton {
+.editButton {
     cursor: pointer;
     height: 100%;
 }
 
-#deleteButton {
+.deleteButton {
     cursor: pointer;
     height: 100%;
 }
+
+
 
 #scheduleInput {
     display: flex;

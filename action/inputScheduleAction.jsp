@@ -57,7 +57,8 @@
         scheduleInputSuccess = true;
     }
     catch (SQLException e) {
-        e.printStackTrace();
+        out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+        return;
     }
     finally {
         try {

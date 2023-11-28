@@ -33,22 +33,22 @@
     PreparedStatement query = null;
     ResultSet result = null;
 
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-    String sql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
-	query = connect.prepareStatement(sql);
-	query.setInt(1,accountIdxValue);
-	query.setString(2,date);
-    
-    //return값을 저장해줌
-    result = query.executeQuery();
-
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
     ArrayList<String> scheduleTitleList = new ArrayList<String>();
-    
+
     try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
+        String sql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
+        query = connect.prepareStatement(sql);
+        query.setInt(1,accountIdxValue);
+        query.setString(2,date);
+        
+        //return값을 저장해줌
+        result = query.executeQuery();
+
         while (result.next()) {
             int scheduleIdx = result.getInt(1);
             String scheduleTime = result.getString(3);
@@ -101,7 +101,7 @@
     </main>
 
     <!-- 일정 입력창 -->
-    <form action = "../action/scheduleInputAction.jsp" onsubmit = "return nullCheckEvent()">
+    <form action = "../action/inputScheduleAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
             <input type="hidden" name="date" id="dateInput">
             <input type="time" name="time" id="timeInput">
@@ -118,6 +118,9 @@
         var daySection = document.getElementById("daySection");
         daySection.innerHTML = date;
         
+        var dateInput = document.getElementById("dateInput");
+        dateInput.value = date;
+
         var scheduleSection = document.getElementById("schduleSection");
 
         if (scheduleIdxList.length > 0) {
@@ -129,19 +132,33 @@
                 var editButton = document.createElement("img");
                 var deleteButton = document.createElement("img");
                 
-                scheduleRow.id = "scheduleRow";
-
-                scheduleTime.id = "scheduleTime";
+                scheduleRow.className = "scheduleRow";
+                scheduleTime.className = "scheduleTime";
                 scheduleTime.innerHTML = scheduleTimeList[i];
-
-                scheduleTitle.id = "scheduleTitle";
+                scheduleTitle.className = "scheduleTitle";
                 scheduleTitle.innerHTML = scheduleTitleList[i];
 
-                buttonSection.id = "buttonSection";
-                editButton.id = "editButton";
-                deleteButton.id = "deleteButton";
+                buttonSection.className = "buttonSection";
+
+                editButton.className = "editButton";
                 editButton.src = "../image/pencil.svg";
+                editButton.addEventListener('click', scheduleEditEvent);
+
+                deleteButton.className = "deleteButton";
                 deleteButton.src = "../image/trashcan.svg";
+
+                deleteButton.addEventListener("click", function(index) {
+                    return function() {
+                        var scheduleIdx = scheduleIdxList[index];
+                        var confirmation = confirm("일정을 삭제하시겠습니까?");
+                    
+                        if (confirmation) {
+                            location.href = "../action/deleteScheduleAction.jsp?date=" + date + "&scheduleIdx=" + scheduleIdx;
+                        } else {
+                            
+                        }
+                    };
+                }(i));
 
                 buttonSection.appendChild(editButton);
                 buttonSection.appendChild(deleteButton);
@@ -149,13 +166,17 @@
                 scheduleRow.appendChild(scheduleTime);
                 scheduleRow.appendChild(scheduleTitle);
                 scheduleRow.appendChild(buttonSection);
+
                 scheduleSection.appendChild(scheduleRow);
             }
         }
+        function scheduleEditEvent() {
 
+        }
+        function scheduleDeleteEvent() {
 
-        var dateInput = document.getElementById("dateInput");
-        dateInput.value = date;
+        }
+
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;

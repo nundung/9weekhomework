@@ -28,7 +28,8 @@
     request.setCharacterEncoding("UTF-8");
     
     //id정보 받아오기
-    String pageId = request.getParameter("id"); 
+    String pageId = request.getParameter("id");
+    
     //오늘 날짜 정보 받아오기
     String year = request.getParameter("year"); 
     String month = request.getParameter("month"); 
@@ -308,7 +309,6 @@
         memberList.appendChild(memberRow);
 
         }
-        var test = 7;
 
         
 

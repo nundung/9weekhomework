@@ -16,6 +16,20 @@ main {
     margin-right: auto;
 }
 
+#headerMid {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-right: 300px;
+}
+
+#memberNameSection {
+    width: 200px;
+    margin-right: 100px;
+    font-size: 25px;
+    color: white;
+}
+
 .headerIcon {
     cursor: pointer;
     height: 35px;
@@ -24,6 +38,7 @@ main {
 }
 
 #todaySection {
+    width: 250px;
     font-size: 30px;
     color: white;
 }

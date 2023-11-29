@@ -27,6 +27,9 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
+    //id정보 받아오기
+    String pageId = request.getParameter("id"); 
+
     //오늘 날짜 정보 받아오기
     String year = request.getParameter("year"); 
     String month = request.getParameter("month"); 
@@ -35,6 +38,9 @@
 
     //세션값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
+
+    Object idSession = session.getAttribute("id");
+    String id = (String)idSession;
 
     Object nameSession = session.getAttribute("name");
     String myName = (String)nameSession;
@@ -53,49 +59,98 @@
         return;
     }
 
+
     Connection connect = null;
+
+    //페이지의 id를 불러오기
+    PreparedStatement pageIdQuery = null;
+    ResultSet pageIdResult = null;
+
+    //만약 팀장이 보는 팀원페이지일 경우 팀원의 정보 불러오기
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
 
-    PreparedStatement accountQuery = null;
-    ResultSet accountResult = null;
+    //팀장일 경우 팀원리스트 불러오기
+    PreparedStatement memberQuery = null;
+    ResultSet memberResult = null;
+
+
+
+    ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
+    ArrayList<Integer> scheduleYearList = new ArrayList<Integer>();
+    ArrayList<Integer> scheduleMonthList = new ArrayList<Integer>();
+    ArrayList<Integer> scheduleDayList = new ArrayList<Integer>();
 
     ArrayList<String> memberNameList = new ArrayList<String>();
     ArrayList<String> memberPhonenumberList = new ArrayList<String>();
-    
+    ArrayList<String> memberIdList = new ArrayList<String>();
+
+    int pageMemberIdx = 0;
+    String pageMemberName = "null";
+    String memberPage = "false";
+
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
+
         String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
-        scheduleQuery.setInt(1,accountIdx);
+
+        if(id.equals(pageId)) {
+            scheduleQuery.setInt(1,accountIdx);
+        }
+        else {
+            String pageIdSql = "SELECT * FROM account WHERE id = ?";
+            pageIdQuery = connect.prepareStatement(pageIdSql);
+            pageIdQuery.setString(1,pageId);
+
+            //return값을 저장해줌
+            pageIdResult = pageIdQuery.executeQuery();
+
+            while(pageIdResult.next()) {
+                pageMemberIdx = pageIdResult.getInt(1);
+                pageMemberName = pageIdResult.getString(4);
+            }
+            scheduleQuery.setInt(1,pageMemberIdx);
+            memberPage = "true";
+        }
 
         //return값을 저장해줌
         scheduleResult = scheduleQuery.executeQuery();
 
         int scheduleIdx = 0;
-        String scheduleName = "null";
-        String scheduleDate = "null";
+        int scheduleYear = 0;
+        int scheduleMonth = 0;
+        int scheduleDay = 0;
 
-        if(scheduleResult.next()) {
+
+        while(scheduleResult.next()) {
             scheduleIdx = scheduleResult.getInt(1);
-            scheduleName = scheduleResult.getString(2);
-            scheduleDate = scheduleResult.getString(3);
+            scheduleYear = scheduleResult.getInt(2);
+            scheduleMonth = scheduleResult.getInt(3);
+            scheduleDay = scheduleResult.getInt(4);
+            
+            scheduleIdxList.add(scheduleIdx);
+            scheduleYearList.add(scheduleYear);
+            scheduleMonthList.add(scheduleMonth);
+            scheduleDayList.add(scheduleDay);
         }
 
-        if("팀장".equals(position)){
-            String accountSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
-            accountQuery = connect.prepareStatement(accountSql);
-            accountQuery.setString(1,team);
+        if(position.equals("팀장")){
+            String memberSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
+            memberQuery = connect.prepareStatement(memberSql);
+            memberQuery.setString(1,team);
     
             //return값을 저장해줌
-            accountResult = accountQuery.executeQuery();
+            memberResult = memberQuery.executeQuery();
     
-            while (accountResult.next()) {
-                String memberName = accountResult.getString(4);
-                String memberPhonenumber = accountResult.getString(5);
+            while(memberResult.next()) {
+                String memberId = memberResult.getString(2);
+                String memberName = memberResult.getString(4);
+                String memberPhonenumber = memberResult.getString(5);
     
+                memberIdList.add("\""+memberId+"\"");
                 memberNameList.add("\""+memberName+"\"");
                 memberPhonenumberList.add("\""+memberPhonenumber+"\"");
             }
@@ -105,6 +160,7 @@
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
+
 %>
 
 <!DOCTYPE html>
@@ -121,7 +177,10 @@
     <!-- 상단헤더 -->
     <header>
         <img src="../image/home.svg" class="headerIcon" onclick="reloadEvent()">
-        <p id="todaySection"></p>
+        <section id = "headerMid">
+            <p id="memberNameSection"></p>
+            <p id="todaySection"></p>
+        </section>
         <img src="../image/menu.svg" class="headerIcon" onclick="toggleMenuEvent()">
     </header>
     <main>
@@ -164,9 +223,21 @@
     </nav>
 
     <script>
+        var id = "<%=id%>";
+        var pageId = "<%=pageId%>";
+        var memberPage = "<%=memberPage%>";
+        var pageMemberName = "<%=pageMemberName%>";
+
+        var scheduleIdxList = <%=scheduleIdxList%>;
+        var scheduleYearList = <%=scheduleYearList%>;
+        var scheduleMonthList = <%=scheduleMonthList%>;
+        var scheduleDayList = <%=scheduleDayList%>;
+        console.log(scheduleIdxList,scheduleYearList,scheduleMonthList,scheduleDayList);
+
+        var memberIdList = <%=memberIdList%>;
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
-        console.log(memberNameList,memberPhonenumberList);
+        console.log(memberIdList,memberNameList,memberPhonenumberList);
 
         var myNameValue = "<%=myName%>";
         var phonenumberValue = "<%=phonenumber%>";
@@ -194,31 +265,37 @@
         var thisMonth = date.getMonth() + 1;
         var thisDay = date.getDate();
         
-        
+        makeCalendar();
+
         //달력 
-        var calendar = document.getElementById("calendar");
-        var calendarHeader = document.getElementById("calendarHeader");
-        calendarHeader.innerHTML = month + '월';
-        calendar.appendChild(calendarHeader);
-        var daysInMonth = new Date(year, month, 0).getDate();
-        for (var i = 0; i < daysInMonth; i++) {
+        function makeCalendar() {
+            var calendar = document.getElementById("calendar");
+            var calendarHeader = document.getElementById("calendarHeader");
+            calendarHeader.innerHTML = month + '월';
+            calendar.appendChild(calendarHeader);
+            var daysInMonth = new Date(year, month, 0).getDate();
+            for (var i = 0; i < daysInMonth; i++) {
                 var daySelectButton = document.createElement("div");
                 daySelectButton.innerHTML = i + 1;
                 daySelectButton.id = i + 1;
                 daySelectButton.className = "daySelectButton";
 
+
+                var schedulesInDay
                 if (year == thisYear && month == thisMonth && (i + 1) === thisDay) {
                     daySelectButton.id = "todayButton";
                 }
                 daySelectButton.addEventListener('click', showDetailEvent);
                 calendar.appendChild(daySelectButton);
+            }
         }
-
+        
         //팀원목록
         var memberList = document.getElementById("memberList");
         for(var i=0; i<memberNameList.length; i++){
         var memberRow = document.createElement("div");
         memberRow.className = "memberRow";
+        memberRow.dataset.index = i;
         memberRow.addEventListener('click', showTemMemberScheduleEvent);
 
         var memberName = document.createElement("p");
@@ -234,25 +311,27 @@
         }
         var test = 7;
 
-        makeScheldulesInDay(test);
+        
 
-        showTemMemberScheduleEvent() {
-            location.href = 
+        function showTemMemberScheduleEvent(event) {
+            var clickedIndex = event.target.dataset.index;
+            var memberId = memberIdList[clickedIndex];
+            location.href = "schedule.jsp?id=" + memberId + "&year=" + year + "&month=" + month + "&day=" + day;
         }
 
 
-        function makeScheldulesInDay(test) {
+        function makeSchedulesInDay(test) {
             var day = document.getElementById(test);
-            var scheldulesInDay = document.createElement("div");
-            scheldulesInDay.id = "scheldulesInDay";
-            day.appendChild(scheldulesInDay);
+            var schedulesInDay = document.createElement("div");
+            schedulesInDay.id = "schelduesInDay";
+            day.appendChild(schedulesInDay);
         }
 
         function showDetailEvent() {
             var clickedDay = event.target.innerHTML;
             var clickedDate = year+"-"+month+"-"+clickedDay;
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?date=" + clickedDate, "상세일정", options)
+            var ret = window.open("scheduleDetail.jsp?" + clickedDate, "상세일정", options)
         }
     </script>
     <script src="../js/schedule.js"></script>

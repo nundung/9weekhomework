@@ -31,7 +31,7 @@
         //월 선택 버튼 입력
         for (var i=0; i<12; i++) {
             var monthSelectSection = document.getElementById("monthSelectSection");
-            var monthSelectButton = document.createElement("p")
+            var monthSelectButton = document.createElement("span")
             monthSelectButton.innerHTML = i+1;
             monthSelectButton.className = "monthSelectButton";
             monthSelectButton.addEventListener('click', monthSelectEvent);

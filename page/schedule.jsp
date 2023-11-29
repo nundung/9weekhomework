@@ -29,7 +29,6 @@
     
     //id정보 받아오기
     String pageId = request.getParameter("id"); 
-
     //오늘 날짜 정보 받아오기
     String year = request.getParameter("year"); 
     String month = request.getParameter("month"); 
@@ -329,9 +328,8 @@
 
         function showDetailEvent() {
             var clickedDay = event.target.innerHTML;
-            var clickedDate = year+"-"+month+"-"+clickedDay;
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?" + clickedDate, "상세일정", options)
+            var ret = window.open("scheduleDetail.jsp?id=" + pageId + "&year=" + year + "&month=" + month + "&day=" + clickedDay, "상세일정", options)
         }
     </script>
     <script src="../js/schedule.js"></script>

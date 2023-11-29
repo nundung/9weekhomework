@@ -23,36 +23,77 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
+    //id정보 받아오기
+    String pageId = request.getParameter("id"); 
+
     //클릭된 날짜 정보 받아오기
-    String date = request.getParameter("date"); 
+    String yearString = request.getParameter("year"); 
+    String monthString = request.getParameter("month"); 
+    String dayString = request.getParameter("day");  
+
+    //문자열을 숫자열로 변환
+    int year = Integer.parseInt(yearString);
+    int month = Integer.parseInt(monthString);
+    int day = Integer.parseInt(dayString);
 
     //세션값 받아줌
-    int accountIdxValue = (Integer)session.getAttribute("accountIdx");
+    int accountIdx = (Integer)session.getAttribute("accountIdx");
+
+    Object idSession = session.getAttribute("id");
+    String id = (String)idSession;
 
     Connection connect = null;
-    PreparedStatement query = null;
-    ResultSet result = null;
+
+    PreparedStatement scheduleQuery = null;
+    ResultSet scheduleResult = null;
+    
+    PreparedStatement pageIdQuery = null;
+    ResultSet pageIdResult = null;
 
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
     ArrayList<String> scheduleTitleList = new ArrayList<String>();
 
+    int pageMemberIdx = 0;
+    String pageMemberName = "null";
+    String memberPage = "false";
+
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
-        query = connect.prepareStatement(sql);
-        query.setInt(1,accountIdxValue);
-        query.setString(2,date);
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND year = ? AND month = ? AND day = ?";
+        scheduleQuery = connect.prepareStatement(scheduleSql);
+        
+        if(id.equals(pageId)) {
+            scheduleQuery.setInt(1,accountIdx);
+        }
+        else {
+            String pageIdSql = "SELECT * FROM account WHERE id = ?";
+            pageIdQuery = connect.prepareStatement(pageIdSql);
+            pageIdQuery.setString(1,pageId);
+            
+            //return값을 저장해줌
+            pageIdResult = pageIdQuery.executeQuery();
+
+            while(pageIdResult.next()) {
+                pageMemberIdx = pageIdResult.getInt(1);
+                pageMemberName = pageIdResult.getString(4);
+            }
+            scheduleQuery.setInt(1,pageMemberIdx);
+            memberPage = "true";
+        }
+        scheduleQuery.setInt(2,year);
+        scheduleQuery.setInt(3,month);
+        scheduleQuery.setInt(4,day);
         
         //return값을 저장해줌
-        result = query.executeQuery();
+        scheduleResult = scheduleQuery.executeQuery();
 
-        while (result.next()) {
-            int scheduleIdx = result.getInt(1);
-            String scheduleTime = result.getString(3);
-            String scheduleTitle = result.getString(4);
+        while (scheduleResult.next()) {
+            int scheduleIdx = scheduleResult.getInt(1);
+            String scheduleTime = scheduleResult.getString(5);
+            String scheduleTitle = scheduleResult.getString(6);
 
             scheduleIdxList.add(scheduleIdx);
             scheduleTimeList.add("\""+scheduleTime+"\"");
@@ -63,23 +104,7 @@
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-        }
-            if (query != null) {
-                query.close();
-        }
-            if (result != null) {
-                result.close();
-            } 
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
-    }
+
 %>
 
 
@@ -110,7 +135,7 @@
         </div>
     </form>
     <script>
-        var date = "<%=date%>";
+        var memberPage = "<%=memberPage%>";
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;

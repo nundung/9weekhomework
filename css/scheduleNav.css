@@ -95,3 +95,7 @@
     background-color: #dfe1ee;
     border: solid 0.5px;
 }
+
+p {
+    pointer-events: none;
+}

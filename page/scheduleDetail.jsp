@@ -27,14 +27,7 @@
     String pageId = request.getParameter("id"); 
 
     //클릭된 날짜 정보 받아오기
-    String yearString = request.getParameter("year"); 
-    String monthString = request.getParameter("month"); 
-    String dayString = request.getParameter("day");  
-
-    //문자열을 숫자열로 변환
-    int year = Integer.parseInt(yearString);
-    int month = Integer.parseInt(monthString);
-    int day = Integer.parseInt(dayString);
+    String date = request.getParameter("date");   
 
     //세션값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
@@ -62,7 +55,7 @@
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND year = ? AND month = ? AND day = ?";
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
         
         if(id.equals(pageId)) {
@@ -83,17 +76,15 @@
             scheduleQuery.setInt(1,pageMemberIdx);
             memberPage = "true";
         }
-        scheduleQuery.setInt(2,year);
-        scheduleQuery.setInt(3,month);
-        scheduleQuery.setInt(4,day);
+        scheduleQuery.setString(2,date);
         
         //return값을 저장해줌
         scheduleResult = scheduleQuery.executeQuery();
 
         while (scheduleResult.next()) {
             int scheduleIdx = scheduleResult.getInt(1);
-            String scheduleTime = scheduleResult.getString(5);
-            String scheduleTitle = scheduleResult.getString(6);
+            String scheduleTime = scheduleResult.getString(3);
+            String scheduleTitle = scheduleResult.getString(4);
 
             scheduleIdxList.add(scheduleIdx);
             scheduleTimeList.add("\""+scheduleTime+"\"");
@@ -128,18 +119,16 @@
     <!-- 일정 입력창 -->
     <form action = "../action/inputScheduleAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
-            <input type="hidden" name="year" id="yearInput">
-            <input type="hidden" name="month" id="monthInput">
-            <input type="hidden" name="day" id="dayInput">
+            <input type="hidden" name="date" id="dateInput">
             <input type="time" name="time" id="timeInput">
             <input type="text" name="title" id="titleInput">
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
+    
     <script>
-        var year = "<%=year%>";
-        var month = "<%=month%>";
-        var day = "<%=day%>";
+        var date = "<%=date%>";
+        console.log(date);
 
         var memberPage = "<%=memberPage%>";
         var scheduleIdxList = <%=scheduleIdxList%>;
@@ -147,60 +136,64 @@
         var scheduleTitleList = <%=scheduleTitleList%>;
 
         var daySection = document.getElementById("daySection");
-        daySection.innerHTML = year + '.' + month + '.' + day;
+        daySection.innerHTML = date;
         
 
         var scheduleSection = document.getElementById("schduleSection");
+            if (scheduleIdxList.length > 0) {
+                for(var i=0; i<scheduleIdxList.length; i++){
+                    var scheduleRow = document.createElement("div");
+                    var scheduleTime = document.createElement("span");
+                    var scheduleTitle = document.createElement("span");
+                    var buttonSection = document.createElement("span");
+                    
+                    scheduleRow.className = "scheduleRow";
+                    scheduleTime.className = "scheduleTime";
+                    scheduleTime.innerHTML = scheduleTimeList[i];
+                    scheduleTitle.className = "scheduleTitle";
+                    scheduleTitle.innerHTML = scheduleTitleList[i];
+                    buttonSection.className = "buttonSection";
 
-        if (scheduleIdxList.length > 0) {
-            for(var i=0; i<scheduleIdxList.length; i++){
-                var scheduleRow = document.createElement("div");
-                var scheduleTime = document.createElement("span");
-                var scheduleTitle = document.createElement("span");
-                var buttonSection = document.createElement("span");
-                
-                scheduleRow.className = "scheduleRow";
-                scheduleTime.className = "scheduleTime";
-                scheduleTime.innerHTML = scheduleTimeList[i];
-                scheduleTitle.className = "scheduleTitle";
-                scheduleTitle.innerHTML = scheduleTitleList[i];
-                buttonSection.className = "buttonSection";
-
-                if(memberPage == "false") {
-
+            if(memberPage === "false") {
                 var editButton = document.createElement("img");
                 var deleteButton = document.createElement("img");
-                    editButton.className = "editButton";
-                    editButton.src = "../image/pencil.svg";
-                    editButton.addEventListener('click', scheduleEditEvent);
+                editButton.className = "editButton";
+                editButton.src = "../image/pencil.svg";
+                editButton.addEventListener('click', scheduleEditEvent);
 
-                    deleteButton.className = "deleteButton";
-                    deleteButton.src = "../image/trashcan.svg";
+                deleteButton.className = "deleteButton";
+                deleteButton.src = "../image/trashcan.svg";
 
-                    deleteButton.addEventListener("click", function(index) {
-                        return function() {
-                            var scheduleIdx = scheduleIdxList[index];
-                            var confirmation = confirm("일정을 삭제하시겠습니까?");
-                        
-                            if (confirmation) {
-                                location.href = "../action/deleteScheduleAction.jsp?date=" + date + "&scheduleIdx=" + scheduleIdx;
-                            } else {
-                                
-                            }
-                        };
-                    }(i));
+                deleteButton.addEventListener("click", function(index) {
+                    return function() {
+                        var scheduleIdx = scheduleIdxList[index];
+                        var confirmation = confirm("일정을 삭제하시겠습니까?");
+                    
+                        if (confirmation) {
+                            location.href = "../action/deleteScheduleAction.jsp?date=" + date + "&scheduleIdx=" + scheduleIdx;
+                        } else {
+                            
+                        }
+                    };
+                }(i));
 
-                    buttonSection.appendChild(editButton);
-                    buttonSection.appendChild(deleteButton);
-                }
-                
+                buttonSection.appendChild(editButton);
+                buttonSection.appendChild(deleteButton);
+            }
                 scheduleRow.appendChild(scheduleTime);
                 scheduleRow.appendChild(scheduleTitle);
                 scheduleRow.appendChild(buttonSection);
 
                 scheduleSection.appendChild(scheduleRow);
             }
-        }
+    }
+    else {
+        if(memberPage === "false") {
+        schduleSection.innerText = "일정을 추가해주세요.";
+        console.log("ok")
+    }
+}
+        
         function scheduleEditEvent() {
 
         }
@@ -211,13 +204,9 @@
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
-            var yearInput = document.getElementById("yearInput");
-            var monthInput = document.getElementById("monthInput");
-            var dayInput = document.getElementById("dayInput");
-            yearInput.value = year;
-            monthInput.value = month;
-            dayInput.value = day;
-            if (timeValue.trim() == "") {
+            var dateInput = document.getElementById("dateInput");
+            dateInput.value = date;
+            if (timeInput.trim() == "") {
                 alert("일정시간을 입력해주세요.");
                 return false;
             } 
@@ -228,10 +217,7 @@
         }
 
         // JavaScript를 사용하여 내용이 비어 있을 때 기본 텍스트를 추가
-        if (schduleSection.innerHTML.trim() == '') {
-            schduleSection.innerText = "일정을 추가해주세요.";
-            console.log("ok")
-        }
+        
     </script>
 </body>
 </html>

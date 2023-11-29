@@ -47,13 +47,13 @@
 
     Object phonenumberSession = session.getAttribute("phonenumber");
     String phonenumber = (String)phonenumberSession;
-    
+
     Object teamSession = session.getAttribute("team");
     String team = (String)teamSession;
-    
+
     Object positionSession = session.getAttribute("position");
     String position = (String)positionSession;
-    
+
     if (accountIdx == 0) {
         out.println("<div>올바른 접근이 아닙니다.</div>");
         return;
@@ -77,9 +77,7 @@
 
 
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
-    ArrayList<Integer> scheduleYearList = new ArrayList<Integer>();
-    ArrayList<Integer> scheduleMonthList = new ArrayList<Integer>();
-    ArrayList<Integer> scheduleDayList = new ArrayList<Integer>();
+    ArrayList<String> scheduleDateList = new ArrayList<String>();
 
     ArrayList<String> memberNameList = new ArrayList<String>();
     ArrayList<String> memberPhonenumberList = new ArrayList<String>();
@@ -93,8 +91,7 @@
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-
-        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ?";
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(date) = ? AND MONTH(date) = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
 
         if(id.equals(pageId)) {
@@ -115,26 +112,22 @@
             scheduleQuery.setInt(1,pageMemberIdx);
             memberPage = "true";
         }
+        scheduleQuery.setString(2,year);
+        scheduleQuery.setString(3,month);
 
         //return값을 저장해줌
         scheduleResult = scheduleQuery.executeQuery();
 
         int scheduleIdx = 0;
-        int scheduleYear = 0;
-        int scheduleMonth = 0;
-        int scheduleDay = 0;
+        String scheduleDate = "null";
 
 
         while(scheduleResult.next()) {
             scheduleIdx = scheduleResult.getInt(1);
-            scheduleYear = scheduleResult.getInt(2);
-            scheduleMonth = scheduleResult.getInt(3);
-            scheduleDay = scheduleResult.getInt(4);
+            scheduleDate = scheduleResult.getString(2);
             
             scheduleIdxList.add(scheduleIdx);
-            scheduleYearList.add(scheduleYear);
-            scheduleMonthList.add(scheduleMonth);
-            scheduleDayList.add(scheduleDay);
+            scheduleDateList.add("\""+scheduleDate+"\"");
         }
 
         if(position.equals("팀장")){
@@ -219,6 +212,7 @@
             <p id="phonenumber"></p>
         </section>
         <input type="button" value="정보수정" id="editInfoButton" onclick="editInfoEvent()">
+        <input type="button" value="돌아가기" id="comeBackButton" onclick="comeBackEvent()">
         <section id="memberList"></section>
     </nav>
 
@@ -229,10 +223,17 @@
         var pageMemberName = "<%=pageMemberName%>";
 
         var scheduleIdxList = <%=scheduleIdxList%>;
-        var scheduleYearList = <%=scheduleYearList%>;
-        var scheduleMonthList = <%=scheduleMonthList%>;
-        var scheduleDayList = <%=scheduleDayList%>;
-        console.log(scheduleIdxList,scheduleYearList,scheduleMonthList,scheduleDayList);
+        var scheduleDateList = <%=scheduleDateList%>;
+
+        const extractedDays = scheduleDateList.map(dateString => {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            
+            return day;
+        });
+        console.log(extractedDays);
+
+        console.log(scheduleIdxList,scheduleDateList);
 
         var memberIdList = <%=memberIdList%>;
         var memberNameList = <%=memberNameList%>;
@@ -318,18 +319,24 @@
             location.href = "schedule.jsp?id=" + memberId + "&year=" + year + "&month=" + month + "&day=" + day;
         }
 
-
-        function makeSchedulesInDay(test) {
-            var day = document.getElementById(test);
+        for (var i=0; i<extractedDays.length; i++) {
+            var day = extractedDays[i];
             var schedulesInDay = document.createElement("div");
             schedulesInDay.id = "schelduesInDay";
-            day.appendChild(schedulesInDay);
+
+        }
+        function makeSchedulesInDay(test) {
         }
 
-        function showDetailEvent() {
+        function showDetailEvent(event) {
             var clickedDay = event.target.innerHTML;
+            var clickedDate = year+"-"+month+"-"+clickedDay;
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?id=" + pageId + "&year=" + year + "&month=" + month + "&day=" + clickedDay, "상세일정", options)
+            var ret = window.open("scheduleDetail.jsp?id=" + pageId + "&date=" + clickedDate, "상세일정", options)
+        }
+
+        function comeBackEvent() {
+            location.href = "schedule.jsp?id=" + id + "&year=" + year + "&month=" + month + "&day=" + day;
         }
     </script>
     <script src="../js/schedule.js"></script>

@@ -23,23 +23,16 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //Input 정보 받아오기
-    String yearString = request.getParameter("year"); 
-    String monthString = request.getParameter("month"); 
-    String dayString = request.getParameter("day"); 
+    String date = request.getParameter("date"); 
 
     String time = request.getParameter("time"); 
     String title = request.getParameter("title"); 
 
     //값이 null값이 아닌지 체크
-    if (yearString == null || monthString == null || dayString == null || time == null || title == null) {
+    if (date == null || time == null || title == null) {
         out.println("<div>입력값이 부족합니다.</div>");
         return;
     }
-    
-    int year = Integer.parseInt(yearString);
-    int month = Integer.parseInt(monthString);
-    int day = Integer.parseInt(dayString);
 
 
     //세션값 받아줌
@@ -56,14 +49,12 @@
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "INSERT INTO schedule (year, month, day, time, title, account_idx) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO schedule (date, time, title, account_idx) VALUES (?, ?, ?, ?)";
         query = connect.prepareStatement(sql);
-        query.setInt(1,year);
-        query.setInt(2,month);
-        query.setInt(3,day);
-        query.setString(4,time);
-        query.setString(5,title);
-        query.setInt(6,accountIdxValue);
+        query.setString(1,date);
+        query.setString(2,time);
+        query.setString(3,title);
+        query.setInt(4,accountIdxValue);
 
         //SQL 전송
         query.executeUpdate();
@@ -84,11 +75,9 @@
 </head>
 <body>
     <script>
-        var year = "<%=year%>";
-        var month = "<%=month%>";
-        var day = "<%=day%>";
+        var date = "<%=date%>";
         var id = "<%=id%>";
-        location.href = "../page/scheduleDetail.jsp?id=" + id + "&year=" + year + "&month=" + month + "&day=" + day;
+        location.href = "../page/scheduleDetail.jsp?id=" + id + "&date=" + date;
     </script>
 </body>
 </html>

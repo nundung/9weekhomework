@@ -4,9 +4,19 @@
         var today = thisYear + '.' + thisMonth + '.' + thisDay;
         todaySection.innerHTML = today;
 
-        if(memberPage == "true") {
+        var editInfoButton = document.getElementById("editInfoButton");
+        var comeBackButton = document.getElementById("comeBackButton");
+        
+        if(memberPage === "true") {
             var memberNameSection = document.getElementById("memberNameSection");
             memberNameSection.innerHTML = "팀원 " + pageMemberName;
+
+            editInfoButton.style.display = "none"; // 정보수정 버튼 숨기기
+            comeBackButton.style.display = "block"; // 돌아가기 버튼 보이기
+        }
+        else {
+            editInfoButton.style.display = "block"; // 정보수정 버튼 보이기
+            comeBackButton.style.display = "none"; // 돌아가기 버튼 숨기기
         }
 
         //홈 버튼 클릭시 이번달 달력 표시

@@ -71,6 +71,19 @@
 }
 
 #editInfoButton {
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+    color: #3b5998;
+    background-color: white;
+    width: 90px;
+    height: 30px;
+    border: none;
+}
+
+#comeBackButton {
+    margin-left: auto;
+    margin-right: auto;
     cursor: pointer;
     color: #3b5998;
     background-color: white;

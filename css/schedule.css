@@ -135,10 +135,11 @@ main {
     background-color: #94a4c4;
 }
 
-#scheldulesInDay {
+.schedulesInDay {
     position: absolute;
     bottom: 0;
     background-color: #3b5898;
-    width: 141.5px;
+    color: white;
+    width: 140.5px;
     height: 35px;
 }

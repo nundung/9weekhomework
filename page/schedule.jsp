@@ -268,28 +268,6 @@
         
         makeCalendar();
 
-        //달력 
-        function makeCalendar() {
-            var calendar = document.getElementById("calendar");
-            var calendarHeader = document.getElementById("calendarHeader");
-            calendarHeader.innerHTML = month + '월';
-            calendar.appendChild(calendarHeader);
-            var daysInMonth = new Date(year, month, 0).getDate();
-            for (var i = 0; i < daysInMonth; i++) {
-                var daySelectButton = document.createElement("div");
-                daySelectButton.innerHTML = i + 1;
-                daySelectButton.id = i + 1;
-                daySelectButton.className = "daySelectButton";
-
-
-                var schedulesInDay
-                if (year == thisYear && month == thisMonth && (i + 1) === thisDay) {
-                    daySelectButton.id = "todayButton";
-                }
-                daySelectButton.addEventListener('click', showDetailEvent);
-                calendar.appendChild(daySelectButton);
-            }
-        }
         
         //팀원목록
         var memberList = document.getElementById("memberList");
@@ -319,13 +297,40 @@
             location.href = "schedule.jsp?id=" + memberId + "&year=" + year + "&month=" + month + "&day=" + day;
         }
 
+        //달력 
+        function makeCalendar() {
+            var calendar = document.getElementById("calendar");
+            var calendarHeader = document.getElementById("calendarHeader");
+            calendarHeader.innerHTML = month + '월';
+            calendar.appendChild(calendarHeader);
+            var daysInMonth = new Date(year, month, 0).getDate();
+            for (var i = 0; i < daysInMonth; i++) {
+                var daySelectButton = document.createElement("div");
+                daySelectButton.innerHTML = i + 1;
+                daySelectButton.id = "day" + (i + 1);
+                daySelectButton.className = "daySelectButton";
+                
+                if (year == thisYear && month == thisMonth && (i + 1) === thisDay) {
+                    daySelectButton.id = "todayButton";
+                }
+                daySelectButton.addEventListener('click', showDetailEvent);
+                calendar.appendChild(daySelectButton);
+            }
+        }
+
         for (var i=0; i<extractedDays.length; i++) {
             var day = extractedDays[i];
-            var schedulesInDay = document.createElement("div");
-            schedulesInDay.id = "schelduesInDay";
-
+            makeSchedulesInDay(day);
         }
-        function makeSchedulesInDay(test) {
+
+        function makeSchedulesInDay(day) {
+            var schedulesInDay = document.createElement("div");
+            var dayButton = document.getElementById("day" + day);
+            console.log(day);
+            console.log(dayButton);
+            schedulesInDay.innerHTML = "일정이 있습니다."
+            schedulesInDay.className = "schedulesInDay";
+            dayButton.appendChild(schedulesInDay);
         }
 
         function showDetailEvent(event) {

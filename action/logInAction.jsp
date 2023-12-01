@@ -61,7 +61,7 @@
 
     //return값을 저장해줌
     result = query.executeQuery();
-    
+
     boolean logInSuccess = false;
 
     try {
@@ -71,7 +71,6 @@
         String team = "null";
         String position = "null";
 
-        // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             accountIdx = result.getInt(1);
             name = result.getString(4);
@@ -89,31 +88,11 @@
             session.setAttribute("position", position);
             logInSuccess = true;
         }
-        else {
-            logInSuccess = false;
-        }
     } 
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         e.printStackTrace();
         return;
-    }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-        }
-            if (query != null) {
-                query.close();
-        }
-            if (result != null) {
-                result.close();
-            } 
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
     }
 %>
 

@@ -123,6 +123,7 @@ main {
 
 .daySelectButton {
     color: #3b5998;
+    text-align: left;
     cursor: pointer;
     font-weight: bold;
     width: 141.5px;
@@ -133,6 +134,7 @@ main {
 
 .todayButton {
     color: #3b5898;
+    text-align: left;
     cursor: pointer;
     font-weight: bold;
     width: 141.5px;

@@ -58,7 +58,7 @@
         Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
         Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
-        if (!pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
+        if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
     }

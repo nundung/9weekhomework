@@ -18,10 +18,6 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
-<!-- 정규식 -->
-<%@ page import="java.util.regex.Pattern" %>
-<%@ page import="java.util.regex.Matcher" %>
-
 
 <%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
@@ -39,11 +35,16 @@
     //세션값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
 
+    if (accountIdx == 0) {
+        out.println("<div>올바른 접근이 아닙니다.</div>");
+        return;
+    }
+
     Object idSession = session.getAttribute("id");
     String id = (String)idSession;
 
     Object nameSession = session.getAttribute("name");
-    String myName = (String)nameSession;
+    String name = (String)nameSession;
 
     Object phonenumberSession = session.getAttribute("phonenumber");
     String phonenumber = (String)phonenumberSession;
@@ -54,29 +55,23 @@
     Object positionSession = session.getAttribute("position");
     String position = (String)positionSession;
 
-    if (accountIdx == 0) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
-        return;
-    }
 
 
     Connection connect = null;
 
-    //페이지의 id를 불러오기
-    PreparedStatement pageIdQuery = null;
-    ResultSet pageIdResult = null;
-
-    //만약 팀장이 보는 팀원페이지일 경우 팀원의 정보 불러오기
+    //이 페이지의 일별 일정개수 불러오기
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
+
+    //이 페이지가 만약 팀장이 보는 팀원의 페이지라면 팀원의 accountIdx를 불러오기
+    PreparedStatement pageIdQuery = null;
+    ResultSet pageIdResult = null;
 
     //팀장일 경우 팀원리스트 불러오기
     PreparedStatement memberQuery = null;
     ResultSet memberResult = null;
 
 
-
-    ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
     ArrayList<String> scheduleDateList = new ArrayList<String>();
 
     ArrayList<String> memberNameList = new ArrayList<String>();
@@ -85,18 +80,23 @@
 
     int pageMemberIdx = 0;
     String pageMemberName = "null";
-    String memberPage = "false";
+    String memberPageCheck = "false";
+    String leaderCheck = "false";
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
+        //이 페이지의 일별 일정개수 불러오기
         String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(date) = ? AND MONTH(date) = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
 
+        //내가 이 페이지의 주인일때 세션에서 받은 accountIdx 쿼리문에 입력
         if(id.equals(pageId)) {
             scheduleQuery.setInt(1,accountIdx);
         }
+
+        //팀원의 페이지라면 팀원의 accountIdx 찾아서 쿼리문에 입력
         else {
             String pageIdSql = "SELECT * FROM account WHERE id = ?";
             pageIdQuery = connect.prepareStatement(pageIdSql);
@@ -110,26 +110,22 @@
                 pageMemberName = pageIdResult.getString(4);
             }
             scheduleQuery.setInt(1,pageMemberIdx);
-            memberPage = "true";
+            memberPageCheck = "true";
         }
+        //이 페이지의 year값과 month값 쿼리문에 입력
         scheduleQuery.setString(2,year);
         scheduleQuery.setString(3,month);
 
         //return값을 저장해줌
         scheduleResult = scheduleQuery.executeQuery();
 
-        int scheduleIdx = 0;
-        String scheduleDate = "null";
-
-
         while(scheduleResult.next()) {
-            scheduleIdx = scheduleResult.getInt(1);
-            scheduleDate = scheduleResult.getString(2);
+            String scheduleDate = scheduleResult.getString(2);
             
-            scheduleIdxList.add(scheduleIdx);
             scheduleDateList.add("\""+scheduleDate+"\"");
         }
 
+        //내 직급이 팀장일 경우 팀원 목록을 불러오기
         if(position.equals("팀장")){
             String memberSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
             memberQuery = connect.prepareStatement(memberSql);
@@ -147,6 +143,7 @@
                 memberNameList.add("\""+memberName+"\"");
                 memberPhonenumberList.add("\""+memberPhonenumber+"\"");
             }
+            leaderCheck = "true";
         }
     }
     catch (SQLException e) {
@@ -185,8 +182,7 @@
         </section>
 
         <!-- month 선택 버튼 -->
-        <section id="monthSelectSection">
-        </section>
+        <section id="monthSelectSection"></section>
         <div id="calendar">
             <div id="calendarHeader">
                 <p id="monthValue"></p>
@@ -219,41 +215,24 @@
     <script>
         var id = "<%=id%>";
         var pageId = "<%=pageId%>";
-        var memberPage = "<%=memberPage%>";
+        var memberPageCheck = "<%=memberPageCheck%>";
         var pageMemberName = "<%=pageMemberName%>";
+        var leaderCheck = "<%=leaderCheck%>";
 
-        var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleDateList = <%=scheduleDateList%>;
-
-        const extractedDays = scheduleDateList.map(dateString => {
-            const date = new Date(dateString);
-            const day = date.getDate();
-            
-            return day;
-        });
-        console.log(extractedDays);
-
-        console.log(scheduleIdxList,scheduleDateList);
 
         var memberIdList = <%=memberIdList%>;
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
-        console.log(memberIdList,memberNameList,memberPhonenumberList);
 
-        var myNameValue = "<%=myName%>";
+        var nameValue = "<%=name%>";
         var phonenumberValue = "<%=phonenumber%>";
         var teamValue = "<%=team%>";
         var positionValue = "<%=position%>";
-        var myName = document.getElementById("name");
-        var phonenumber = document.getElementById("phonenumber");
-        var team = document.getElementById("team");
-        var position = document.getElementById("position");
-
-
-        myName.innerHTML = myNameValue;
-        phonenumber.innerHTML = phonenumberValue;
-        team.innerHTML = teamValue + "부";
-        position.innerHTML = positionValue
+        var nameSection = document.getElementById("name");
+        var phonenumberSection = document.getElementById("phonenumber");
+        var teamSection = document.getElementById("team");
+        var positionSection = document.getElementById("position");
 
         //Parameter로 받은 날짜 정보
         var year = "<%=year%>";
@@ -266,85 +245,24 @@
         var thisMonth = date.getMonth() + 1;
         var thisDay = date.getDate();
         
-        makeCalendar();
 
-        
-        //팀원목록
-        var memberList = document.getElementById("memberList");
-        for(var i=0; i<memberNameList.length; i++){
-        var memberRow = document.createElement("div");
-        memberRow.className = "memberRow";
-        memberRow.dataset.index = i;
-        memberRow.addEventListener('click', showTemMemberScheduleEvent);
-
-        var memberName = document.createElement("p");
-        memberName.innerHTML = memberNameList[i];
-        
-        var memberPhonenumber = document.createElement("p");
-        memberPhonenumber.innerHTML = memberPhonenumberList[i];
-
-        memberRow.appendChild(memberName);
-        memberRow.appendChild(memberPhonenumber);
-        memberList.appendChild(memberRow);
-
-        }
-
-        
-
-        function showTemMemberScheduleEvent(event) {
-            var clickedIndex = event.target.dataset.index;
-            var memberId = memberIdList[clickedIndex];
-            location.href = "schedule.jsp?id=" + memberId + "&year=" + year + "&month=" + month + "&day=" + day;
-        }
-
-        //달력 
-        function makeCalendar() {
-            var calendar = document.getElementById("calendar");
-            var calendarHeader = document.getElementById("calendarHeader");
-            calendarHeader.innerHTML = month + '월';
-            calendar.appendChild(calendarHeader);
-            var daysInMonth = new Date(year, month, 0).getDate();
-            for (var i = 0; i < daysInMonth; i++) {
-                var daySelectButton = document.createElement("div");
-                daySelectButton.innerHTML = i + 1;
-                daySelectButton.id = "day" + (i + 1);
-                daySelectButton.className = "daySelectButton";
-                
-                if (year == thisYear && month == thisMonth && (i + 1) === thisDay) {
-                    daySelectButton.className = "todayButton";
-                }
-                daySelectButton.addEventListener('click', showDetailEvent);
-                calendar.appendChild(daySelectButton);
+        //문서와 모든 자원이 완전히 로드되었을 때 실행되는 함수
+        window.onload = function() {
+            makeCalendar();
+            for (var i=0; i<extractedDays.length; i++) {
+            var day = extractedDays[i];
+            makeSchedulesInDay(day);
             }
         }
 
-        for (var i=0; i<extractedDays.length; i++) {
-            var day = extractedDays[i];
-            makeSchedulesInDay(day);
-        }
+        const extractedDays = scheduleDateList.map(dateString => {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            return day;
+        });
+        console.log(extractedDays);
+        console.log(scheduleDateList);
 
-        function makeSchedulesInDay(day) {
-            var schedulesInDay = document.createElement("div");
-            var dayButton = document.getElementById("day" + day);
-            var existingSchedules = dayButton.getElementsByClassName("schedulesInDay").length + 1;
-
-            console.log(day);
-            console.log(dayButton);
-            schedulesInDay.innerHTML = "일정" + existingSchedules +"개"
-            schedulesInDay.className = "schedulesInDay";
-            dayButton.appendChild(schedulesInDay);
-        }
-
-        function showDetailEvent(event) {
-            var clickedDay = parseInt(event.target.innerHTML, 10);
-            var clickedDate = year+"-"+month+"-"+clickedDay;
-            let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-            var ret = window.open("scheduleDetail.jsp?id=" + pageId + "&date=" + clickedDate, "상세일정", options)
-        }
-
-        function comeBackEvent() {
-            location.href = "schedule.jsp?id=" + id + "&year=" + year + "&month=" + month + "&day=" + day;
-        }
     </script>
     <script src="../js/schedule.js"></script>
 </body>

@@ -29,7 +29,7 @@
         var yearValue = document.getElementById("yearValue");
         yearValue.innerHTML = year;
 
-        //년도 선택 이벤트
+        //년도 선택 
         function lastYearEvent() {
             year = parseInt(year) - 1;
             location.href = "schedule.jsp?id=" + pageId + "&year=" + year + "&month=" + month + "&day=" + day;
@@ -58,14 +58,19 @@
             location.href = "schedule.jsp?id=" + pageId + "&year=" + year + "&month=" + clickedMonth + "&day=" + day;
         }
 
-        //내 정보 입력
+        //메뉴바에 내 정보 불러오기
+        var nameSection = document.getElementById("name");
+        var phonenumberSection = document.getElementById("phonenumber");
+        var teamSection = document.getElementById("team");
+        var positionSection = document.getElementById("position");
+
         nameSection.innerHTML = nameValue;
         phonenumberSection.innerHTML = phonenumberValue;
         teamSection.innerHTML = teamValue + "부";
         positionSection.innerHTML = positionValue;
 
         
-        //팀원목록 불러오기
+        //내 직급이 팀장일 경우 팀원목록 불러오기
         if(leaderCheck === "true") {
             var memberList = document.getElementById("memberList");
             for(var i=0; i<memberNameList.length; i++){
@@ -105,7 +110,7 @@
         }
 
 
-        //로그아웃 이벤트
+        //로그아웃
         function logOutEvent() {
             location.href = "../action/logOutAction.jsp"
         }
@@ -115,7 +120,7 @@
             location.href="editInfo.jsp";
         }
         
-        //원래 내 페이지로 돌아오기
+        //원래 내 페이지로 돌아가기
         function comeBackEvent() {
             location.href = "schedule.jsp?id=" + id + "&year=" + year + "&month=" + month + "&day=" + day;
         }
@@ -141,21 +146,15 @@
             }
         }
 
-        const extractedDays = scheduleDateList.map(dateString => {
-            const date = new Date(dateString);
-            const day = date.getDate();
-            return day;
-        });
-        console.log(extractedDays);
-        console.log(scheduleDateList);
-
         //일자별로 일정 개수 표시해주기
         function makeSchedulesInDay(day) {
             var schedulesInDay = document.createElement("div");
             var dayButton = document.getElementById("day" + day);
-            var existingSchedules = dayButton.getElementsByClassName("schedulesInDay").length + 1;
+            // 일자에 원래 있던 일정 개수에 하나를 더해준다.
+            var existingSchedules = dayButton.getElementsByClassName("schedulesInDay").length;
+            var newScheduleCount = existingSchedules + 1;
 
-            schedulesInDay.innerHTML = "일정" + existingSchedules +"개"
+            schedulesInDay.innerHTML = "일정" + newScheduleCount +"개";
             schedulesInDay.className = "schedulesInDay";
             dayButton.appendChild(schedulesInDay);
         }

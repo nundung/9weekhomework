@@ -215,26 +215,22 @@
     <script>
         var id = "<%=id%>";
         var pageId = "<%=pageId%>";
-        var memberPageCheck = "<%=memberPageCheck%>";
-        var pageMemberName = "<%=pageMemberName%>";
-        var leaderCheck = "<%=leaderCheck%>";
-
-        var scheduleDateList = <%=scheduleDateList%>;
-
-        var memberIdList = <%=memberIdList%>;
-        var memberNameList = <%=memberNameList%>;
-        var memberPhonenumberList = <%=memberPhonenumberList%>;
 
         var nameValue = "<%=name%>";
         var phonenumberValue = "<%=phonenumber%>";
         var teamValue = "<%=team%>";
         var positionValue = "<%=position%>";
-        var nameSection = document.getElementById("name");
-        var phonenumberSection = document.getElementById("phonenumber");
-        var teamSection = document.getElementById("team");
-        var positionSection = document.getElementById("position");
 
-        //Parameter로 받은 날짜 정보
+        var memberPageCheck = "<%=memberPageCheck%>";
+        var leaderCheck = "<%=leaderCheck%>";
+        var pageMemberName = "<%=pageMemberName%>";
+
+        var scheduleDateList = <%=scheduleDateList%>;
+        var memberIdList = <%=memberIdList%>;
+        var memberNameList = <%=memberNameList%>;
+        var memberPhonenumberList = <%=memberPhonenumberList%>;
+
+        //현재 페이지의 날짜
         var year = "<%=year%>";
         var month = "<%=month%>";
         var day = "<%=day%>";
@@ -245,16 +241,22 @@
         var thisMonth = date.getMonth() + 1;
         var thisDay = date.getDate();
         
+        //map : 배열의 각 요소에 대해 주어진 함수를 호출하고, 그 함수가 반환하는 결과를 모아 새로운 배열을 생성
+        //스케줄 날짜 리스트에서 일(day)값만 추출
+        const extractedDays = scheduleDateList.map(function(scheduleDate) {
+            const date = new Date(scheduleDate);
+            const day = date.getDate();
+            return day;
+        });
 
-        //문서와 모든 자원이 완전히 로드되었을 때 실행되는 함수
+        //문서와 모든 자원(img)이 완전히 로드되었을 때 실행되는 함수
         window.onload = function() {
             makeCalendar();
             for (var i=0; i<extractedDays.length; i++) {
-            var day = extractedDays[i];
-            makeSchedulesInDay(day);
+                var day = extractedDays[i];
+                makeSchedulesInDay(day);
             }
         }
-
     </script>
     <script src="../js/schedule.js"></script>
 </body>

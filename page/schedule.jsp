@@ -328,13 +328,13 @@
             var dayButton = document.getElementById("day" + day);
             console.log(day);
             console.log(dayButton);
-            schedulesInDay.innerHTML = "일정이 있습니다."
+            schedulesInDay.innerHTML = "일정이" + 1 +"개 있습니다."
             schedulesInDay.className = "schedulesInDay";
             dayButton.appendChild(schedulesInDay);
         }
 
         function showDetailEvent(event) {
-            var clickedDay = event.target.innerHTML;
+            var clickedDay = parseInt(event.target.innerHTML, 10);
             var clickedDate = year+"-"+month+"-"+clickedDay;
             let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
             var ret = window.open("scheduleDetail.jsp?id=" + pageId + "&date=" + clickedDate, "상세일정", options)

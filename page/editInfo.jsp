@@ -37,7 +37,7 @@
         <div id="empty"></div>
     </header>
     <main>
-        <form action="../action/editInfoAction.jsp">
+        <form action="../action/editInfoAction.jsp" onsubmit="return exceptionCheckEvent()">
             <section class="rows">
                 <label for="id" class ="label">아이디</label>
                 <p id="id"></p>

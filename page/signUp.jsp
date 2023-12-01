@@ -49,7 +49,7 @@
                     <input type="radio" name="position" value="팀장">팀장
                 </div>
             </section>
-            <input type="submit" id="button" value="회원가입" >
+            <input type="submit" id="button" value="회원가입">
         </form>
     </main>
     <script>

@@ -255,14 +255,6 @@
             }
         }
 
-        const extractedDays = scheduleDateList.map(dateString => {
-            const date = new Date(dateString);
-            const day = date.getDate();
-            return day;
-        });
-        console.log(extractedDays);
-        console.log(scheduleDateList);
-
     </script>
     <script src="../js/schedule.js"></script>
 </body>

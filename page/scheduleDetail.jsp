@@ -36,7 +36,8 @@
     String id = (String)idSession;
 
     Connection connect = null;
-
+    
+    //이 페이지의 일정들 불러오기
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
     
@@ -49,24 +50,27 @@
 
     int pageMemberIdx = 0;
     String pageMemberName = "null";
-    String memberPage = "false";
+    String memberPageCheck = "false";
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
+        //이 페이지날짜의 일정 불러오기
         String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
         
+        //내가 이 페이지의 주인일때 세션에서 받은 accountIdx 쿼리문에 입력
         if(id.equals(pageId)) {
             scheduleQuery.setInt(1,accountIdx);
         }
+
+        //팀원의 페이지라면 팀원의 accountIdx 찾아서 쿼리문에 입력
         else {
             String pageIdSql = "SELECT * FROM account WHERE id = ?";
             pageIdQuery = connect.prepareStatement(pageIdSql);
             pageIdQuery.setString(1,pageId);
             
-            //return값을 저장해줌
             pageIdResult = pageIdQuery.executeQuery();
 
             while(pageIdResult.next()) {
@@ -74,7 +78,7 @@
                 pageMemberName = pageIdResult.getString(4);
             }
             scheduleQuery.setInt(1,pageMemberIdx);
-            memberPage = "true";
+            memberPageCheck = "true";
         }
         scheduleQuery.setString(2,date);
         
@@ -95,7 +99,6 @@
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
-
 %>
 
 
@@ -125,114 +128,113 @@
             <input type="submit" id="scheduleInputButton">
         </div>
     </form>
-    
+
     <script>
         var date = "<%=date%>";
         var id = "<%=id%>";
-        console.log(date);
-
-        var memberPage = "<%=memberPage%>";
+        var pageMemberName = "<%=pageMemberName%>";
+        var memberPageCheck = "<%=memberPageCheck%>";
+        
         var scheduleIdxList = <%=scheduleIdxList%>;
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;
 
+
+        //이 페이지의 날짜를 표시하는 영역
         var daySection = document.getElementById("daySection");
         daySection.innerHTML = date;
         
-
+        //이 날짜의 일정들을 표시하는 영역
         var scheduleSection = document.getElementById("schduleSection");
-            if (scheduleIdxList.length > 0) {
-                for(var i=0; i<scheduleIdxList.length; i++){
-                    var scheduleRow = document.createElement("div");
-                    var scheduleTime = document.createElement("span");
-                    var scheduleTitle = document.createElement("span");
-                    var buttonSection = document.createElement("span");
-                    
-                    scheduleRow.className = "scheduleRow";
-                    scheduleTime.className = "scheduleTime";
-                    scheduleTime.innerHTML = scheduleTimeList[i];
-                    scheduleTitle.className = "scheduleTitle";
-                    scheduleTitle.innerHTML = scheduleTitleList[i];
-                    buttonSection.className = "buttonSection";
+        if (scheduleIdxList.length > 0) {
+            for(var i=0; i<scheduleIdxList.length; i++){
+                var scheduleRow = document.createElement("div");
+                var scheduleTime = document.createElement("span");
+                var scheduleTitle = document.createElement("span");
+                var buttonSection = document.createElement("span");
+                
+                scheduleRow.className = "scheduleRow";
+                scheduleTime.className = "scheduleTime";
+                scheduleTime.innerHTML = scheduleTimeList[i];
+                scheduleTitle.className = "scheduleTitle";
+                scheduleTitle.innerHTML = scheduleTitleList[i];
+                buttonSection.className = "buttonSection";
 
-            if(memberPage === "false") {
-                var editButton = document.createElement("img");
-                var deleteButton = document.createElement("img");
-                editButton.className = "editButton";
-                editButton.src = "../image/pencil.svg";
-                editButton.addEventListener('click', function(index) {
-                return function() {
-                    var scheduleIdx = scheduleIdxList[index];
-                    var currentScheduleTime = scheduleTimeList[index];
-                    var currentScheduleTitle = scheduleTitleList[index];
-                    
-                    var scheduleTime = document.getElementsByClassName("scheduleTime")[index];
-                    var scheduleTitle = document.getElementsByClassName("scheduleTitle")[index];
-                    var buttonSection = document.getElementsByClassName("buttonSection")[index];
-                    
-                    // 시간과 내용을 input 모드로 전환하는 로직 추가
-                    var scheduleTimeEdit = document.createElement("input");
-                    scheduleTimeEdit.type = "time";
-                    scheduleTimeEdit.value = currentScheduleTime;
-            
-                    var scheduleTitleEdit = document.createElement("input");
-                    scheduleTitleEdit.type = "text";
-                    scheduleTitleEdit.value = currentScheduleTitle;
-
-                    // 기존의 span 요소를 input 요소로 교체
-                    scheduleTime.replaceWith(scheduleTimeEdit);
-                    scheduleTitle.replaceWith(scheduleTitleEdit);
-
-                    
-                    buttonSection.innerHTML = "";
-                    var saveButton = document.createElement("button");
-                    saveButton.innerHTML = "저장";
-                    saveButton.addEventListener('click', function() {
-                        location.href = "../action/editScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
-                    });
-
-                    buttonSection.appendChild(saveButton);
-                };
-            }(i));
-
-                deleteButton.className = "deleteButton";
-                deleteButton.src = "../image/trashcan.svg";
-
-                deleteButton.addEventListener('click', function(index) {
-                    return function() {
-                        var scheduleIdx = scheduleIdxList[index];
-                        var confirmation = confirm("일정을 삭제하시겠습니까?");
-                    
-                        if (confirmation) {
-                            location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
-                        } else {
+                //내가 이 페이지의 주인일 경우 수정, 삭제 버튼 추가
+                if(memberPageCheck === "false") {
+                    var editButton = document.createElement("img");
+                    var deleteButton = document.createElement("img");
+                    //수정버튼 생성
+                    editButton.className = "editButton";
+                    editButton.src = "../image/pencil.svg";
+                    editButton.addEventListener('click', function(index) {
+                        return function() {
+                            var scheduleIdx = scheduleIdxList[index];
+                            var currentScheduleTime = scheduleTimeList[index];
+                            var currentScheduleTitle = scheduleTitleList[index];
+                        
+                            var scheduleTime = document.getElementsByClassName("scheduleTime")[index];
+                            var scheduleTitle = document.getElementsByClassName("scheduleTitle")[index];
+                            var buttonSection = document.getElementsByClassName("buttonSection")[index];
                             
-                        }
-                    };
-                }(i));
+                            // 시간과 내용 수정칸을 input type으로 생성
+                            var scheduleTimeEdit = document.createElement("input");
+                            scheduleTimeEdit.type = "time";
+                            scheduleTimeEdit.value = currentScheduleTime;
+                    
+                            var scheduleTitleEdit = document.createElement("input");
+                            scheduleTitleEdit.type = "text";
+                            scheduleTitleEdit.value = currentScheduleTitle;
 
-                buttonSection.appendChild(editButton);
-                buttonSection.appendChild(deleteButton);
-            }
+                            // 수정버튼 클릭시 기존의 span 요소를 input 요소로 교체
+                            scheduleTime.replaceWith(scheduleTimeEdit);
+                            scheduleTitle.replaceWith(scheduleTitleEdit);
+
+                            //버튼 구역의 수정, 삭제 버튼을 없애고 저장버튼 생성
+                            buttonSection.innerHTML = "";
+                            var saveButton = document.createElement("button");
+                            saveButton.innerHTML = "저장";
+                            saveButton.addEventListener('click', function() {
+                                location.href = "../action/editScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
+                            });
+                        buttonSection.appendChild(saveButton);
+                        };
+                    }(i));
+                    //삭제버튼 생성
+                    deleteButton.className = "deleteButton";
+                    deleteButton.src = "../image/trashcan.svg";
+                    deleteButton.addEventListener('click', function(index) {
+                        return function() {
+                            var scheduleIdx = scheduleIdxList[index];
+                            var confirmation = confirm("일정을 삭제하시겠습니까?");
+                        
+                            if (confirmation) {
+                                location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
+                            } else {
+                                
+                            }
+                        };
+                    }(i));
+                    buttonSection.appendChild(editButton);
+                    buttonSection.appendChild(deleteButton);
+                }
                 scheduleRow.appendChild(scheduleTime);
                 scheduleRow.appendChild(scheduleTitle);
                 scheduleRow.appendChild(buttonSection);
-
                 scheduleSection.appendChild(scheduleRow);
             }
+        }
+        else {
+            if(memberPageCheck === "false") {
+            schduleSection.innerText = "일정을 추가해주세요.";
+            console.log("ok")
+        }
     }
-    else {
-        if(memberPage === "false") {
-        schduleSection.innerText = "일정을 추가해주세요.";
-        console.log("ok")
+    //내가 이 페이지의 주인이 아닌 경우 input창 안보이게
+    if(memberPageCheck === "true") {
+        var scheduleInput = document.getElementById("scheduleInput");
+        scheduleInput.style.display = "none";
     }
-}
-
-if(memberPage === "true") {
-    var scheduleInput = document.getElementById("scheduleInput");
-
-    scheduleInput.style.display = "none";
-}
         
         function scheduleEditEvent() {
 

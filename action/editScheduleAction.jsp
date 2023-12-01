@@ -19,7 +19,6 @@
 <%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
-    
 
     //계정 id값 받아오기 
     String id = request.getParameter("id"); 

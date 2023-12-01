@@ -141,6 +141,14 @@
             }
         }
 
+        const extractedDays = scheduleDateList.map(dateString => {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            return day;
+        });
+        console.log(extractedDays);
+        console.log(scheduleDateList);
+
         //일자별로 일정 개수 표시해주기
         function makeSchedulesInDay(day) {
             var schedulesInDay = document.createElement("div");

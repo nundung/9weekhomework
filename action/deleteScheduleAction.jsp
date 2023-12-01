@@ -71,7 +71,7 @@
     <script>
         var date = "<%=date%>";
         var id = "<%=id%>";
-        location.href="../page/scheduleDetail.jsp?id" + id + "&date=" + date;
+        location.href="../page/scheduleDetail.jsp?id=" + id + "&date=" + date;
     </script>
 </body>
 </html>

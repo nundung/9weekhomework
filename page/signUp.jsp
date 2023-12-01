@@ -21,11 +21,11 @@
             </section>
             <section class="rows">
                 <label for="pw" class ="label">비밀번호</label>
-                <input type="text" class="input" id="pw" name="pw" placeholder="영문, 숫자,특수문자 조합으로 8~20자">
+                <input type="password" class="input" id="pw" name="pw" placeholder="영문, 숫자,특수문자 조합으로 8~20자">
             </section>
             <section class="rows">
                 <label for="pwCheck" class ="label">비밀번호 확인</label>
-                <input type="text" class="input" id="pwCheck">
+                <input type="password" class="input" id="pwCheck">
             </section>
             <section class="rows">
                 <label for="name" class ="label">이름</label>

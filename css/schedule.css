@@ -85,6 +85,11 @@ main {
     color: #3b5998;
 }
 
+#thisMonthButton {
+    background-color: #3b5998;
+    color: white;
+}
+
 .monthSelectButton:hover {
     /* 호버 시 변경할 스타일 */
     background-color: #3b5998;
@@ -126,13 +131,14 @@ main {
     position: relative;
 }
 
-#todayButton {
+.todayButton {
     color: #3b5898;
     cursor: pointer;
     font-weight: bold;
     width: 141.5px;
     height: 100px;
     background-color: #94a4c4;
+    position: relative;
 }
 
 .schedulesInDay {
@@ -140,6 +146,7 @@ main {
     bottom: 0;
     background-color: #3b5898;
     color: white;
+    font-weight: 100;
     width: 140.5px;
     height: 35px;
 }

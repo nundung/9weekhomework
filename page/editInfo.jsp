@@ -3,22 +3,22 @@
 
 <%
     Object idSession = session.getAttribute("id");
-    String idValue = (String)idSession;
+    String id = (String)idSession;
 
     Object pwSession = session.getAttribute("pw");
-    String pwValue = (String)pwSession;
+    String pw = (String)pwSession;
 
     Object nameSession = session.getAttribute("name");
-    String nameValue = (String)nameSession;
+    String name = (String)nameSession;
 
     Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumberValue = (String)phonenumberSession;
+    String phonenumber = (String)phonenumberSession;
     
     Object teamSession = session.getAttribute("team");
-    String teamValue = (String)teamSession;
+    String team = (String)teamSession;
     
     Object positionSession = session.getAttribute("position");
-    String positionValue = (String)positionSession;
+    String position = (String)positionSession;
 %>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>정보수정</title>
     <link rel="stylesheet" type="text/css" href="../css/editInfo.css">
     <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
@@ -44,11 +44,11 @@
             </section>
             <section class="rows">
                 <label for="pw" class ="label">비밀번호</label>
-                <input type="text" class="input" name="pw" id="pw">
+                <input type="password" class="input" name="pw" id="pw">
             </section>
             <section class="rows">
                 <label for="pwCheck" class ="label">비밀번호 확인</label>
-                <input type="text" class="input">
+                <input type="password" class="input">
             </section>
             <section class="rows">
                 <label for="name" class ="label">이름</label>
@@ -77,12 +77,17 @@
     </main>
     
     <script>
-        var idValue = "<%=idValue%>";
-        var pwValue = "<%=pwValue%>";
-        var nameValue = "<%=nameValue%>";
-        var phonenumberValue = "<%=phonenumberValue%>";
-        var teamValue = "<%=teamValue%>";
-        var positionValue = "<%=positionValue%>";
+        var idValue = "<%=id%>";
+        var pwValue = "<%=pw%>";
+        var nameValue = "<%=name%>";
+        var phonenumberValue = "<%=phonenumber%>";
+        var teamValue = "<%=team%>";
+        var positionValue = "<%=position%>";
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
 
         var id = document.getElementById("id");
         var pw = document.getElementById("pw");
@@ -112,7 +117,7 @@
             positionLeader.checked = true;
         }
         function schedulePageEvent() {
-            location.href = "schedule.jsp";
+            location.href = "schedule.jsp?id=" + idValue + "&year=" + year + "&month=" + month + "&day=" + day;
         }
     </script>
 </body>

@@ -41,9 +41,12 @@
         //월 선택 버튼 입력
         for (var i=0; i<12; i++) {
             var monthSelectSection = document.getElementById("monthSelectSection");
-            var monthSelectButton = document.createElement("span")
+            var monthSelectButton = document.createElement("span");
             monthSelectButton.innerHTML = i+1;
             monthSelectButton.className = "monthSelectButton";
+            if(i+1 == month) {
+                monthSelectButton.id = "thisMonthButton";
+            }
             monthSelectButton.addEventListener('click', monthSelectEvent);
             monthSelectSection.appendChild(monthSelectButton);
         }

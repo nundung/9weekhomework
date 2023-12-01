@@ -16,7 +16,7 @@
     <main>
         <form action="action/logInAction.jsp" onsubmit="return exceptionCheckEvent()">
             <input type="text" class="input" name = "id" id="id" placeholder="아이디">
-            <input type="text" class="input" name = "pw" id="pw" placeholder="비밀번호" oninput="maskPw()">
+            <input type="password" class="input" name = "pw" id="pw" placeholder="비밀번호" oninput="maskPw()">
             <input type="submit" id="button" value="로그인">
         </form>
         <div id="menuBox">

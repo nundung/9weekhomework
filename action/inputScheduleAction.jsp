@@ -23,8 +23,10 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    String date = request.getParameter("date"); 
+    //계정 id값 받아오기 
+    String pageid = request.getParameter("id"); 
 
+    String date = request.getParameter("date"); 
     String time = request.getParameter("time"); 
     String title = request.getParameter("title"); 
 

@@ -311,7 +311,7 @@
                 daySelectButton.className = "daySelectButton";
                 
                 if (year == thisYear && month == thisMonth && (i + 1) === thisDay) {
-                    daySelectButton.id = "todayButton";
+                    daySelectButton.className = "todayButton";
                 }
                 daySelectButton.addEventListener('click', showDetailEvent);
                 calendar.appendChild(daySelectButton);
@@ -326,9 +326,11 @@
         function makeSchedulesInDay(day) {
             var schedulesInDay = document.createElement("div");
             var dayButton = document.getElementById("day" + day);
+            var existingSchedules = dayButton.getElementsByClassName("schedulesInDay").length + 1;
+
             console.log(day);
             console.log(dayButton);
-            schedulesInDay.innerHTML = "일정이" + 1 +"개 있습니다."
+            schedulesInDay.innerHTML = "일정" + existingSchedules +"개"
             schedulesInDay.className = "schedulesInDay";
             dayButton.appendChild(schedulesInDay);
         }

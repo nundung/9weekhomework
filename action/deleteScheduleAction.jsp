@@ -23,6 +23,10 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
+    //계정 id값 받아오기 
+    String id = request.getParameter("id"); 
+    
+    //스케줄 정보 받아오기
     String date = request.getParameter("date"); 
     String scheduleIdxString = request.getParameter("scheduleIdx"); 
 
@@ -53,20 +57,6 @@
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-            }
-            if (query != null) {
-                query.close();
-            }
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-            }
-        }
     
 %>
 
@@ -80,7 +70,8 @@
 <body>
     <script>
         var date = "<%=date%>";
-        location.href="../page/scheduleDetail.jsp?date="+date;
+        var id = "<%=id%>";
+        location.href="../page/scheduleDetail.jsp?id" + id + "&date=" + date;
     </script>
 </body>
 </html>

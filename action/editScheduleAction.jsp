@@ -20,89 +20,70 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //오늘 날짜 정보 받아오기
-    String date = request.getParameter("date"); 
+
+    //계정 id값 받아오기 
+    String id = request.getParameter("id"); 
+
+    //스케줄 정보 받아오기
     String scheduleIdxString = request.getParameter("scheduleIdx"); 
+    String date = request.getParameter("date");
+    String scheduleTime = request.getParameter("scheduleTime");
+    String scheduleTitle = request.getParameter("scheduleTitle");
 
     if (scheduleIdxString == null) {
         out.println("<div>올바른 접근이 아닙니다.</div>");
         return;
     }
-    
+    //int로 변환
     int scheduleIdx = Integer.parseInt(scheduleIdxString);
+
+    if (date == null || scheduleTime == null || scheduleTitle == null) {
+        out.println("<div>입력값이 부족합니다.</div>");
+        return;
+    }
 
     //세션값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
 
+    if (accountIdx == 0) {
+        out.println("<div>올바른 접근이 아닙니다.</div>");
+        return;
+    }
+
     Connection connect = null;
     PreparedStatement query = null;
-
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "UPDATE scadule SET pw='****' WHERE id='test2';";
+        String sql = "UPDATE schedule SET time = ?, title = ? WHERE idx = ? AND account_idx = ?";
         query = connect.prepareStatement(sql);
+        query.setString(1,scheduleTime);
+        query.setString(2,scheduleTitle);
+        query.setInt(3,scheduleIdx);
+        query.setInt(4,accountIdx);
 
-        if(id.equals(pageId)) {
-            scheduleQuery.setInt(1,accountIdx);
-        }
-        else {
-            String pageIdSql = "SELECT * FROM account WHERE id = ?";
-            pageIdQuery = connect.prepareStatement(pageIdSql);
-            pageIdQuery.setString(1,pageId);
-
-            //return값을 저장해줌
-            pageIdResult = pageIdQuery.executeQuery();
-
-            while(pageIdResult.next()) {
-                pageMemberIdx = pageIdResult.getInt(1);
-                pageMemberName = pageIdResult.getString(4);
-            }
-            scheduleQuery.setInt(1,pageMemberIdx);
-            memberPage = "true";
-        }
-        scheduleQuery.setString(2,year);
-        scheduleQuery.setString(3,month);
-
-        //return값을 저장해줌
-        scheduleResult = scheduleQuery.executeQuery();
-
-        int scheduleIdx = 0;
-        String scheduleDate = "null";
-
-
-        while(scheduleResult.next()) {
-            scheduleIdx = scheduleResult.getInt(1);
-            scheduleDate = scheduleResult.getString(2);
-            
-            scheduleIdxList.add(scheduleIdx);
-            scheduleDateList.add("\""+scheduleDate+"\"");
-        }
-
-        if(position.equals("팀장")){
-            String memberSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
-            memberQuery = connect.prepareStatement(memberSql);
-            memberQuery.setString(1,team);
-    
-            //return값을 저장해줌
-            memberResult = memberQuery.executeQuery();
-    
-            while(memberResult.next()) {
-                String memberId = memberResult.getString(2);
-                String memberName = memberResult.getString(4);
-                String memberPhonenumber = memberResult.getString(5);
-    
-                memberIdList.add("\""+memberId+"\"");
-                memberNameList.add("\""+memberName+"\"");
-                memberPhonenumberList.add("\""+memberPhonenumber+"\"");
-            }
-        }
+        query.executeUpdate();
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
-
 %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var date = "<%=date%>";
+        var id = "<%=id%>";
+        location.href = "../page/scheduleDetail.jsp?id=" + id + "&date=" + date;
+    </script>
+</body>
+</html>

@@ -128,6 +128,7 @@
     
     <script>
         var date = "<%=date%>";
+        var id = "<%=id%>";
         console.log(date);
 
         var memberPage = "<%=memberPage%>";
@@ -187,9 +188,7 @@
                     var saveButton = document.createElement("button");
                     saveButton.innerHTML = "저장";
                     saveButton.addEventListener('click', function() {
-                        return function() {}
-                        editScheduleEvent(scheduleIdx, scheduleTimeEdit.value, scheduleTitleEdit.value);
-                        locaion.href = "../action/editScheduleAction.jsp?date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle" + scheduleTitleEdit.value;
+                        location.href = "../action/editScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
                     });
 
                     buttonSection.appendChild(saveButton);
@@ -205,7 +204,7 @@
                         var confirmation = confirm("일정을 삭제하시겠습니까?");
                     
                         if (confirmation) {
-                            location.href = "../action/deleteScheduleAction.jsp?date=" + date + "&scheduleIdx=" + scheduleIdx;
+                            location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
                         } else {
                             
                         }

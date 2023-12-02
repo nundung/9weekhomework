@@ -13,7 +13,7 @@
         회원가입
     </header>
     <main>
-        <form action="../action/signUpAction.jsp" onsubmit=" return exceptionCheckEvent()">
+        <form action="../action/signUpAction.jsp" onsubmit="return exceptionCheckEvent()">
             <section id="idRow">
                 <label for="id" id="idLabel">아이디</label>
                 <input type="text" id="idInput" name="id" placeholder="영문, 숫자 조합으로 6~18자" onchange="resetDuplicateCheck()">

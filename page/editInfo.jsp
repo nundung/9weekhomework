@@ -48,15 +48,15 @@
             </section>
             <section class="rows">
                 <label for="pwCheck" class ="label">비밀번호 확인</label>
-                <input type="password" class="input">
+                <input type="password" class="input" id="pwCheck">
             </section>
             <section class="rows">
                 <label for="name" class ="label">이름</label>
-                <input type="text" class="input" id="nameId">
+                <input type="text" class="input" id="nameId" name="name">
             </section>
             <section class="rows">
                 <label for="phoneNumber" class ="label">전화번호</label>
-                <input type="text" class="input" id="phonenumber">
+                <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
             </section>
             <section class="rows">
                 <label for="team" class ="label">부서</label>
@@ -89,36 +89,36 @@
         var month = date.getMonth()+1;
         var day = date.getDate();
 
-        var id = document.getElementById("id");
-        var pw = document.getElementById("pw");
-        var pwCheck = document.getElementById("pwCheck");
+        var idId = document.getElementById("id");
+        var pwId = document.getElementById("pw");
+        var pwCheckId = document.getElementById("pwCheck");
         var nameId = document.getElementById("nameId");
-        var phonenumber = document.getElementById("phonenumber");
-        var teamDev = document.getElementById("teamDev");
-        var teamDesign = document.getElementById("teamDesign");
-        var positionMember = document.getElementById("positionMember");
-        var positionLeader = document.getElementById("positionLeader");
+        var phonenumberId = document.getElementById("phonenumber");
+        var teamDevId = document.getElementById("teamDev");
+        var teamDesignId = document.getElementById("teamDesign");
+        var positionMemberId = document.getElementById("positionMember");
+        var positionLeaderId = document.getElementById("positionLeader");
         
-        id.innerHTML = idValue;
-        pw.value = pwValue;
+        idId.innerHTML = idValue;
+        pwId.value = pwValue;
         nameId.value = nameValue;
-        phonenumber.value = phonenumberValue;
+        phonenumberId.value = phonenumberValue;
         
 
         if (teamValue === "개발") {
-            teamDev.checked = true;
+            teamDevId.checked = true;
         } else if (teamValue === "디자인") {
-            teamDesign.checked = true;
+            teamDesignId.checked = true;
         }
 
         if (positionValue === "팀원") {
-            positionMember.checked = true;
+            positionMemberId.checked = true;
         } else if (positionValue === "팀장") {
-            positionLeader.checked = true;
+            positionLeaderId.checked = true;
         }
         function schedulePageEvent() {
             location.href = "schedule.jsp?id=" + idValue + "&year=" + year + "&month=" + month + "&day=" + day;
         }
     </script>
-    <script src="../js/signUp.js"></script>
+    <script src="../js/editInfo.js"></script>
 </body>

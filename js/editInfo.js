@@ -9,10 +9,6 @@
         
         //예외처리
         function exceptionCheckEvent() {
-            if (checkedId === false) {
-                alert("아이디 중복체크를 먼저 진행해주세요.");
-                return false;
-            }
             var input = document.getElementsByClassName("input")
             for(var i=0; i < input.length; i++) {
                 if (input[i].value === "") {
@@ -20,14 +16,6 @@
                     return false;
                 }
             }
-            
-            //아이디 정규식
-            var id = document.getElementById("idInput").value;
-            var idReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
-            if(!idReg.test(id)) {
-                alert("아이디는 영문, 숫자의 조합으로 6~18자로 입력해주세요.");
-                return false;
-            } 
             //비밀번호 정규식
             var pwReg = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
             var pw = document.getElementById("pw").value;

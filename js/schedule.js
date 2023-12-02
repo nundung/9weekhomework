@@ -148,14 +148,15 @@
 
         //일자별로 일정 개수 표시해주기
         function makeSchedulesInDay(day) {
-            var schedulesInDay = document.createElement("div");
             var dayButton = document.getElementById("day" + day);
             // 일자에 원래 있던 일정 개수에 하나를 더해준다.
             var existingSchedules = dayButton.getElementsByClassName("schedulesInDay").length;
             var newScheduleCount = existingSchedules + 1;
 
+            var schedulesInDay = document.createElement("div");
             schedulesInDay.innerHTML = "일정" + newScheduleCount +"개";
             schedulesInDay.className = "schedulesInDay";
+            schedulesInDay.style.pointerEvents = "none";
             dayButton.appendChild(schedulesInDay);
         }
 

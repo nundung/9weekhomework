@@ -164,34 +164,34 @@
                 if(memberPageCheck === "false") {
                     var editButton = document.createElement("img");
                     var deleteButton = document.createElement("img");
-                    makeEditButton();
-                    makeDeleteButton();
+                    makeEditButton(i);
+                    makeDeleteButton(i);
                     }
-                    buttonSection.appendChild(editButton);
-                    buttonSection.appendChild(deleteButton);
-                }
-                scheduleRow.appendChild(scheduleTime);
-                scheduleRow.appendChild(scheduleTitle);
-                scheduleRow.appendChild(buttonSection);
-                scheduleSection.appendChild(scheduleRow);
+                buttonSection.appendChild(editButton);
+                buttonSection.appendChild(deleteButton);
+            scheduleRow.appendChild(scheduleTime);
+            scheduleRow.appendChild(scheduleTitle);
+            scheduleRow.appendChild(buttonSection);
+            scheduleSection.appendChild(scheduleRow);
             }
+        }
+        //내가 이 페이지의 주인일 경우 일정이 없을시 멘트 추가
         else {
             if(memberPageCheck === "false") {
-            schduleSection.innerText = "일정을 추가해주세요.";
-            console.log("ok")
+                schduleSection.innerText = "일정을 추가해주세요.";
+                console.log("ok")
+            }
         }
-    }
         //내가 이 페이지의 주인이 아닌 경우 input창 안보이게
         if(memberPageCheck === "true") {
             var scheduleInput = document.getElementById("scheduleInput");
             scheduleInput.style.display = "none";
         }
         //수정버튼 생성
-        function makeEditButton() {
+        function makeEditButton(index) {
             editButton.className = "editButton";
             editButton.src = "../image/pencil.svg";
-            editButton.addEventListener('click', function(index) {
-                return function() {
+            editButton.addEventListener('click', function() {
                     var scheduleIdx = scheduleIdxList[index];
                     var currentScheduleTime = scheduleTimeList[index];
                     var currentScheduleTitle = scheduleTitleList[index];
@@ -217,30 +217,27 @@
                     buttonSection.innerHTML = "";
                     var saveButton = document.createElement("button");
                     saveButton.innerHTML = "저장";
-                    saveButton.addEventListener('click', function() {
+                    saveButton.addEventListener('click', function(index) {
                         location.href = "../action/editScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
                     });
                 buttonSection.appendChild(saveButton);
-                };
-            }(i));
-        }
+                });
+            }(i);
+        
         //삭제버튼 생성
-        function makeDeleteButton() {
+        function makeDeleteButton(index) {
             deleteButton.className = "deleteButton";
             deleteButton.src = "../image/trashcan.svg";
-            deleteButton.addEventListener('click', function(index) {
-                return function() {
-                    var scheduleIdx = scheduleIdxList[index];
-                    var confirmation = confirm("일정을 삭제하시겠습니까?");
-                    if (confirmation) {
-                        location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
-                    } else {
-                        
-                    }
-                };
-            }(i));
-        }
+            deleteButton.addEventListener('click', function() {
+                var scheduleIdx = scheduleIdxList[index];
+                var confirmation = confirm("일정을 삭제하시겠습니까?");
+                if (confirmation) {
+                    location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
+                } 
+            });
+        }(i);
 
+        //입력값 빈칸 확인
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
@@ -255,7 +252,6 @@
                 return false;
             }
         }
-
     </script>
 </body>
 </html>

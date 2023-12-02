@@ -38,45 +38,45 @@
         out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
-    else {
-        //아이디 정규식
-        String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
-        Pattern idPattern = Pattern.compile(idReg);
-        Matcher idMatcher = idPattern.matcher(id);
+    //아이디 정규식
+    String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
+    Pattern idPattern = Pattern.compile(idReg);
+    Matcher idMatcher = idPattern.matcher(id);
 
-        //비밀번호 정규식
-        String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
-        Pattern pwPattern = Pattern.compile(pwReg);
-        Matcher pwMatcher = pwPattern.matcher(pw);
+    //비밀번호 정규식
+    String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
+    Pattern pwPattern = Pattern.compile(pwReg);
+    Matcher pwMatcher = pwPattern.matcher(pw);
 
-        //이름 정규식
-        String nameReg = "[가-힣]{2,4}";
-        Pattern namePattern = Pattern.compile(nameReg);
-        Matcher nameMatcher = namePattern.matcher(name);
+    //이름 정규식
+    String nameReg = "[가-힣]{2,4}";
+    Pattern namePattern = Pattern.compile(nameReg);
+    Matcher nameMatcher = namePattern.matcher(name);
 
-        //전화번호 정규식
-        String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
-        Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
-        Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
+    //전화번호 정규식
+    String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
+    Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
+    Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
-        //부서 확인
-        if (!("개발".equals(team) || "디자인".equals(team))) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
-
-        //직급 확인
-        if (!("팀원".equals(position) || "팀장".equals(position))) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
-        
-        //정규식 확인
-        if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
+    //정규식 확인
+    if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
+        out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
     }
+    
+    //부서 확인
+    if (!("개발".equals(team) || "디자인".equals(team))) {
+        out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
+    }
+
+    //직급 확인
+    if (!("팀원".equals(position) || "팀장".equals(position))) {
+        out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
+    }
+    
+
 
     Connection connect = null;
     PreparedStatement query = null;

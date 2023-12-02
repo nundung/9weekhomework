@@ -32,6 +32,11 @@
     //세션값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
 
+    if (accountIdx == 0) {
+        out.println("<div>올바른 접근이 아닙니다.</div>");
+        return;
+    }
+
     Object idSession = session.getAttribute("id");
     String id = (String)idSession;
 

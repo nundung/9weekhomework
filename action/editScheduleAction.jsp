@@ -21,7 +21,7 @@
     request.setCharacterEncoding("UTF-8");
 
     //이 페이지의 계정 id값 받아오기 
-    String id = request.getParameter("id"); 
+    String pageId = request.getParameter("id"); 
 
     //스케줄 정보 받아오기
     String scheduleIdxString = request.getParameter("scheduleIdx"); 
@@ -29,7 +29,7 @@
     String scheduleTime = request.getParameter("scheduleTime");
     String scheduleTitle = request.getParameter("scheduleTitle");
 
-    if (id == null || scheduleIdxString == null || date == null || scheduleTime == null || scheduleTitle == null) {
+    if (pageId == null || scheduleIdxString == null || date == null || scheduleTime == null || scheduleTitle == null) {
         out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
@@ -41,6 +41,15 @@
     int accountIdx = (Integer)session.getAttribute("accountIdx");
 
     if (accountIdx == 0) {
+        out.println("<div>올바르지 않은 접근입니다.</div>");
+        return;
+    }
+
+    Object idSession = session.getAttribute("id");
+    String id = (String)idSession;
+
+    //내가 이 페이지의 주인이 맞는지 체크
+    if(!id.equals(pageId)) {
         out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }

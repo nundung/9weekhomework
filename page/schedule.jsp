@@ -23,40 +23,6 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //id정보 받아오기
-    String pageId = request.getParameter("id");
-    
-    //오늘 날짜 정보 받아오기
-    String year = request.getParameter("year"); 
-    String month = request.getParameter("month"); 
-    String day = request.getParameter("day"); 
-
-
-    //세션값 받아줌
-    int accountIdx = (Integer)session.getAttribute("accountIdx");
-
-    if (accountIdx == 0) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
-        return;
-    }
-
-    Object idSession = session.getAttribute("id");
-    String id = (String)idSession;
-
-    Object nameSession = session.getAttribute("name");
-    String name = (String)nameSession;
-
-    Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumber = (String)phonenumberSession;
-
-    Object teamSession = session.getAttribute("team");
-    String team = (String)teamSession;
-
-    Object positionSession = session.getAttribute("position");
-    String position = (String)positionSession;
-
-
-
     Connection connect = null;
 
     //이 페이지의 일별 일정개수 불러오기
@@ -82,6 +48,40 @@
     String pageMemberName = "null";
     String memberPageCheck = "false";
     String leaderCheck = "false";
+
+    //id정보 받아오기
+    String pageId = request.getParameter("id");
+    
+    //오늘 날짜 정보 받아오기
+    String year = request.getParameter("year"); 
+    String month = request.getParameter("month"); 
+    String day = request.getParameter("day"); 
+
+
+    //세션값 받아줌
+    Integer accountIdx = (Integer)session.getAttribute("accountIdx");
+
+    if (accountIdx == null) {
+        out.println("<div>올바른 접근이 아닙니다.</div>");
+        return;
+    }
+
+    Object idSession = session.getAttribute("id");
+    String id = (String)idSession;
+
+    Object nameSession = session.getAttribute("name");
+    String name = (String)nameSession;
+
+    Object phonenumberSession = session.getAttribute("phonenumber");
+    String phonenumber = (String)phonenumberSession;
+
+    Object teamSession = session.getAttribute("team");
+    String team = (String)teamSession;
+
+    Object positionSession = session.getAttribute("position");
+    String position = (String)positionSession;
+
+
 
     try {
         Class.forName("com.mysql.jdbc.Driver");

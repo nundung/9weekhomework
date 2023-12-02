@@ -33,6 +33,7 @@
 	String team = request.getParameter("team");
 	String position = request.getParameter("position");
 
+    //입력값 체크
     if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
         out.println("<div>입력값이 부족합니다.</div>");
         return;
@@ -58,6 +59,17 @@
         Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
         Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
+        //부서 확인
+        if (!("개발".equals(team) || "디자인".equals(team))) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+        }
+
+        //직급 확인
+        if (!("팀원".equals(position) || "팀장".equals(position))) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+        }
+        
+        //정규식 확인
         if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
@@ -65,7 +77,6 @@
 
     Connection connect = null;
     PreparedStatement query = null;
-    boolean signUpSuccess = false;
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
@@ -82,27 +93,10 @@
     
         // SQL 전송
         query.executeUpdate();
-        signUpSuccess = true;
-    
     }
     catch(SQLException e) {
-        signUpSuccess = false;
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
-    }    
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-            }
-            if (query != null) {
-                query.close();
-            }
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
     }
 %>
 
@@ -113,11 +107,8 @@
 </head>
 <body>
     <script>
-        var signUpSuccess = "<%=signUpSuccess%>";
-        if (signUpSuccess === "true") {
-            alert("회원가입이 완료되었습니다.")
-            location.href="../index.jsp"
-        }
+        alert("회원가입이 완료되었습니다.")
+        location.href="../index.jsp"
     </script>
 
 </body>

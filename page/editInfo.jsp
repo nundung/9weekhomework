@@ -120,4 +120,5 @@
             location.href = "schedule.jsp?id=" + idValue + "&year=" + year + "&month=" + month + "&day=" + day;
         }
     </script>
+    <script src="../js/signUp.js"></script>
 </body>

@@ -31,18 +31,16 @@
     String title = request.getParameter("title"); 
 
     //값이 null값이 아닌지 체크
-    if (date == null || time == null || title == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
+    if (pageId == null || date == null || time == null || title == null) {
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
-
 
     //세션값 받아줌
     int accountIdxValue = (Integer)session.getAttribute("accountIdx");
 
     Object idSession = session.getAttribute("id");
     String id = (String)idSession;
-
 
     Connection connect = null;
     PreparedStatement query = null;

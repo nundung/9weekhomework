@@ -123,6 +123,7 @@
     <form action = "../action/inputScheduleAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
             <input type="hidden" name="date" id="dateInput">
+            <input type="hidden" name="id" id="idInput">
             <input type="time" name="time" id="timeInput">
             <input type="text" name="title" id="titleInput">
             <input type="submit" id="scheduleInputButton">
@@ -166,20 +167,24 @@
                     var deleteButton = document.createElement("img");
                     makeEditButton(i);
                     makeDeleteButton(i);
-                    }
                 buttonSection.appendChild(editButton);
                 buttonSection.appendChild(deleteButton);
+                }
             scheduleRow.appendChild(scheduleTime);
             scheduleRow.appendChild(scheduleTitle);
             scheduleRow.appendChild(buttonSection);
             scheduleSection.appendChild(scheduleRow);
             }
         }
-        //내가 이 페이지의 주인일 경우 일정이 없을시 멘트 추가
+        
         else {
+            //내가 이 페이지의 주인일 경우
             if(memberPageCheck === "false") {
-                schduleSection.innerText = "일정을 추가해주세요.";
-                console.log("ok")
+                scheduleSection.innerText = "일정을 추가해주세요.";
+            }
+            //팀원 페이지일 경우
+            else {
+                scheduleSection.innerText = "아직 일정이 없습니다.";
             }
         }
         //내가 이 페이지의 주인이 아닌 경우 input창 안보이게
@@ -237,12 +242,14 @@
             });
         }(i);
 
-        //입력값 빈칸 확인
+        //입력값 확인
         function nullCheckEvent() {
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
             var dateInput = document.getElementById("dateInput");
+            var idInput = document.getElementById("idInput");
             dateInput.value = date;
+            idInput.value = id;
             if (timeInput.trim() == "") {
                 alert("일정시간을 입력해주세요.");
                 return false;

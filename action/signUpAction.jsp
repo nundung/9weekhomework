@@ -35,7 +35,7 @@
 
     //입력값 체크
     if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
     else {
@@ -62,16 +62,19 @@
         //부서 확인
         if (!("개발".equals(team) || "디자인".equals(team))) {
             out.println("<div>유효하지 않은 값입니다.</div>");
+            return;
         }
 
         //직급 확인
         if (!("팀원".equals(position) || "팀장".equals(position))) {
             out.println("<div>유효하지 않은 값입니다.</div>");
+            return;
         }
         
         //정규식 확인
         if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
+            return;
         }
     }
 

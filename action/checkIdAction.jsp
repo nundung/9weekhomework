@@ -27,67 +27,49 @@
 
     String id = request.getParameter("id"); 
 
-    //id값이 null값일 경우 기본값 설정
     if(id == null || id.isEmpty()) {
         out.println("<div>아이디값을 입력해주세요.</div>");
+        return;
     }
-    else {
-        //정규식 검사
-        String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
-        Pattern pattern = Pattern.compile(idReg);
-        Matcher matcher = pattern.matcher(id);
+    //아이디 정규식 검사
+    String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
+    Pattern pattern = Pattern.compile(idReg);
+    Matcher matcher = pattern.matcher(id);
 
-        if (!matcher.matches()) {
-            out.println("<div>잘못된 형식의 아이디입니다.</div>");
-        } 
-        else {
-            Connection connect = null;
-            PreparedStatement query = null;
-            ResultSet result = null;
+    if (!matcher.matches()) {
+        out.println("<div>잘못된 형식의 아이디입니다.</div>");
+        return;
+    } 
+
+    Connection connect = null;
+    PreparedStatement query = null;
+    ResultSet result = null;
+
+    boolean checkId = false;
+
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
         
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
+        String sql = "SELECT * FROM account WHERE id = ?";
+        query = connect.prepareStatement(sql);
+        query.setString(1, id);
+        
+        result = query.executeQuery();
 
-                connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-                
-                String sql = "SELECT * FROM account WHERE id = ?";
-                query = connect.prepareStatement(sql);
-                query.setString(1, id);
-                
-                result = query.executeQuery();
-
-                if (result.next()) {
-                    id = "0";
-                    out.println("<script>window.opener.checkedId = false;</script>");
-                    out.println("<div>이미 존재하는 아이디입니다.</div>");
-                }
-                else {
-                    out.println("<script>window.opener.checkedId = true;</script>");
-                    out.println("<div>사용가능한 아이디입니다.</div>");
-                    
-                } 
-            }
-            catch (Exception e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            }
-            finally {
-                try {
-                    if (connect != null) {
-                        connect.close();
-                }
-                if (query != null) {
-                    query.close();
-                }
-                if (result != null) {
-                    result.close();
-                } 
-            } 
-            catch (SQLException e) {
-                out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            }
+        if (result.next()) {
+            out.println("<div>이미 존재하는 아이디입니다.</div>");
         }
+        else {
+            checkId = true;
+            out.println("<div>사용가능한 아이디입니다.</div>");
+        } 
     }
-}
+    catch (SQLException e) {
+        out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
+        return;
+    }
 %>
 
 
@@ -101,13 +83,13 @@
 
     </div>
     <script>
-        var id = "<%= id %>";
-        if (id == 0) {
-            alert("사용불가한 아이디입니다.");
-            window.opener.checkedId = false; 
-        } else {
+        var checkId = "<%=checkId%>";
+        if (checkId == "true") { 
             alert("사용가능한 아이디입니다.");
             window.opener.checkedId = true;
+        } else {
+            alert("사용불가한 아이디입니다.");
+            window.opener.checkedId = false;
         }
         window.close(); // 팝업 창 닫기
     </script>

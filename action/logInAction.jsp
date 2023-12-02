@@ -28,7 +28,7 @@
     String pw = request.getParameter("pw"); 
 
     if (id == null || pw == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
     else {
@@ -44,6 +44,7 @@
 
         if (!idMatcher.matches() || !pwMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
         }
     }
 

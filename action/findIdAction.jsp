@@ -28,7 +28,7 @@
     String phonenumber = request.getParameter("phonenumber"); 
 
     if (name == null || phonenumber == null) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
     else {
@@ -63,40 +63,20 @@
     //return값을 저장해줌
     result = query.executeQuery();
 
-    boolean idFind = false;
+    boolean findIdCheck = false;
     String id = "null";
 
     try {
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             id = result.getString(2);
-            idFind = true;
-        }
-        else {
-            idFind = false;
+            findIdCheck = true;
         }
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         e.printStackTrace();
         return;
-    }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-        }
-            if (query != null) {
-                query.close();
-        }
-            if (result != null) {
-                result.close();
-            } 
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
     }
 %>
 
@@ -108,11 +88,11 @@
 </head>
 <body>
     <script>
-        var idFind = "<%=idFind%>";
+        var findIdCheck = "<%=findIdCheck%>";
         var id = "<%=id%>";
 
-        if(idFind === "true") {
-            alert("회원님의 아이디는" + id + "입니다.");
+        if(findIdCheck === "true") {
+            alert("회원님의 아이디는 [" + id + "] 입니다.");
             location.href = "../index.jsp";
         }
         else {

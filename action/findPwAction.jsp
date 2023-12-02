@@ -29,7 +29,7 @@
     String phonenumber = request.getParameter("phonenumber"); 
 
     if (name == null || id == null || phonenumber == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
     else {
@@ -48,11 +48,10 @@
         Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
         Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
-        if (!nameMatcher.matches() || !phonenumberMatcher.matches()) {
+        if (!nameMatcher.matches() || !idMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
     }
-    
 
     Connection connect = null;
     PreparedStatement query = null;
@@ -70,40 +69,20 @@
     //return값을 저장해줌
     result = query.executeQuery();
 
-    boolean pwFind = false;
+    boolean findPwCheck = false;
     String pw = "null";
 
     try {
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             pw = result.getString(3);
-            pwFind = true;
-        }
-        else {
-            pwFind = false;
+            findPwCheck = true;
         }
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         e.printStackTrace();
         return;
-    }
-    finally {
-        try {
-            if (connect != null) {
-                connect.close();
-        }
-            if (query != null) {
-                query.close();
-        }
-            if (result != null) {
-                result.close();
-            } 
-        }
-        catch (SQLException e) {
-            out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
-            return;
-        }
     }
 %>
 
@@ -115,11 +94,11 @@
 </head>
 <body>
     <script>
-        var pwFind = "<%=pwFind%>";
+        var findPwCheck = "<%=findPwCheck%>";
         var pw = "<%=pw%>";
 
-        if(pwFind === "true") {
-            alert("회원님의 비밀번호는" + pw + "입니다.");
+        if(findPwCheck === "true") {
+            alert("회원님의 비밀번호는 [" + pw + "] 입니다.");
             location.href = "../index.jsp";
         }
         else {

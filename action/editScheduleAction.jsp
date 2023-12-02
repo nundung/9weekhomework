@@ -20,7 +20,7 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    //계정 id값 받아오기 
+    //이 페이지의 계정 id값 받아오기 
     String id = request.getParameter("id"); 
 
     //스케줄 정보 받아오기
@@ -29,23 +29,19 @@
     String scheduleTime = request.getParameter("scheduleTime");
     String scheduleTitle = request.getParameter("scheduleTitle");
 
-    if (scheduleIdxString == null) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
+    if (id == null || scheduleIdxString == null || date == null || scheduleTime == null || scheduleTitle == null) {
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
-    //int로 변환
+
+    //스케줄idx값 int형으로 변환
     int scheduleIdx = Integer.parseInt(scheduleIdxString);
 
-    if (date == null || scheduleTime == null || scheduleTitle == null) {
-        out.println("<div>입력값이 부족합니다.</div>");
-        return;
-    }
-
-    //세션값 받아줌
+    //세션으로 accountIdx값 받아줌
     int accountIdx = (Integer)session.getAttribute("accountIdx");
 
     if (accountIdx == 0) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
+        out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }
 
@@ -56,7 +52,8 @@
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "UPDATE schedule SET time = ?, title = ? WHERE idx = ? AND account_idx = ?";
+        //세션의 accountIdx값과 schedule테이블의 accountIdx값이 같은경우에만 쿼리문 전송 되도록
+        String sql = "UPDATE schedule SET time = ?, title = ? WHERE idx = ? AND account_idx = ? ";
         query = connect.prepareStatement(sql);
         query.setString(1,scheduleTime);
         query.setString(2,scheduleTitle);

@@ -39,9 +39,9 @@
     int scheduleIdx = Integer.parseInt(scheduleIdxString);
 
     //세션값 받아줌
-    int accountIdx = (Integer)session.getAttribute("accountIdx");
+    Integer accountIdx = (Integer)session.getAttribute("accountIdx");
 
-    if (accountIdx == 0) {
+    if (accountIdx == null) {
         out.println("<div>올바르지 않은 접근입니다.</div>");
         return;
     }

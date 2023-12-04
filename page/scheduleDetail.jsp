@@ -23,23 +23,6 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //id정보 받아오기
-    String pageId = request.getParameter("id"); 
-
-    //클릭된 날짜 정보 받아오기
-    String date = request.getParameter("date");   
-
-    //세션값 받아줌
-    int accountIdx = (Integer)session.getAttribute("accountIdx");
-
-    if (accountIdx == 0) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
-        return;
-    }
-
-    Object idSession = session.getAttribute("id");
-    String id = (String)idSession;
-
     Connection connect = null;
     
     //이 페이지의 일정들 불러오기
@@ -49,51 +32,84 @@
     PreparedStatement pageIdQuery = null;
     ResultSet pageIdResult = null;
 
+    Integer year = null;
+    Integer month = null;
+    Integer day = null;
+
+    String pageMemberName = null;
+    boolean memberPageCheck = false;
+
+    Integer idx = null;
+
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
     ArrayList<String> scheduleTitleList = new ArrayList<String>();
 
-    int pageMemberIdx = 0;
-    String pageMemberName = "null";
-    String memberPageCheck = "false";
-
     try {
+        //이 페이지의 idx정보 받아오기
+        String pageIdxString = request.getParameter("idx");
+
+        //이 페이지의 날짜 정보 받아오기
+        String yearString = request.getParameter("year"); 
+        String monthString = request.getParameter("month"); 
+        String dayString = request.getParameter("day"); 
+        
+        //입력값 null체크
+        if (pageIdxString == null || yearString == null || monthString == null || dayString == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
+        Integer pageIdx = Integer.parseInt(pageIdxString); 
+        year = Integer.parseInt(yearString);
+        month = Integer.parseInt(monthString);
+        day = Integer.parseInt(dayString);
+
+
+        //세션값 받아줌
+        idx = (Integer)session.getAttribute("idx");
+
+        if (idx == null) {
+            out.println("<div>올바른 접근이 아닙니다.</div>");
+            return;
+        }
+
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        //이 페이지날짜의 일정 불러오기
-        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND date = ?";
+        //이 날의 일정 불러오기
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(time) = ? AND MONTH(time) = ? AND DAY(time) = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
         
-        //내가 이 페이지의 주인일때 세션에서 받은 accountIdx 쿼리문에 입력
-        if(id.equals(pageId)) {
-            scheduleQuery.setInt(1,accountIdx);
+        //내가 이 페이지의 주인일때 세션에서 받은 idx값 쿼리문에 입력
+        if(pageIdx == idx) {
+            scheduleQuery.setInt(1,idx);
         }
-
-        //팀원의 페이지라면 팀원의 accountIdx 찾아서 쿼리문에 입력
+        //팀원의 페이지라면 팀원의 idx를 입력하고 팀원의 이름 찾아오기
         else {
-            String pageIdSql = "SELECT * FROM account WHERE id = ?";
+            String pageIdSql = "SELECT * FROM account WHERE idx = ?";
             pageIdQuery = connect.prepareStatement(pageIdSql);
-            pageIdQuery.setString(1,pageId);
-            
+            pageIdQuery.setInt(1,pageIdx);
+
+            //return값을 저장해줌
             pageIdResult = pageIdQuery.executeQuery();
 
             while(pageIdResult.next()) {
-                pageMemberIdx = pageIdResult.getInt(1);
                 pageMemberName = pageIdResult.getString(4);
             }
-            scheduleQuery.setInt(1,pageMemberIdx);
-            memberPageCheck = "true";
+            scheduleQuery.setInt(1,pageIdx);
+            memberPageCheck = true;
         }
-        scheduleQuery.setString(2,date);
+        scheduleQuery.setInt(2, year);
+        scheduleQuery.setInt(3, month);
+        scheduleQuery.setInt(4, day);
         
         //return값을 저장해줌
         scheduleResult = scheduleQuery.executeQuery();
 
         while (scheduleResult.next()) {
             int scheduleIdx = scheduleResult.getInt(1);
-            String scheduleTime = scheduleResult.getString(3);
-            String scheduleTitle = scheduleResult.getString(4);
+            String scheduleTime = scheduleResult.getString(2);
+            String scheduleTitle = scheduleResult.getString(3);
 
             scheduleIdxList.add(scheduleIdx);
             scheduleTimeList.add("\""+scheduleTime+"\"");
@@ -127,8 +143,8 @@
     <!-- 일정 입력창 -->
     <form action = "../action/inputScheduleAction.jsp" onsubmit = "return nullCheckEvent()">
         <div id="scheduleInput">
+            <input type="hidden" name="idx" id="idxInput">
             <input type="hidden" name="date" id="dateInput">
-            <input type="hidden" name="id" id="idInput">
             <input type="time" name="time" id="timeInput">
             <input type="text" name="title" id="titleInput">
             <input type="submit" id="scheduleInputButton">
@@ -136,8 +152,11 @@
     </form>
 
     <script>
-        var date = "<%=date%>";
-        var id = "<%=id%>";
+        var year = <%=year%>;
+        var month = <%=month%>;
+        var day = <%=day%>;
+        var idx = <%=idx%>;
+        
         var pageMemberName = "<%=pageMemberName%>";
         var memberPageCheck = "<%=memberPageCheck%>";
         
@@ -148,6 +167,7 @@
 
         //이 페이지의 날짜를 표시하는 영역
         var daySection = document.getElementById("daySection");
+        var date = year + '. ' + month + '. ' + day; 
         daySection.innerHTML = date;
         
         //이 날짜의 일정들을 표시하는 영역
@@ -228,7 +248,7 @@
                     var saveButton = document.createElement("button");
                     saveButton.innerHTML = "저장";
                     saveButton.addEventListener('click', function(index) {
-                        location.href = "../action/editScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
+                        location.href = "../action/editScheduleAction.jsp?idx=" + idx  + "&year=" + year +"&month=" + month +"&day=" + day + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
                     });
                 buttonSection.appendChild(saveButton);
                 });
@@ -242,7 +262,7 @@
                 var scheduleIdx = scheduleIdxList[index];
                 var confirmation = confirm("일정을 삭제하시겠습니까?");
                 if (confirmation) {
-                    location.href = "../action/deleteScheduleAction.jsp?id=" + id + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
+                    location.href = "../action/deleteScheduleAction.jsp?idx=" + idx  + "&year=" + year +"&month=" + month +"&day=" + day + "&scheduleIdx=" + scheduleIdx;
                 } 
             });
         }(i);
@@ -252,9 +272,9 @@
             var timeInput = document.getElementById("timeInput").value;
             var titleInput = document.getElementById("titleInput").value;
             var dateInput = document.getElementById("dateInput");
-            var idInput = document.getElementById("idInput");
+            var idxInput = document.getElementById("idxInput");
             dateInput.value = date;
-            idInput.value = id;
+            idxInput.value = idx;
             if (timeInput.trim() == "") {
                 alert("일정시간을 입력해주세요.");
                 return false;

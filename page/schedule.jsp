@@ -23,24 +23,9 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    //이 페이지의  id정보 받아오기
-    String pageId = request.getParameter("id");
-    
-    //오늘 날짜 정보 받아오기
-    String year = request.getParameter("year"); 
-    String month = request.getParameter("month"); 
-    String day = request.getParameter("day"); 
-
-    //입력값 null체크
-    if (pageId == null || year == null || month == null || day == null) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
-
-
     Connection connect = null;
 
-    //이 페이지의 일별 일정개수리스트 불러오기
+    //이 페이지의 일정리스트 불러오기
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
 
@@ -52,69 +37,89 @@
     PreparedStatement memberQuery = null;
     ResultSet memberResult = null;
 
+    Integer pageIdx = null;
+    String year = null;
+    String month = null;
+    String day = null;
+
+    Integer idx = null;
+    String name = null;
+    String phonenumber = null;
+    Integer team = null;
+    Integer position = null;
+
     int pageMemberIdx = 0;
-    String pageMemberName = "null";
-    String memberPageCheck = "false";
-    String leaderCheck = "false";
+    String pageMemberName = null;
+    boolean memberPageCheck = false;
+    boolean leaderCheck = false;
 
     ArrayList<String> scheduleDateList = new ArrayList<String>();
     ArrayList<String> memberNameList = new ArrayList<String>();
     ArrayList<String> memberPhonenumberList = new ArrayList<String>();
-    ArrayList<String> memberIdList = new ArrayList<String>();
+    ArrayList<Integer> memberIdxList = new ArrayList<Integer>();
 
     try {
+        //이 페이지의 idx정보 받아오기
+        String pageIdxString = request.getParameter("idx");
+        
+        //오늘 날짜 정보 받아오기
+        year = request.getParameter("year"); 
+        month = request.getParameter("month"); 
+        day = request.getParameter("day"); 
+
+        //입력값 null체크
+        if (pageIdxString == null || year == null || month == null || day == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
+        pageIdx = Integer.parseInt(pageIdxString);
+
+
         //세션값 받아줌
-        Integer accountIdx = (Integer)session.getAttribute("accountIdx");
+        idx = (Integer)session.getAttribute("idx");
 
-    if (accountIdx == null) {
-        out.println("<div>올바른 접근이 아닙니다.</div>");
-        return;
-    }
+        Object nameSession = session.getAttribute("name");
+        name = (String)nameSession;
 
-    Object idSession = session.getAttribute("id");
-    String id = (String)idSession;
+        Object phonenumberSession = session.getAttribute("phonenumber");
+        phonenumber = (String)phonenumberSession;
 
-    Object nameSession = session.getAttribute("name");
-    String name = (String)nameSession;
+        team = (Integer)session.getAttribute("team");
 
-    Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumber = (String)phonenumberSession;
+        position = (Integer)session.getAttribute("position");
 
-    Object teamSession = session.getAttribute("team");
-    String team = (String)teamSession;
-
-    Object positionSession = session.getAttribute("position");
-    String position = (String)positionSession;
+        if (idx == null || name == null || phonenumber == null || team == null || position == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
 
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
         //이 페이지의 일별 일정개수 불러오기
-        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(date) = ? AND MONTH(date) = ?";
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(time) = ? AND MONTH(time) = ?";
         scheduleQuery = connect.prepareStatement(scheduleSql);
 
-        //내가 이 페이지의 주인일때 세션에서 받은 accountIdx 쿼리문에 입력
-        if(id.equals(pageId)) {
-            scheduleQuery.setInt(1,accountIdx);
+        //내가 이 페이지의 주인일때 세션에서 받은 idx 쿼리문에 입력
+        if(pageIdx == idx) {
+            scheduleQuery.setInt(1,idx);
         }
-
-        //팀원의 페이지라면 팀원의 accountIdx 찾아서 쿼리문에 입력
+        //팀원의 페이지라면 팀원의 idx를 입력하고 팀원의 이름 찾아오기
         else {
-            String pageIdSql = "SELECT * FROM account WHERE id = ?";
+            String pageIdSql = "SELECT * FROM account WHERE idx = ?";
             pageIdQuery = connect.prepareStatement(pageIdSql);
-            pageIdQuery.setString(1,pageId);
+            pageIdQuery.setInt(1,pageIdx);
 
             //return값을 저장해줌
             pageIdResult = pageIdQuery.executeQuery();
 
             while(pageIdResult.next()) {
-                pageMemberIdx = pageIdResult.getInt(1);
                 pageMemberName = pageIdResult.getString(4);
             }
             scheduleQuery.setInt(1,pageMemberIdx);
-            memberPageCheck = "true";
+            memberPageCheck = true;
         }
-        //이 페이지의 year값과 month값 쿼리문에 입력
+        //이 페이지의 year값과 month값도 쿼리문에 입력
         scheduleQuery.setString(2,year);
         scheduleQuery.setString(3,month);
 
@@ -123,29 +128,28 @@
 
         while(scheduleResult.next()) {
             String scheduleDate = scheduleResult.getString(2);
-            
             scheduleDateList.add("\""+scheduleDate+"\"");
         }
 
         //내 직급이 팀장일 경우 팀원 목록을 불러오기
-        if(position.equals("팀장")){
-            String memberSql = "SELECT * FROM account WHERE team = ? AND position = '팀원'";
+        if(position == 2){
+            String memberSql = "SELECT * FROM account WHERE team_idx = ? AND position_idx = 1";
             memberQuery = connect.prepareStatement(memberSql);
-            memberQuery.setString(1,team);
+            memberQuery.setInt(1,team);
     
             //return값을 저장해줌
             memberResult = memberQuery.executeQuery();
     
             while(memberResult.next()) {
-                String memberId = memberResult.getString(2);
+                Integer memberIdx = memberResult.getInt(1);
                 String memberName = memberResult.getString(4);
                 String memberPhonenumber = memberResult.getString(5);
     
-                memberIdList.add("\""+memberId+"\"");
+                memberIdxList.add(memberIdx);
                 memberNameList.add("\""+memberName+"\"");
                 memberPhonenumberList.add("\""+memberPhonenumber+"\"");
             }
-            leaderCheck = "true";
+            leaderCheck = true;
         }
     }
     catch (SQLException e) {
@@ -215,23 +219,39 @@
     </nav>
 
     <script>
-        var id = "<%=id%>";
-        var pageId = "<%=pageId%>";
+        var pageIdx = <%=idx%>;
+        var idx = <%=idx%>;
 
         var nameValue = "<%=name%>";
         var phonenumberValue = "<%=phonenumber%>";
-        var teamValue = "<%=team%>";
-        var positionValue = "<%=position%>";
+        var team = "<%=team%>";
+        var teamValue = null;
+        if(team == 1) {
+            var teamValue = "개발";
+        }
+        else if(team == 2) {
+            var teamValue = "디자인";
+        }
+
+        var position = "<%=position%>";
+        var positionValue = null;
+        if(position == 1) {
+            var positionValue = "팀원";
+        }
+        else if(position == 2) {
+            var positionValue = "팀장";
+        }
 
         var memberPageCheck = "<%=memberPageCheck%>";
         var leaderCheck = "<%=leaderCheck%>";
         var pageMemberName = "<%=pageMemberName%>";
 
         var scheduleDateList = <%=scheduleDateList%>;
-        var memberIdList = <%=memberIdList%>;
+        var memberIdxList = <%=memberIdxList%>;
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
 
+        console.log(scheduleDateList);
         //현재 페이지의 날짜
         var year = "<%=year%>";
         var month = "<%=month%>";

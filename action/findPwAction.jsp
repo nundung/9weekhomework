@@ -29,7 +29,7 @@
     ResultSet result = null;
 
     boolean findPwCheck = false;
-    String pw = "null";
+    String pw = null;
 
 
     try {

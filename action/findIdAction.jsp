@@ -29,7 +29,7 @@
     ResultSet result = null;
 
     boolean findIdCheck = false;
-    String id = "null";
+    String id = null;
 
 
     try {

@@ -18,52 +18,68 @@
 <!-- 예외처리 -->
 <%@ page import="java.sql.SQLException" %>
 
+<!-- 타임스탬프 -->
+<%@ page import="java.sql.Timestamp" %>
 
 <%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
     
-    //이 페이지의 계정 id값 받아오기 
-    String pageId = request.getParameter("id"); 
-
-    String date = request.getParameter("date"); 
-    String time = request.getParameter("time"); 
-    String title = request.getParameter("title"); 
-
-    //값이 null값이 아닌지 체크
-    if (pageId == null || date == null || time == null || title == null) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
-
-    //세션값 받아줌
-    Integer accountIdx = (Integer)session.getAttribute("accountIdx");
-    if (accountIdx == 0) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
-
-    Object idSession = session.getAttribute("id");
-    String id = (String)idSession;
-
-    //내가 이 페이지의 주인이 맞는지 체크
-    if(!id.equals(pageId)) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
     Connection connect = null;
     PreparedStatement query = null;
 
+    Integer year = null;
+    Integer month = null;
+    Integer day = null;
+
+    Integer idx = null;
+
     try {
+        //이 페이지의 계정 id값 받아오기 
+        String pageIdxString = request.getParameter("idx");
+        
+        //이 페이지의 날짜 정보 받아오기
+        String date = request.getParameter("date"); 
+        String[] dateParts = date.split(". ");
+        year = Integer.parseInt(dateParts[0]);
+        month = Integer.parseInt(dateParts[1]);
+        day = Integer.parseInt(dateParts[2]);
+
+        String time = request.getParameter("time"); 
+        String title = request.getParameter("title"); 
+
+        //입력값 null체크
+        if (pageIdxString == null || year == null || month == null || date == null || time == null || title == null) {
+            out.println("<div>올바르지 않 접근입니다.</div>");
+            return;
+        }
+
+        Integer pageIdx = Integer.parseInt(pageIdxString); 
+
+        //세션값 받아줌
+        idx = (Integer)session.getAttribute("idx");
+        if (idx == null) {
+            out.println("<div>올바르지은 접근입니다.</div>");
+            return;
+        }
+
+        //내가 이 페이지의 주인이 맞는지 체크
+        if(idx != pageIdx) {
+            out.println("<div>올바르지 접근입니다.</div>");
+            return;
+        }
+
+        String dateTime = year + "-" + month + "-" + day + " " + time + ":00";
+        Timestamp timestamp = Timestamp.valueOf(dateTime);
+
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
-        String sql = "INSERT INTO schedule (date, time, title, account_idx) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO schedule (time, title, account_idx) VALUES (?, ?, ?)";
         query = connect.prepareStatement(sql);
-        query.setString(1,date);
-        query.setString(2,time);
-        query.setString(3,title);
-        query.setInt(4,accountIdx);
+        query.setTimestamp(1, timestamp);
+        query.setString(2, title);
+        query.setInt(3, idx);
 
         //SQL 전송
         query.executeUpdate();
@@ -84,9 +100,12 @@
 </head>
 <body>
     <script>
-        var date = "<%=date%>";
-        var id = "<%=pageId%>";
-        location.href = "../page/scheduleDetail.jsp?id=" + id + "&date=" + date;
+        var idx = <%=idx%>;
+        var year = <%=year%>;
+        var month = <%=month%>;
+        var day = <%=day%>;
+        
+        location.href = "../page/scheduleDetail.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
     </script>
 </body>
 </html>

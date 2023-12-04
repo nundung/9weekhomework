@@ -24,31 +24,6 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    String name = request.getParameter("name"); 
-    String phonenumber = request.getParameter("phonenumber"); 
-
-    if (name == null || phonenumber == null) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
-    else {
-        //이름 정규식
-        String nameReg = "[가-힣]{2,4}";
-        Pattern namePattern = Pattern.compile(nameReg);
-        Matcher nameMatcher = namePattern.matcher(name);
-
-        //전화번호 정규식
-        String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
-        Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
-        Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
-
-        //정규식 확인
-        if (!nameMatcher.matches() || !phonenumberMatcher.matches()) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-        }
-    }
-
-
     Connection connect = null;
     PreparedStatement query = null;
     ResultSet result = null;
@@ -56,7 +31,34 @@
     boolean findIdCheck = false;
     String id = "null";
 
+
     try {
+        //값을 받아서 변수에 저장해 준다.
+        String name = request.getParameter("name"); 
+        String phonenumber = request.getParameter("phonenumber"); 
+
+        if (name == null || phonenumber == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
+        else {
+            //이름 정규식
+            String nameReg = "[가-힣]{2,4}";
+            Pattern namePattern = Pattern.compile(nameReg);
+            Matcher nameMatcher = namePattern.matcher(name);
+
+            //전화번호 정규식
+            String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
+            Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
+            Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
+
+            //정규식 확인
+            if (!nameMatcher.matches() || !phonenumberMatcher.matches()) {
+                out.println("<div>유효하지 않은 값입니다.</div>");
+                return;
+            }
+        }
+
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 

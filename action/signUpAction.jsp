@@ -24,69 +24,67 @@
 	//전페이지에서 온 데이터에 대해서 인코딩 설정
 	request.setCharacterEncoding("UTF-8");
 
-    //값을 받아서 변수에 저장해 준다.
-    //변수의 자료형을 String으로 지정
-    String id = request.getParameter("id");
-    String pw = request.getParameter("pw");
-    String name = request.getParameter("name");
-    String phonenumber = request.getParameter("phonenumber");
-    String team = request.getParameter("team");
-    String position = request.getParameter("position");
-
-    //입력값 null체크
-    if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
-        out.println("<div>올바르지 않은 접근입니다.</div>");
-        return;
-    }
-
-    else {
-        //아이디 정규식
-        String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
-        Pattern idPattern = Pattern.compile(idReg);
-        Matcher idMatcher = idPattern.matcher(id);
-
-        //비밀번호 정규식
-        String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
-        Pattern pwPattern = Pattern.compile(pwReg);
-        Matcher pwMatcher = pwPattern.matcher(pw);
-
-        //이름 정규식
-        String nameReg = "[가-힣]{2,4}";
-        Pattern namePattern = Pattern.compile(nameReg);
-        Matcher nameMatcher = namePattern.matcher(name);
-
-        //전화번호 정규식
-        String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
-        Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
-        Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
-
-        //정규식 확인
-        if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
-    }
-
-    //부서 확인
-    if (!("1".equals(team) || "2".equals(team))) {
-        out.println("<div>유효하지 않은 값입니다.</div>");
-        return;
-    }
-
-    //직급 확인
-    if (!("1".equals(position) || "2".equals(position))) {
-        out.println("<div>유효하지 않은 값입니다.</div>");
-        return;
-    }
-
-
-    Integer teamIdx = Integer.parseInt(team);
-    Integer positionIdx = Integer.parseInt(position);
-
     Connection connect = null;
     PreparedStatement query = null;
 
-    try {   
+    try { 
+        //값을 받아서 변수에 저장해 준다.
+        //변수의 자료형을 String으로 지정
+        String id = request.getParameter("id");
+        String pw = request.getParameter("pw");
+        String name = request.getParameter("name");
+        String phonenumber = request.getParameter("phonenumber");
+        String team = request.getParameter("team");
+        String position = request.getParameter("position");
+
+        //입력값 null체크
+        if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
+        else {
+            //아이디 정규식
+            String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
+            Pattern idPattern = Pattern.compile(idReg);
+            Matcher idMatcher = idPattern.matcher(id);
+
+            //비밀번호 정규식
+            String pwReg = "(?=.*[a-zA-z])(?=.*\\d)(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,20}";
+            Pattern pwPattern = Pattern.compile(pwReg);
+            Matcher pwMatcher = pwPattern.matcher(pw);
+
+            //이름 정규식
+            String nameReg = "[가-힣]{2,4}";
+            Pattern namePattern = Pattern.compile(nameReg);
+            Matcher nameMatcher = namePattern.matcher(name);
+
+            //전화번호 정규식
+            String phonenumberReg = "01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})";
+            Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
+            Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
+
+            //정규식 확인
+            if (!idMatcher.matches() || !pwMatcher.matches() || !nameMatcher.matches() || !phonenumberMatcher.matches()) {
+                out.println("<div>유효하지 않은 값입니다.</div>");
+                return;
+            }
+        }
+
+        //부서 확인
+        if (!("1".equals(team) || "2".equals(team))) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+            return;
+        }
+
+        //직급 확인
+        if (!("1".equals(position) || "2".equals(position))) {
+            out.println("<div>유효하지 않은 값입니다.</div>");
+            return;
+        }
+
+        Integer teamIdx = Integer.parseInt(team);
+        Integer positionIdx = Integer.parseInt(position);
+
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
     
@@ -115,9 +113,6 @@
 </head>
 <body>
     <script>
-        var team = "<%=teamIdx%>";
-        var position = "<%=positionIdx%>";
-        console.log(team, position);
         alert("회원가입이 완료되었습니다.")
         location.href = "../index.jsp";
     </script>

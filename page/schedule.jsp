@@ -22,10 +22,25 @@
 <%
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
+
+    //이 페이지의  id정보 받아오기
+    String pageId = request.getParameter("id");
     
+    //오늘 날짜 정보 받아오기
+    String year = request.getParameter("year"); 
+    String month = request.getParameter("month"); 
+    String day = request.getParameter("day"); 
+
+    //입력값 null체크
+    if (pageId == null || year == null || month == null || day == null) {
+        out.println("<div>올바르지 않은 접근입니다.</div>");
+        return;
+    }
+
+
     Connection connect = null;
 
-    //이 페이지의 일별 일정개수 불러오기
+    //이 페이지의 일별 일정개수리스트 불러오기
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
 
@@ -37,29 +52,19 @@
     PreparedStatement memberQuery = null;
     ResultSet memberResult = null;
 
-
-    ArrayList<String> scheduleDateList = new ArrayList<String>();
-
-    ArrayList<String> memberNameList = new ArrayList<String>();
-    ArrayList<String> memberPhonenumberList = new ArrayList<String>();
-    ArrayList<String> memberIdList = new ArrayList<String>();
-
     int pageMemberIdx = 0;
     String pageMemberName = "null";
     String memberPageCheck = "false";
     String leaderCheck = "false";
 
-    //id정보 받아오기
-    String pageId = request.getParameter("id");
-    
-    //오늘 날짜 정보 받아오기
-    String year = request.getParameter("year"); 
-    String month = request.getParameter("month"); 
-    String day = request.getParameter("day"); 
+    ArrayList<String> scheduleDateList = new ArrayList<String>();
+    ArrayList<String> memberNameList = new ArrayList<String>();
+    ArrayList<String> memberPhonenumberList = new ArrayList<String>();
+    ArrayList<String> memberIdList = new ArrayList<String>();
 
-
-    //세션값 받아줌
-    Integer accountIdx = (Integer)session.getAttribute("accountIdx");
+    try {
+        //세션값 받아줌
+        Integer accountIdx = (Integer)session.getAttribute("accountIdx");
 
     if (accountIdx == null) {
         out.println("<div>올바른 접근이 아닙니다.</div>");
@@ -81,9 +86,6 @@
     Object positionSession = session.getAttribute("position");
     String position = (String)positionSession;
 
-
-
-    try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 

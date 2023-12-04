@@ -38,15 +38,15 @@
             <section class="rows">
                 <label for="team" class ="label">부서</label>
                 <div class="radioInput">
-                    <input type="radio" name="team" value="개발">개발
-                    <input type="radio" name="team" value="디자인">디자인
+                    <input type="radio" name="team" value="1">개발
+                    <input type="radio" name="team" value="2">디자인
                 </div>
             </section>
             <section class="rows">
                 <label for="position" class ="label">직급</label>
                 <div class="radioInput">
-                    <input type="radio" name="position" value="팀원">팀원
-                    <input type="radio" name="position" value="팀장">팀장
+                    <input type="radio" name="position" value="1">팀원
+                    <input type="radio" name="position" value="2">팀장
                 </div>
             </section>
             <input type="submit" id="button" value="회원가입">

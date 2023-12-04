@@ -42,42 +42,44 @@
         Pattern pwPattern = Pattern.compile(pwReg);
         Matcher pwMatcher = pwPattern.matcher(pw);
 
+        //정규식 확인
         if (!idMatcher.matches() || !pwMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
-        return;
+            return;
         }
     }
+
 
     Connection connect = null;
     PreparedStatement query = null;
     ResultSet result = null;
 
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-    String sql = "SELECT * FROM account WHERE id= ? AND pw = ?";
-	query = connect.prepareStatement(sql);
-	query.setString(1, id);
-    query.setString(2, pw);
-
-    //return값을 저장해줌
-    result = query.executeQuery();
+    Integer accountIdx = 0;
+    String name = "null";
+    String phonenumber = "null";
+    Integer team = 0;
+    Integer position = 0;
 
     boolean logInSuccess = false;
 
     try {
-        int accountIdx = 0;
-        String name = "null";
-        String phonenumber = "null";
-        String team = "null";
-        String position = "null";
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
+        String sql = "SELECT * FROM account WHERE id= ? AND pw = ?";
+        query = connect.prepareStatement(sql);
+        query.setString(1, id);
+        query.setString(2, pw);
+
+        //return값을 저장해줌
+        result = query.executeQuery();
 
         if(result.next()) {
             accountIdx = result.getInt(1);
             name = result.getString(4);
             phonenumber = result.getString(5);
-            team = result.getString(6);
-            position = result.getString(7);
+            team = result.getInt(6);
+            position = result.getInt(7);
             
             //세션에 값 설정
             session.setAttribute("accountIdx", accountIdx);

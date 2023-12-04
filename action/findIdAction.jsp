@@ -42,31 +42,32 @@
         Pattern phonenumberPattern = Pattern.compile(phonenumberReg);
         Matcher phonenumberMatcher = phonenumberPattern.matcher(phonenumber);
 
+        //정규식 확인
         if (!nameMatcher.matches() || !phonenumberMatcher.matches()) {
             out.println("<div>유효하지 않은 값입니다.</div>");
         }
     }
-    
+
 
     Connection connect = null;
     PreparedStatement query = null;
     ResultSet result = null;
 
-    Class.forName("com.mysql.jdbc.Driver");
-    connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
-
-    String sql = "SELECT * FROM account WHERE name= ? AND phonenumber = ?";
-	query = connect.prepareStatement(sql);
-	query.setString(1, name);
-    query.setString(2, phonenumber);
-
-    //return값을 저장해줌
-    result = query.executeQuery();
-
     boolean findIdCheck = false;
     String id = "null";
 
     try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
+
+        String sql = "SELECT * FROM account WHERE name= ? AND phonenumber = ?";
+        query = connect.prepareStatement(sql);
+        query.setString(1, name);
+        query.setString(2, phonenumber);
+
+        //return값을 저장해줌
+        result = query.executeQuery();
+
         // 입력한 값과 일치하는 데이터 레코드가 있는지 체크
         if(result.next()) {
             id = result.getString(2);

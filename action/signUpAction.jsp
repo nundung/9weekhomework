@@ -23,37 +23,23 @@
 <%
 	//전페이지에서 온 데이터에 대해서 인코딩 설정
 	request.setCharacterEncoding("UTF-8");
-    
-    String id = null;
-    String pw = null;
-    String name = null;
-    String phonenumber = null;
-    String team = null;
-    String position = null;
 
-    int teamIdx = 0;
-    int positionIdx = 0;
+    //값을 받아서 변수에 저장해 준다.
+    //변수의 자료형을 String으로 지정
+    String id = request.getParameter("id");
+    String pw = request.getParameter("pw");
+    String name = request.getParameter("name");
+    String phonenumber = request.getParameter("phonenumber");
+    String team = request.getParameter("team");
+    String position = request.getParameter("position");
 
-    Connection connect = null;
-    PreparedStatement query = null;
+    //입력값 null체크
+    if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
+        out.println("<div>올바르지 않은 접근입니다.</div>");
+        return;
+    }
 
-    
-    try {
-        //값을 받아서 변수에 저장해 준다.
-        //변수의 자료형을 String으로 지정
-        id = request.getParameter("id");
-        pw = request.getParameter("pw");
-        name = request.getParameter("name");
-        phonenumber = request.getParameter("phonenumber");
-        team = request.getParameter("team");
-        position = request.getParameter("position");
-
-        //입력값 체크
-        if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
-            out.println("<div>올바르지 않은 접근입니다.</div>");
-            return;
-        }
-
+    else {
         //아이디 정규식
         String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
         Pattern idPattern = Pattern.compile(idReg);
@@ -79,24 +65,28 @@
             out.println("<div>유효하지 않은 값입니다.</div>");
             return;
         }
+    }
 
-        //부서 확인
-        if (!("1".equals(team) || "2".equals(team))) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
+    //부서 확인
+    if (!("1".equals(team) || "2".equals(team))) {
+        out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
+    }
 
-        //직급 확인
-        if (!("1".equals(position) || "2".equals(position))) {
-            out.println("<div>유효하지 않은 값입니다.</div>");
-            return;
-        }
-        
-        //스케줄idx값 int형으로 변환
-        teamIdx = Integer.parseInt(team);
-        positionIdx = Integer.parseInt(position);
+    //직급 확인
+    if (!("1".equals(position) || "2".equals(position))) {
+        out.println("<div>유효하지 않은 값입니다.</div>");
+        return;
+    }
 
 
+    Integer teamIdx = Integer.parseInt(team);
+    Integer positionIdx = Integer.parseInt(position);
+
+    Connection connect = null;
+    PreparedStatement query = null;
+
+    try {   
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
     

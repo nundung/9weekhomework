@@ -32,14 +32,12 @@
     PreparedStatement pageIdQuery = null;
     ResultSet pageIdResult = null;
 
-    Integer year = null;
-    Integer month = null;
-    Integer day = null;
+    String date = null;
+    Integer idx = null;
 
     String pageMemberName = null;
     boolean memberPageCheck = false;
 
-    Integer idx = null;
 
     ArrayList<Integer> scheduleIdxList = new ArrayList<Integer>();
     ArrayList<String> scheduleTimeList = new ArrayList<String>();
@@ -50,24 +48,21 @@
         String pageIdxString = request.getParameter("idx");
 
         //이 페이지의 날짜 정보 받아오기
-        String yearString = request.getParameter("year"); 
-        String monthString = request.getParameter("month"); 
-        String dayString = request.getParameter("day"); 
+        date = request.getParameter("date"); 
         
         //입력값 null체크
-        if (pageIdxString == null || yearString == null || monthString == null || dayString == null) {
+        if (pageIdxString == null || date == null) {
             out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
+        String[] dateParts = date.split(". ");
+        Integer year = Integer.parseInt(dateParts[0]);
+        Integer month = Integer.parseInt(dateParts[1]);
+        Integer day = Integer.parseInt(dateParts[2]);
         Integer pageIdx = Integer.parseInt(pageIdxString); 
-        year = Integer.parseInt(yearString);
-        month = Integer.parseInt(monthString);
-        day = Integer.parseInt(dayString);
-
 
         //세션값 받아줌
         idx = (Integer)session.getAttribute("idx");
-
         if (idx == null) {
             out.println("<div>올바른 접근이 아닙니다.</div>");
             return;
@@ -152,10 +147,8 @@
     </form>
 
     <script>
-        var year = <%=year%>;
-        var month = <%=month%>;
-        var day = <%=day%>;
         var idx = <%=idx%>;
+        var date = "<%=date%>";
         
         var pageMemberName = "<%=pageMemberName%>";
         var memberPageCheck = "<%=memberPageCheck%>";
@@ -164,10 +157,17 @@
         var scheduleTimeList = <%=scheduleTimeList%>;
         var scheduleTitleList = <%=scheduleTitleList%>;
 
+        const extractedTimes = scheduleTimeList.map(function(scheduleTime) {
+            const date = new Date(scheduleTime);
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            var time = hours + ':' + minutes;
+            return time;
+        });
 
+        console.log(extractedTimes);
         //이 페이지의 날짜를 표시하는 영역
         var daySection = document.getElementById("daySection");
-        var date = year + '. ' + month + '. ' + day; 
         daySection.innerHTML = date;
         
         //이 날짜의 일정들을 표시하는 영역
@@ -181,7 +181,7 @@
                 
                 scheduleRow.className = "scheduleRow";
                 scheduleTime.className = "scheduleTime";
-                scheduleTime.innerHTML = scheduleTimeList[i];
+                scheduleTime.innerHTML = extractedTimes[i];
                 scheduleTitle.className = "scheduleTitle";
                 scheduleTitle.innerHTML = scheduleTitleList[i];
                 buttonSection.className = "buttonSection";
@@ -223,7 +223,7 @@
             editButton.src = "../image/pencil.svg";
             editButton.addEventListener('click', function() {
                     var scheduleIdx = scheduleIdxList[index];
-                    var currentScheduleTime = scheduleTimeList[index];
+                    var currentScheduleTime = extractedTimes[index];
                     var currentScheduleTitle = scheduleTitleList[index];
                 
                     var scheduleTime = document.getElementsByClassName("scheduleTime")[index];
@@ -248,7 +248,7 @@
                     var saveButton = document.createElement("button");
                     saveButton.innerHTML = "저장";
                     saveButton.addEventListener('click', function(index) {
-                        location.href = "../action/editScheduleAction.jsp?idx=" + idx  + "&year=" + year +"&month=" + month +"&day=" + day + "&scheduleIdx=" + scheduleIdx + "&scheduleTime=" + scheduleTimeEdit.value + "&scheduleTitle=" + scheduleTitleEdit.value;
+                        location.href = "../action/editScheduleAction.jsp?idx=" + idx  + "&date=" + date + "&scheduleIdx=" + scheduleIdx + "&time=" + scheduleTimeEdit.value + "&title=" + scheduleTitleEdit.value;
                     });
                 buttonSection.appendChild(saveButton);
                 });
@@ -262,7 +262,7 @@
                 var scheduleIdx = scheduleIdxList[index];
                 var confirmation = confirm("일정을 삭제하시겠습니까?");
                 if (confirmation) {
-                    location.href = "../action/deleteScheduleAction.jsp?idx=" + idx  + "&year=" + year +"&month=" + month +"&day=" + day + "&scheduleIdx=" + scheduleIdx;
+                    location.href = "../action/deleteScheduleAction.jsp?idx=" + idx  + "&date=" + date + "&scheduleIdx=" + scheduleIdx;
                 } 
             });
         }(i);

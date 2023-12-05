@@ -163,8 +163,9 @@ function makeSchedulesInDay(day) {
 //상세일정 팝업 오픈
 function showDetailEvent(event) {
     var clickedDay = parseInt(event.target.innerHTML);
+    var clickedDate = year + '. ' + month + '. ' + clickedDay;
     let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-    var pop = window.open("scheduleDetail.jsp?idx=" + pageIdx + "&year=" + year +"&month=" + month +"&day=" + day, "상세일정", options);
+    var pop = window.open("scheduleDetail.jsp?idx=" + pageIdx + "&date=" + clickedDate, "상세일정", options);
     pop.onload = function() {
         pop.onunload = function() {
             location.reload();

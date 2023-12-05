@@ -28,44 +28,44 @@
     Connection connect = null;
     PreparedStatement query = null;
 
-    Integer year = null;
-    Integer month = null;
-    Integer day = null;
-
     Integer idx = null;
+    String date = null;
 
     try {
-        //이 페이지의 계정 id값 받아오기 
-        String pageIdxString = request.getParameter("idx");
-        
         //이 페이지의 날짜 정보 받아오기
-        String date = request.getParameter("date"); 
-        String[] dateParts = date.split(". ");
-        year = Integer.parseInt(dateParts[0]);
-        month = Integer.parseInt(dateParts[1]);
-        day = Integer.parseInt(dateParts[2]);
+        date = request.getParameter("date"); 
 
+        //스케줄 정보 받아오기
+        String scheduleIdxString = request.getParameter("scheduleIdx"); 
         String time = request.getParameter("time"); 
         String title = request.getParameter("title"); 
 
         //입력값 null체크
-        if (pageIdxString == null || year == null || month == null || date == null || time == null || title == null) {
-            out.println("<div>올바르지 않 접근입니다.</div>");
+        if (scheduleIdxString == null || date == null || time == null || title == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
 
-        Integer pageIdx = Integer.parseInt(pageIdxString); 
+        String[] dateParts = date.split(". ");
+        Integer year = Integer.parseInt(dateParts[0]);
+        Integer month = Integer.parseInt(dateParts[1]);
+        Integer day = Integer.parseInt(dateParts[2]);
+        Integer scheduleIdx = Integer.parseInt(scheduleIdxString);
 
         //세션값 받아줌
         idx = (Integer)session.getAttribute("idx");
         if (idx == null) {
-            out.println("<div>올바르지은 접근입니다.</div>");
+            out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
 
+        //이 부분은 생략해도 됨
+        //이 페이지의 계정 idx값 받아오기 
+        String pageIdxString = request.getParameter("idx");
+        Integer pageIdx = Integer.parseInt(pageIdxString);
         //내가 이 페이지의 주인이 맞는지 체크
         if(idx != pageIdx) {
-            out.println("<div>올바르지 접근입니다.</div>");
+            out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
 
@@ -101,11 +101,9 @@
 <body>
     <script>
         var idx = <%=idx%>;
-        var year = <%=year%>;
-        var month = <%=month%>;
-        var day = <%=day%>;
+        var date = "<%=date%>";
         
-        location.href = "../page/scheduleDetail.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
+        location.href = "../page/scheduleDetail.jsp?idx=" + idx + "&date=" + date;
     </script>
 </body>
 </html>

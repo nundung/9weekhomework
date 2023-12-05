@@ -29,7 +29,7 @@
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
 
-    //이 페이지가 만약 팀장이 보는 팀원의 페이지라면 팀원의 accountIdx를 불러오기
+    //이 페이지가 만약 팀장이 보는 팀원의 페이지라면 팀원의 idx를 불러오기
     PreparedStatement pageIdQuery = null;
     ResultSet pageIdResult = null;
 

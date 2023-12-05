@@ -34,11 +34,11 @@
         String pw = request.getParameter("pw");
         String name = request.getParameter("name");
         String phonenumber = request.getParameter("phonenumber");
-        String team = request.getParameter("team");
-        String position = request.getParameter("position");
+        String teamString = request.getParameter("team");
+        String positionString = request.getParameter("position");
 
         //입력값 null체크
-        if (id == null || pw == null || name == null || phonenumber == null || team == null || position == null) {
+        if (id == null || pw == null || name == null || phonenumber == null || teamString == null || positionString == null) {
             out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
@@ -71,19 +71,19 @@
         }
 
         //부서 확인
-        if (!("1".equals(team) || "2".equals(team))) {
+        if (!("1".equals(teamString) || "2".equals(teamString))) {
             out.println("<div>유효하지 않은 값입니다.</div>");
             return;
         }
 
         //직급 확인
-        if (!("1".equals(position) || "2".equals(position))) {
+        if (!("1".equals(positionString) || "2".equals(positionString))) {
             out.println("<div>유효하지 않은 값입니다.</div>");
             return;
         }
 
-        Integer teamIdx = Integer.parseInt(team);
-        Integer positionIdx = Integer.parseInt(position);
+        Integer team = Integer.parseInt(teamString);
+        Integer position = Integer.parseInt(positionString);
 
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
@@ -94,8 +94,8 @@
         query.setString(2, pw);
         query.setString(3, name);
         query.setString(4, phonenumber);
-        query.setInt(5, teamIdx);
-        query.setInt(6, positionIdx);
+        query.setInt(5, team);
+        query.setInt(6, position);
     
         // SQL 전송
         query.executeUpdate();

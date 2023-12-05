@@ -35,7 +35,6 @@
     String date = null;
     Integer idx = null;
 
-    String pageMemberName = null;
     boolean memberPageCheck = false;
 
 
@@ -79,18 +78,8 @@
         if(pageIdx == idx) {
             scheduleQuery.setInt(1,idx);
         }
-        //팀원의 페이지라면 팀원의 idx를 입력하고 팀원의 이름 찾아오기
+        //팀원의 페이지라면 팀원의 idx를 입력
         else {
-            String pageIdSql = "SELECT * FROM account WHERE idx = ?";
-            pageIdQuery = connect.prepareStatement(pageIdSql);
-            pageIdQuery.setInt(1,pageIdx);
-
-            //return값을 저장해줌
-            pageIdResult = pageIdQuery.executeQuery();
-
-            while(pageIdResult.next()) {
-                pageMemberName = pageIdResult.getString(4);
-            }
             scheduleQuery.setInt(1,pageIdx);
             memberPageCheck = true;
         }
@@ -128,8 +117,11 @@
     <link rel="stylesheet" type="text/css" href="../css/common.css">
 </head>
 <body>
-    <!-- 이 페이지의 날짜 출력 -->
-    <header id="daySection"></header>
+    
+    <header>
+        <!-- 이 페이지의 날짜 출력 -->
+        <p id="daySection"></p>
+    </header>
 
     <!-- 해당날짜의 일정 리스트 출력 -->
     <main id="schduleSection">
@@ -150,7 +142,6 @@
         var idx = <%=idx%>;
         var date = "<%=date%>";
         
-        var pageMemberName = "<%=pageMemberName%>";
         var memberPageCheck = "<%=memberPageCheck%>";
         
         var scheduleIdxList = <%=scheduleIdxList%>;
@@ -158,14 +149,15 @@
         var scheduleTitleList = <%=scheduleTitleList%>;
 
         const extractedTimes = scheduleTimeList.map(function(scheduleTime) {
-            const date = new Date(scheduleTime);
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            var time = hours + ':' + minutes;
+            var date2 = new Date(scheduleTime);
+            var hours = date2.getHours();
+            var minutes = date2.getMinutes();
+            var time = hours + ':' + String(minutes).padStart(2, '0');
             return time;
         });
 
         console.log(extractedTimes);
+        
         //이 페이지의 날짜를 표시하는 영역
         var daySection = document.getElementById("daySection");
         daySection.innerHTML = date;

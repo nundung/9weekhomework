@@ -36,12 +36,11 @@
         date = request.getParameter("date"); 
 
         //스케줄 정보 받아오기
-        String scheduleIdxString = request.getParameter("scheduleIdx"); 
         String time = request.getParameter("time"); 
         String title = request.getParameter("title"); 
 
         //입력값 null체크
-        if (scheduleIdxString == null || date == null || time == null || title == null) {
+        if (date == null || time == null || title == null) {
             out.println("<div>올바르지 않은 접근입니다.</div>");
             return;
         }
@@ -50,7 +49,6 @@
         Integer year = Integer.parseInt(dateParts[0]);
         Integer month = Integer.parseInt(dateParts[1]);
         Integer day = Integer.parseInt(dateParts[2]);
-        Integer scheduleIdx = Integer.parseInt(scheduleIdxString);
 
         //세션값 받아줌
         idx = (Integer)session.getAttribute("idx");

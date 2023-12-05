@@ -1,24 +1,43 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
+<!-- 예외처리 -->
+<%@ page import="java.sql.SQLException" %>
+
 
 <%
-    Object idSession = session.getAttribute("id");
-    String id = (String)idSession;
+    //전페이지에서 온 데이터에 대해서 인코딩 설정
+    request.setCharacterEncoding("UTF-8");
 
-    Object pwSession = session.getAttribute("pw");
-    String pw = (String)pwSession;
-
-    Object nameSession = session.getAttribute("name");
-    String name = (String)nameSession;
-
-    Object phonenumberSession = session.getAttribute("phonenumber");
-    String phonenumber = (String)phonenumberSession;
+    String id = null;
+    String pw = null;
+    String name = null;
+    String phonenumber = null;
+    Integer team = null;
+    Integer position = null;
     
-    Object teamSession = session.getAttribute("team");
-    String team = (String)teamSession;
-    
-    Object positionSession = session.getAttribute("position");
-    String position = (String)positionSession;
+        //세션값 받아줌
+        Integer idx = (Integer)session.getAttribute("idx");
+
+        Object idSession = session.getAttribute("id");
+        id = (String)idSession;
+
+        Object pwSession = session.getAttribute("pw");
+        pw = (String)pwSession;
+
+        Object nameSession = session.getAttribute("name");
+        name = (String)nameSession;
+
+        Object phonenumberSession = session.getAttribute("phonenumber");
+        phonenumber = (String)phonenumberSession;
+
+        team = (Integer)session.getAttribute("team");
+
+        position = (Integer)session.getAttribute("position");
+
+        if (idx == null || id == null || name == null || phonenumber == null || team == null || position == null) {
+            out.println("<div>올바르지 않은 접근입니다.</div>");
+            return;
+        }
 %>
 
 <!DOCTYPE html>
@@ -61,15 +80,15 @@
             <section class="rows">
                 <label for="team" class ="label">부서</label>
                 <div class="radioInput">
-                    <input type="radio" name="team" value="개발" id="teamDev">개발
-                    <input type="radio" name="team" value="디자인" id="teamDesign">디자인
+                    <input type="radio" name="team" value="1" id="teamDev">개발
+                    <input type="radio" name="team" value="2" id="teamDesign">디자인
                 </div>
             </section>
             <section class="rows">
                 <label for="position" class ="label">직급</label>
                 <div class="radioInput">
-                    <input type="radio" name="position" value="팀원" id="positionMember">팀원
-                    <input type="radio" name="position" value="팀장" id="positionLeader">팀장
+                    <input type="radio" name="position" value="1" id="positionMember">팀원
+                    <input type="radio" name="position" value="2" id="positionLeader">팀장
                 </div>
             </section>
             <input type="submit" id="editButton" value="수정완료">
@@ -77,6 +96,7 @@
     </main>
     
     <script>
+        var idx = "<%=idx%>";
         var idValue = "<%=id%>";
         var pwValue = "<%=pw%>";
         var nameValue = "<%=name%>";
@@ -105,19 +125,19 @@
         phonenumberId.value = phonenumberValue;
         
 
-        if (teamValue === "개발") {
+        if (teamValue === "1") {
             teamDevId.checked = true;
-        } else if (teamValue === "디자인") {
+        } else if (teamValue === "2") {
             teamDesignId.checked = true;
         }
 
-        if (positionValue === "팀원") {
+        if (positionValue === "1") {
             positionMemberId.checked = true;
-        } else if (positionValue === "팀장") {
+        } else if (positionValue === "2") {
             positionLeaderId.checked = true;
         }
         function schedulePageEvent() {
-            location.href = "schedule.jsp?id=" + idValue + "&year=" + year + "&month=" + month + "&day=" + day;
+            location.href = "schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
         }
     </script>
     <script src="../js/editInfo.js"></script>

@@ -116,7 +116,7 @@
             while(pageIdResult.next()) {
                 pageMemberName = pageIdResult.getString(4);
             }
-            scheduleQuery.setInt(1,pageMemberIdx);
+            scheduleQuery.setInt(1,pageIdx);
             memberPageCheck = true;
         }
         //이 페이지의 year값과 month값도 쿼리문에 입력
@@ -219,7 +219,7 @@
     </nav>
 
     <script>
-        var pageIdx = <%=idx%>;
+        var pageIdx = <%=pageIdx%>;
         var idx = <%=idx%>;
 
         var nameValue = "<%=name%>";

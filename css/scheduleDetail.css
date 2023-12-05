@@ -7,10 +7,12 @@ header {
     color: white;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
     top:0;
 }
 
+#daySection {
+    font-size: 25px;
+}
 main {
     display: flex;
     flex-direction: column;

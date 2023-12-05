@@ -75,7 +75,7 @@
             </section>
             <section class="rows">
                 <label for="phoneNumber" class ="label">전화번호</label>
-                <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphen()">
+                <input type="text" class="input" id="phonenumber" name="phonenumber" oninput="phonenumberAutoHyphenEvent()">
             </section>
             <section class="rows">
                 <label for="team" class ="label">부서</label>
@@ -139,6 +139,69 @@
         function schedulePageEvent() {
             location.href = "schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
         }
+
+        
+        //자동 하이픈 추가 이벤트
+        var phonenumberAutoHyphenEvent =() => {
+            var target = event.target || window.event.srcElement;
+            target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+        }
+        
+        //예외 체크 이벤트
+        function exceptionCheckEvent() {
+            var input = document.getElementsByClassName("input")
+            for(var i=0; i < input.length; i++) {
+                if (input[i].value === "") {
+                    alert("모든값을 입력해주세요.");
+                    return false;
+                }
+            }
+            //비밀번호 정규식
+            var pwReg = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
+            var pw = document.getElementById("pw").value;
+            if(!pwReg.test(pw)) {
+                alert("비밀번호는 영문, 숫자, 특수문자의 조합으로 8~20자로 입력해주세요.");
+                return false;
+            }
+            //비밀번호 확인값 검사
+            var pwCheck = document.getElementById("pwCheck").value;
+            if(pw !== pwCheck) {
+                alert("비밀번호 확인값이 일치하지 않습니다.");
+                return false;
+            }
+            //이름 정규식
+            var nameReg = /^[가-힣]{2,4}$/;
+            var name = document.getElementById("name").value;
+            if(!nameReg.test(name)) {
+                alert("이름은 한글 2~4자로 입력해주세요.")
+                return false;
+            }
+            //전화번호 정규식
+            var phonenumberReg = /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/;
+            var phonenumber = document.getElementById("phonenumber").value;
+            if(!phonenumberReg.test(phonenumber)) {
+                alert("유효한 전화번호 값을 입력해주세요.")
+                return false;
+            }
+            //라디오 버튼 선택값 체크
+            var teamRadio = document.getElementsByName("team");
+            var positionRadio = document.getElementsByName("position");
+            var radioList = [teamRadio, positionRadio];
+            
+            for (var j = 0; j < radioList.length; j++) {
+                var isChecked = false;
+                for(var k = 0; k < radioList[j].length; k++)
+                if (radioList[j][k].checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            if (!isChecked) {
+                alert("부서와 직급을 선택해주세요.");
+                return false;
+            }
+        }
     </script>
-    <script src="../js/editInfo.js"></script>
 </body>

@@ -326,7 +326,7 @@
         //내 페이지로 돌아가는 이벤트
         function comeBackEvent() {
             location.href = "schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
-}
+    }
 
         //상세일정 팝업 오픈 이벤트
         function showDetailEvent(event) {

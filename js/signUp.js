@@ -1,12 +1,4 @@
 
-        // 자동 하이픈 추가
-        var phonenumberAutoHyphen =() => {
-            var target = event.target || window.event.srcElement;
-            target.value = target.value
-            .replace(/[^0-9]/g, '')
-            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
-        }
-        
         //예외처리
         function exceptionCheckEvent() {
             if (checkedId === false) {

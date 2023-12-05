@@ -172,7 +172,7 @@
 <body>
     <!-- 상단헤더 -->
     <header>
-        <img src="../image/home.svg" class="headerIcon" onclick="reloadEvent()">
+        <img src="../image/home.svg" class="headerIcon" onclick="homeButtonEvent()">
         <section id = "headerMid">
             <p id="memberNameSection"></p>
             <p id="todaySection"></p>
@@ -251,7 +251,6 @@
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
 
-        console.log(scheduleDateList);
         //현재 페이지의 날짜
         var year = "<%=year%>";
         var month = "<%=month%>";
@@ -270,6 +269,77 @@
             const day = date.getDate();
             return day;
         });
+
+        //홈 버튼 클릭 이벤트
+        //내 페이지로 이동
+        function homeButtonEvent() {
+            location.href = "schedule.jsp?idx=" + idx + "&year=" + thisYear + "&month=" + thisMonth + "&day=" + thisDay;
+        }
+
+        //년도 선택 버튼 클릭 이벤트
+        //해당 년도 페이지로 이동
+        function lastYearEvent() {
+            year = parseInt(year) - 1;
+            location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + month + "&day=" + day;
+        }
+        function nextYearEvent() {
+            year = parseInt(year) + 1;
+            location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + month + "&day=" + day;
+        }
+
+        //월 버튼 클릭 이벤트
+        //해당 월 페이지로 이동
+        function monthSelectEvent(event) {
+            var clickedMonth = event.target.innerHTML;
+            location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + clickedMonth + "&day=" + day;
+        }
+        
+        //팀원 버튼 클릭 이벤트
+        //해당 팀원의 페이지로 이동
+        function showTemMemberScheduleEvent(event) {
+            var clickedIndex = event.target.dataset.index;
+            var memberIdx = memberIdxList[clickedIndex];
+            location.href = "schedule.jsp?idx=" + memberIdx + "&year=" + year + "&month=" + month + "&day=" + day;
+        }
+
+        //메뉴바 토글 이벤트
+        function toggleMenuEvent(event) {
+            var menuBar = document.getElementById("menuBar");
+            if (getComputedStyle(menuBar).right === "-240px") {
+                menuBar.style.right = "0px";
+            } 
+            else{
+                menuBar.style.right = "-240px";
+            }
+        }
+
+        //로그아웃 이벤트
+        function logOutEvent() {
+            location.href = "../action/logOutAction.jsp"
+        }
+
+        //정보수정 이벤트
+        function editInfoEvent() {
+            location.href="editInfo.jsp";
+        }
+
+        //내 페이지로 돌아가는 이벤트
+        function comeBackEvent() {
+            location.href = "schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
+}
+
+        //상세일정 팝업 오픈 이벤트
+        function showDetailEvent(event) {
+            var clickedDay = parseInt(event.target.innerHTML);
+            var clickedDate = year + '. ' + month + '. ' + clickedDay;
+            let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
+            var pop = window.open("scheduleDetail.jsp?idx=" + pageIdx + "&date=" + clickedDate, "상세일정", options);
+            pop.onload = function() {
+                pop.onunload = function() {
+                    location.reload();
+                }
+            }
+        }
 
         //문서와 모든 자원(img)이 완전히 로드되었을 때 실행되는 함수
         window.onload = function() {

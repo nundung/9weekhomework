@@ -1,7 +1,16 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 
 
+<%
+    boolean logInCheck = false;
 
+    //세션값 받아줌
+    Integer idx = (Integer)session.getAttribute("idx");
+
+    if (idx != null) {
+        logInCheck = true;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +40,16 @@
         </div>
     </main>
     <script>
+        var logInCheck = "<%=logInCheck%>";
+        if (logInCheck == "true") {
+            var idx = "<%=idx%>";
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var day = date.getDate();
+
+            location.href = "page/schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day; 
+        }
         //예외처리
         function exceptionCheckEvent() {
             var input = document.getElementsByClassName("input")

@@ -20,24 +20,9 @@ else {
     comeBackButton.style.display = "none"; // 돌아가기 버튼 숨기기
 }
 
-//홈 버튼 클릭시 이번달 달력 표시
-function reloadEvent() {
-    location.href = "schedule.jsp?idx=" + idx + "&year=" + thisYear + "&month=" + thisMonth + "&day=" + thisDay;
-}
-
 //올해 년도 입력
 var yearValue = document.getElementById("yearValue");
 yearValue.innerHTML = year;
-
-//년도 선택 
-function lastYearEvent() {
-    year = parseInt(year) - 1;
-    location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + month + "&day=" + day;
-}
-function nextYearEvent() {
-    year = parseInt(year) + 1;
-    location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + month + "&day=" + day;
-}
 
 //월 선택 버튼 입력
 for (var i=0; i<12; i++) {
@@ -50,12 +35,6 @@ for (var i=0; i<12; i++) {
     }
     monthSelectButton.addEventListener('click', monthSelectEvent);
     monthSelectSection.appendChild(monthSelectButton);
-}
-
-//월 버튼 클릭 이벤트
-function monthSelectEvent(event) {
-    var clickedMonth = event.target.innerHTML;
-    location.href = "schedule.jsp?idx=" + pageIdx + "&year=" + year + "&month=" + clickedMonth + "&day=" + day;
 }
 
 //메뉴바에 내 정보 불러오기
@@ -91,40 +70,6 @@ if(leaderCheck === "true") {
     }
 }
 
-//팀원페이지로 이동
-function showTemMemberScheduleEvent(event) {
-    var clickedIndex = event.target.dataset.index;
-    var memberIdx = memberIdxList[clickedIndex];
-    location.href = "schedule.jsp?idx=" + memberIdx + "&year=" + year + "&month=" + month + "&day=" + day;
-}
-
-//메뉴바 토글 이벤트
-function toggleMenuEvent(event) {
-    var menuBar = document.getElementById("menuBar");
-    if (getComputedStyle(menuBar).right === "-240px") {
-        menuBar.style.right = "0px";
-    } 
-    else{
-        menuBar.style.right = "-240px";
-    }
-}
-
-
-//로그아웃
-function logOutEvent() {
-    location.href = "../action/logOutAction.jsp"
-}
-
-//정보수정 
-function editInfoEvent() {
-    location.href="editInfo.jsp";
-}
-
-//원래 내 페이지로 돌아가기
-function comeBackEvent() {
-    location.href = "schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
-}
-
 //달력 
 function makeCalendar() {
     var calendar = document.getElementById("calendar");
@@ -158,17 +103,4 @@ function makeSchedulesInDay(day) {
     schedulesInDay.className = "schedulesInDay";
     schedulesInDay.style.pointerEvents = "none";
     dayButton.appendChild(schedulesInDay);
-}
-
-//상세일정 팝업 오픈
-function showDetailEvent(event) {
-    var clickedDay = parseInt(event.target.innerHTML);
-    var clickedDate = year + '. ' + month + '. ' + clickedDay;
-    let options = "toolbar=no, scrollbars=no, resizable=yes, status=no, menubar=no, width=600, height=400, top=200, left=500";
-    var pop = window.open("scheduleDetail.jsp?idx=" + pageIdx + "&date=" + clickedDate, "상세일정", options);
-    pop.onload = function() {
-        pop.onunload = function() {
-            location.reload();
-        }
-    }
 }

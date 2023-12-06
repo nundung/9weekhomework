@@ -81,7 +81,11 @@
         e.printStackTrace();
         return;
     }
-%>
+    finally {
+        if (connect != null) connect.close();
+        if (query != null) query.close();
+        if (result != null) result.close();
+    }
 
 
 <head>

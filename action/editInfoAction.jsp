@@ -114,6 +114,11 @@
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
+    finally {
+        if (connect != null) connect.close();
+        if (query != null) query.close();
+        if (result != null) result.close();
+    }
 %>
 
 

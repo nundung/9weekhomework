@@ -29,13 +29,10 @@
     PreparedStatement scheduleQuery = null;
     ResultSet scheduleResult = null;
 
-    //이 페이지가 만약 팀장이 보는 팀원의 페이지라면 팀원의 idx를 불러오기
-    PreparedStatement pageIdQuery = null;
-    ResultSet pageIdResult = null;
-
     //팀장일 경우 팀원리스트 불러오기
     PreparedStatement memberQuery = null;
     ResultSet memberResult = null;
+
 
     Integer pageIdx = null;
     String year = null;
@@ -54,9 +51,11 @@
     boolean leaderCheck = false;
 
     ArrayList<String> scheduleDateList = new ArrayList<String>();
+    
+    ArrayList<ArrayList<String>> memberInfoList = new ArrayList<ArrayList<String>>();
     ArrayList<String> memberNameList = new ArrayList<String>();
     ArrayList<String> memberPhonenumberList = new ArrayList<String>();
-    ArrayList<Integer> memberIdxList = new ArrayList<Integer>();
+    ArrayList<String> memberIdxList = new ArrayList<String>();
 
     try {
         //이 페이지의 idx정보 받아오기
@@ -104,18 +103,8 @@
         if(pageIdx == idx) {
             scheduleQuery.setInt(1,idx);
         }
-        //팀원의 페이지라면 팀원의 idx를 입력하고 팀원의 이름 찾아오기
+        //팀원의 페이지라면 팀원의 idx를 입력
         else {
-            String pageIdSql = "SELECT * FROM account WHERE idx = ?";
-            pageIdQuery = connect.prepareStatement(pageIdSql);
-            pageIdQuery.setInt(1,pageIdx);
-
-            //return값을 저장해줌
-            pageIdResult = pageIdQuery.executeQuery();
-
-            while(pageIdResult.next()) {
-                pageMemberName = pageIdResult.getString(4);
-            }
             scheduleQuery.setInt(1,pageIdx);
             memberPageCheck = true;
         }
@@ -141,22 +130,35 @@
             memberResult = memberQuery.executeQuery();
     
             while(memberResult.next()) {
-                Integer memberIdx = memberResult.getInt(1);
+                String memberIdx = memberResult.getString(1);
                 String memberName = memberResult.getString(4);
                 String memberPhonenumber = memberResult.getString(5);
-    
-                memberIdxList.add(memberIdx);
+
+                memberIdxList.add("\""+memberIdx+"\"");
                 memberNameList.add("\""+memberName+"\"");
                 memberPhonenumberList.add("\""+memberPhonenumber+"\"");
+                
             }
-            leaderCheck = true;
+            //2차 arraylist에 1차 arraylist 집어넣기
+            memberInfoList.add(memberIdxList);
+            memberInfoList.add(memberNameList);
+            memberInfoList.add(memberPhonenumberList);
         }
+        leaderCheck = true;
     }
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
     }
+    finally {
+        if (connect != null) connect.close();
 
+        if (scheduleQuery != null) scheduleQuery.close();
+        if (scheduleResult != null) scheduleResult.close();
+
+        if (memberQuery != null) memberQuery.close();
+        if (memberResult != null) memberResult.close();
+    }
 %>
 
 <!DOCTYPE html>
@@ -245,11 +247,15 @@
         var memberPageCheck = "<%=memberPageCheck%>";
         var leaderCheck = "<%=leaderCheck%>";
         var pageMemberName = "<%=pageMemberName%>";
-
+        var memberInfoList = <%=memberInfoList%>;
         var scheduleDateList = <%=scheduleDateList%>;
         var memberIdxList = <%=memberIdxList%>;
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
+        console.log(memberInfoList);
+        if(memberPageCheck == true) {
+            
+        }
 
         console.log(scheduleDateList);
         //현재 페이지의 날짜
@@ -259,13 +265,11 @@
         
         //실제 오늘 날짜
         var date = new Date();
+        
         var thisYear = date.getFullYear();
-        var thisMonth = date.getMonth() + 1;
+        var thisMonth = date.getMonth()+1;
         var thisDay = date.getDate();
-        
-        var month0 = String(month).padStart(2, '0');
-        var day0 = String(day).padStart(2, '0');
-        
+
         //map : 배열의 각 요소에 대해 주어진 함수를 호출하고, 그 함수가 반환하는 결과를 모아 새로운 배열을 생성
         //스케줄 날짜 리스트에서 일(day)값만 추출
         const extractedDays = scheduleDateList.map(function(scheduleDate) {

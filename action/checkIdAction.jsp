@@ -25,21 +25,7 @@
     //전페이지에서 온 데이터에 대해서 인코딩 설정
     request.setCharacterEncoding("UTF-8");
 
-    String id = request.getParameter("id"); 
-
-    if(id == null || id.isEmpty()) {
-        out.println("<div>아이디값을 입력해주세요.</div>");
-        return;
-    }
-    //아이디 정규식 검사
-    String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
-    Pattern pattern = Pattern.compile(idReg);
-    Matcher matcher = pattern.matcher(id);
-
-    if (!matcher.matches()) {
-        out.println("<div>잘못된 형식의 아이디입니다.</div>");
-        return;
-    } 
+    String id = null; 
 
     Connection connect = null;
     PreparedStatement query = null;
@@ -48,6 +34,22 @@
     boolean checkId = false;
 
     try {
+        id = request.getParameter("id");
+        
+        if(id == null || id.isEmpty()) {
+            out.println("<div>아이디값을 입력해주세요.</div>");
+            return;
+        }
+        //아이디 정규식 검사
+        String idReg = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,18}$";
+        Pattern pattern = Pattern.compile(idReg);
+        Matcher matcher = pattern.matcher(id);
+
+        if (!matcher.matches()) {
+            out.println("<div>잘못된 형식의 아이디입니다.</div>");
+            return;
+        } 
+
         Class.forName("com.mysql.jdbc.Driver");
 
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
@@ -69,6 +71,11 @@
     catch (SQLException e) {
         out.println("<div>예상치 못한 오류가 발생했습니다.</div>");
         return;
+    }
+    finally {
+        if (connect != null) connect.close();
+        if (query != null) query.close();
+        if (result != null) result.close();
     }
 %>
 

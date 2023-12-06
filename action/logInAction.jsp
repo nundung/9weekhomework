@@ -92,6 +92,11 @@
         e.printStackTrace();
         return;
     }
+    finally {
+        if (connect != null) connect.close();
+        if (query != null) query.close();
+        if (result != null) result.close();
+    }
 %>
 
 <html lang="en">
@@ -108,10 +113,8 @@
         var year = date.getFullYear();
         var month = date.getMonth()+1;
         var day = date.getDate();
-        var month0 = String(month).padStart(2, '0');
-        var day0 = String(day).padStart(2, '0');
         if(logInSuccess === "true") {
-            location.href = "../page/schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month0 + "&day=" + day0;
+            location.href = "../page/schedule.jsp?idx=" + idx + "&year=" + year + "&month=" + month + "&day=" + day;
         }
         else {
             alert("일치하는 계정정보가 존재하지 않습니다.")

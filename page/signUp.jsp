@@ -55,7 +55,7 @@
     <script>
         var checkedId = false;
 
-        //아이디 중복체크 이벤트
+        //아이디 중복체크버튼 클릭 이벤트
         function duplicateCheckEvent() {
             var id = document.getElementById("idInput").value;
             //아이디 유효성 체크

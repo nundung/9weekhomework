@@ -71,7 +71,7 @@
         connect = DriverManager.getConnection("jdbc:mysql://localhost/9weekhomework","stageus","1234");
 
         //이 날의 일정 불러오기
-        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(time) = ? AND MONTH(time) = ? AND DAY(time) = ?";
+        String scheduleSql = "SELECT * FROM schedule WHERE account_idx = ? AND YEAR(time) = ? AND MONTH(time) = ? AND DAY(time) = ? ORDER BY TiME(time)";
         scheduleQuery = connect.prepareStatement(scheduleSql);
         
         //내가 이 페이지의 주인일때 세션에서 받은 idx값 쿼리문에 입력

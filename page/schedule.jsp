@@ -251,6 +251,7 @@
         var memberNameList = <%=memberNameList%>;
         var memberPhonenumberList = <%=memberPhonenumberList%>;
 
+        console.log(scheduleDateList);
         //현재 페이지의 날짜
         var year = "<%=year%>";
         var month = "<%=month%>";
@@ -261,6 +262,9 @@
         var thisYear = date.getFullYear();
         var thisMonth = date.getMonth() + 1;
         var thisDay = date.getDate();
+        
+        var month0 = String(month).padStart(2, '0');
+        var day0 = String(day).padStart(2, '0');
         
         //map : 배열의 각 요소에 대해 주어진 함수를 호출하고, 그 함수가 반환하는 결과를 모아 새로운 배열을 생성
         //스케줄 날짜 리스트에서 일(day)값만 추출

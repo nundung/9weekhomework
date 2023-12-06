@@ -84,6 +84,7 @@
     </div>
     <script>
         var checkId = "<%=checkId%>";
+        
         if (checkId == "true") { 
             alert("사용가능한 아이디입니다.");
             window.opener.checkedId = true;
